@@ -1,0 +1,62 @@
+
+#contenedor{
+	background : #930;
+	padding : 10px;
+	overflow : hidden;	
+}
+
+#contenedorDatos{
+	float : left;	
+	padding: 5px;
+	color : rgb(0, 0, 0);
+	background : #f4f7f4;
+	width : 330px;	
+	margin : 10px;
+	
+}
+#contenedorTablaDocentes{
+	float : left;
+	padding: 5px;	
+	/*color : rgb(0, 0, 0);
+	background : #039;*/
+	width : 330px;	
+	margin : 8px;		
+	position: relative;
+	left: 35px;	
+		
+}
+
+.form-inline .form-control{
+    display: inline-block;
+    width: 476px;
+    vertical-align: middle;
+}
+
+.containerRegistroCurso, .containerRegistroTraduccion{		
+	margin-left: 252px;
+	margin-right: -252px;	
+}
+
+.tituloProgramaCurso{
+	padding: 18px;
+	color : #3C37E4 ;
+}
+
+.containerListadoCurso  {		
+	margin-left: 121px;
+	margin-right: -271px;	
+}
+
+.errores{
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	-o-box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	background: #FF1A0D;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	color: #fff;
+	display: none;
+	font-size: 12px;
+	margin-top: -50px;
+	margin-left: 46px;
+	padding: 10px;
+	position: absolute;
+}

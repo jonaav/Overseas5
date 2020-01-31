@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+
+<div class="container" id="viewInicioDocente">
+    <div class="row m-3">
+        <div class="col-lg-3 col-sm-6">
+            <div class="card gradient-4" style="max-height:125px">
+                <div class="card-body">
+                    <p class="card-title text-center">Horas acumuladas del mes</p>
+                    <h3 class="text-center text-white" id="HorasAcumuladas"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col-lg-12  col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center text-pale-sky mt-2">Cronograma</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Curso</td>
+                                    <td>Nivel</td>
+                                    <td>Horario</td>
+                                    <td>Ambiente</td>
+                                </tr>
+                            </thead>
+                            <tbody id="dataHorarioDocente">
+                                <tr>
+                                    <td>Ingles para niños - Regular</td>
+                                    <td>Children Plus 1</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                                <tr>
+                                    <td>Frances - Privado</td>
+                                    <td>Avanzado 5</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                                <tr>
+                                    <td>Ingles - Regular</td>
+                                    <td>Basico 3</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

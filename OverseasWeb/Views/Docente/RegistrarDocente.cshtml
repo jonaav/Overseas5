@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "RegistrarDocente";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container" id="viewRegistrarDocente">
+    <div class="row m-3">
+        <div class="col-lg-7 col-md-12">
+            <div class="row">
+                <div class="card border-dark col-lg-11 col-md-12">
+                    <div class="card-header mt-2 ml-3">
+                        <h3 class="color-pale-sky">Registro de Docente</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <form>
+                            <partial name="~/Views/Docente/_FormDocente.cshtml">
+
+                            <div class="form-group p-2">
+                                <button type="button" class="btn btn-info" onclick="RegistrarDocentes()">Guardar</button>
+                                <a class="btn btn-danger" asp-action="ListarDocentes">Regresar</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-md-12">
+            <div class="row">
+                <div class="card border-dark col">
+                    <div class="card-header mt-2 ml-3">
+                        <h3 class="color-pale-sky">Especialidad</h3>
+                    </div>
+                    <div class="card-body">
+                        <partial name="~/Views/Docente/_TablaEspecialidades.cshtml">
+
+                            <div class="form-group p-2">
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#formEspecialidadModal" onclick="ListarEspecialidadDocente()">Agregar</button>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+<partial name="~/Views/Docente/_FormModalEspecialidad.cshtml">

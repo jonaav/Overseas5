@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container" id="viewInicioAdmin">
+    <div class="row m-3">
+        <div class="col-lg-3 col-sm-6">
+            <div class="card gradient-4" style="max-height:125px">
+                <div class="card-body">
+                    <p class="card-title text-center">Estudiantes activos</p>
+                    <h3 class="text-center text-white" id="estudiantesActivos"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card gradient-4" style="max-height:125px">
+                <div class="card-body">
+                    <p class="card-title text-center">Docentes activos</p>
+                    <h3 class="text-center text-white" id="docentesActivos"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card gradient-4" style="max-height:125px">
+                <div class="card-body">
+                    <p class="card-title text-center">Cursos activos</p>
+                    <h3 class="text-center text-white" id="cursosActivos"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="card gradient-4" style="max-height:125px">
+                <div class="card-body">
+                    <p class="card-title text-center">Traducciones pendientes</p>
+                    <h3 class="text-center text-white" id="traduccionesPendientes"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col-lg-4 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center text-pale-sky mt-2">Cumpleaños de la semana</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Nombres y apellidos</td>
+                                    <td>Dia</td>
+                                </tr>
+                            </thead>
+                            <tbody id="dataCumpleaños">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8  col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center text-pale-sky mt-2">Clases del dia</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Curso</td>
+                                    <td>Nivel</td>
+                                    <td>Docente</td>
+                                    <td>Horario</td>
+                                    <td>Ambiente</td>
+                                </tr>
+                            </thead>
+                            <tbody id="dataClasesDiarias">
+                                <tr>
+                                    <td>Ingles para niños - Regular</td>
+                                    <td>Children Plus 1</td>
+                                    <td>Pablo Manuel Garcia Garcia</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                                <tr>
+                                    <td>Frances - Privado</td>
+                                    <td>Avanzado 5</td>
+                                    <td>Pablo Manuel Garcia Garcia</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                                <tr>
+                                    <td>Ingles - Regular</td>
+                                    <td>Basico 3</td>
+                                    <td>Pablo Manuel Garcia Garcia</td>
+                                    <td>9:00 - 11:00 am</td>
+                                    <td>Aula B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

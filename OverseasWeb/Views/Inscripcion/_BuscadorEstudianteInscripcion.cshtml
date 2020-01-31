@@ -1,0 +1,26 @@
+﻿
+    <div>
+        <div class="form-check-inline p-2">
+            <div class="col">
+                <h4 class="color-pale-sky">ESTUDIANTE</h4>
+            </div>
+            <div class="col">
+                <button class="btn btn-outline-info" id="btnBuscarEstudiantesInscripcion" onclick="ListarEstudiantesInscripcion()" data-toggle="modal" data-target="#formEstudianteInscripcionModal" rel="tooltip" title="Buscar estudiante">
+                    <span class="fa fa-search"></span>
+                </button>
+            </div>
+        </div>
+        <div>
+            <table class="table table-hover table-bordered" id="tableEstudianteInscripcion">
+                <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>APELLIDOS</th>
+                        <th>NOMBRES</th>
+                    </tr>
+                </thead>
+                <tbody id="dataEstudianteSeleccionado">
+                </tbody>
+            </table>
+        </div>
+    </div>

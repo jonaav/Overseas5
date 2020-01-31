@@ -1,0 +1,91 @@
+﻿
+
+@{
+    ViewData["Title"] = "ListarCursosRegular";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div id="containerPrincipalCursoRegular" class="container-fluid">  
+    <!--<div class=" text-center">
+        <h1 class="tituloProgramaCurso"> CURSOS REGULARES </h1>
+    </div>  -->
+    <br><br>
+    <div class="form-group">
+        <div class="row text-center">        
+            <div class="col-sm-2">            
+                <button id="btnInglesNiños" onclick="SeleccionarCurso('Inglés Para Niños', 'Regular')" class="btn btn-outline-primary">
+                    Inglés Para Niños
+                </button>                                
+            </div>
+            <div class="col-sm-2">                                                  
+                <button id="btnInglesGeneral" onclick="SeleccionarCurso('Inglés General', 'Regular')" class="btn btn-outline-primary">
+                    Inglés General
+                </button>                      
+            </div>                           
+            <div class="col-sm-3">                      
+                <button id="btnPreExamInter" onclick="SeleccionarCurso('P. Exam. Internacional', 'Regular')" class="btn btn-outline-primary">
+                    P. Exam. Internacional
+                </button>                
+            </div>
+            <div class="col-sm-2">                      
+                <button id="btnOtrosIdiomas" onclick="SeleccionarCurso('Otros Idiomas', 'Regular')" class="btn btn-outline-primary">
+                    Otros Idiomas
+                </button>                
+            </div> 
+        </div>
+    </div>
+
+    <br>
+     
+    <div id="containerListadoCurso">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="containerListadoCurso">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-2"><h4 > Nuevo Curso</h4></div>
+                                <h4 id="nombreCursoSeleccionado" hidden></h4>                                
+                                <div><button type="button" id="btnAgregarCursoRegular" rel="tooltip" title="Agregar"class="btn btn-secondary btn-link btn-sm">
+                                    <span class="fa fa-plus" style="color:black"></span></button></div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tablaCursosRegular">
+                                    <thead id="cabeceraTablaCursosRegular">
+                                        <tr>
+                                            <th>N°</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenidoTablaCursosRegular">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+
+    <div id="containerRegistroCurso">
+        <partial name="~/Views/Curso/CrearCursoRegular.cshtml">         
+    </div>
+
+    <div id="containerRegistroHorario">
+        <partial name="~/Views/Horario/CrearHorario.cshtml">           
+    </div>
+    
+
+</div>
+
+
+
+
+    
+
+
+
+
+
+

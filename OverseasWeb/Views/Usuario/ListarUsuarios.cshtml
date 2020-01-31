@@ -1,0 +1,35 @@
+﻿
+
+@{
+    ViewData["Title"] = "ListarUsuarios";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container mt-3" id="viewListarUsuarios">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="dataTableUsuario">
+                            <thead>
+                                <tr>
+                                    <th>ROL</th>
+                                    <th>USUARIO</th>
+                                    <th>APELLIDOS</th>
+                                    <th>NOMBRES</th>
+                                    <th>ESTADO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="datosUsuarios">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

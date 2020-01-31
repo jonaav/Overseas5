@@ -1,0 +1,42 @@
+﻿
+
+@{
+    ViewData["Title"] = "ListarAmbientes";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Table -->
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title text-center">
+                        <h4>Lista de Ambientes</h4>
+                    </div>
+                    <div class="table-responsive ">
+                        <table class="table table-hover" id="tablaAmbiente">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Ambiente</th>
+                                    <th>Direccion</th>
+                                    <th>Aula</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="contenidoTablaAmbiente">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <partial name="~/Views/Ambiente/RegistrarAmbiente.cshtml">        
+    </div>
+</div>
+
+
+   
+

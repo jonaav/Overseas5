@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Entidades.Especialidad>
+
+@{
+    ViewData["Title"] = "ListarEspecialidades";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-3" id="viewEspecialidad">
+    <div class="row">
+        <div class="col-md-5 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <partial name="~/Views/Especialidad/_FormEspecialidad.cshtml">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="tablaEspecialidad">
+                            <thead>
+                                <tr>
+                                    <th>Idiomas</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="contenidoTablaEspecialidad">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

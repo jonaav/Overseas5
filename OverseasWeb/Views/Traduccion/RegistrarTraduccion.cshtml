@@ -1,0 +1,58 @@
+﻿@model Entidades.Traduccion
+
+@{
+    ViewData["Title"] = "RegistrarTraduccion";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>RegistrarTraduccion</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RegistrarTraduccion">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdiomaOrigenTraduccion" class="control-label"> Idioma Origen</label>
+                <input type="text" asp-for="IdiomaOrigenTraduccion" class="form-control" />
+                <span asp-validation-for="IdiomaOrigenTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdiomaDestinoTraduccion" class="control-label"> Idioma Destino</label>
+                <input type="text" asp-for="IdiomaDestinoTraduccion" class="form-control" />
+                <span asp-validation-for="IdiomaDestinoTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaTraduccion" class="control-label"> Fecha Traducción </label>
+                <input type="date" asp-for="FechaTraduccion" class="form-control" />
+                <span asp-validation-for="FechaTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteTraduccion" class="control-label"> Cliente </label>
+                <input type="text" asp-for="ClienteTraduccion" class="form-control" />
+                <span asp-validation-for="ClienteTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoTraduccion" class="control-label"> Tipo </label>
+                <input type="text" asp-for="TipoTraduccion" class="form-control" />
+                <span asp-validation-for="TipoTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DetalleTraduccion" class="control-label"> Detalle </label>
+                <input type="text" asp-for="DetalleTraduccion" class="form-control" />
+                <span asp-validation-for="DetalleTraduccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdDocente" class="control-label"> Id Docente</label>
+                <input type="number" asp-for="IdDocente" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-action="ListarTraducciones" class="btn btn-danger btn-sm">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

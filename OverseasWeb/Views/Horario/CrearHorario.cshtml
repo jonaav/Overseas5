@@ -1,0 +1,145 @@
+ <div class="container-fluid">
+     <div class="row">
+        <div class="col-md-4">
+            <div class="containerRegistroHorario">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center">
+                            <h4> HORARIO </h4>
+                            <br>
+                        </div>
+                        <div id="formHorario">
+                            <div id="divDatosHorarioPrivado" class="form-row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="txtNumeroSesion"> N° Sesión : </label>
+                                    <input type="text" class="form-control" id="txtNumeroSesion" disabled>  
+                                    <input type="number" id="txtNumeroActualSesion" hidden>                                                                      
+                                </div>
+                                <div class="col-md-8 mb-3">
+                                    <label for="txtFechaSesion"> Fecha de Sesión : </label>                                 
+                                    <div class="input-group">
+                                        <input type="text" class="form-control mdate" id="txtFechaSesion" placeholder="yyyy-mm-dd">
+                                        <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                    </div>  
+                                    <span class="errores" id="errorFechaSesion">*Debe llenar la Fecha de la Sesión</span>                                                                 
+                                </div>                                
+                            </div>
+                             <div class="form-row">
+                                <div id="divDiaHorario" class="col-md-12 mb-3">
+                                    <label for="txtHorarioDia" >Día : </label>                        
+                                    <select class="form-control" id="selectorHorarioDia">
+                                        <option value="0"> -- Seleccione -- </option>
+                                        <option value="Lunes"> Lunes </option>
+                                        <option value="Martes"> Martes </option>
+                                        <option value="Miércoles"> Miércoles </option>
+                                        <option value="Jueves"> Jueves </option>
+                                        <option value="Viernes"> Viernes </option>
+                                        <option value="Sábado"> Sábado </option>
+                                        <option value="Domingo"> Domingo </option>
+                                    </select> 
+                                    <span class="errores" id="errorHorarioDia">*Debe seleccionar un Día</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">                    
+                                <!-- DIV PARA EL TIPO EN EXAM. INTERNACIONAL -->   
+                                <div class="col-md-6 mb-3">
+                                    <label for="txtHoraInicio">Hora Inicio : </label>
+                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                        <input type="text" class="form-control" id="txtHoraInicio"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                    </div>       
+                                    <span class="errores" id="errorHoraInicio">*Debe seleccionar una Hora de Inicio</span>                                 				        	                                        
+                                </div> 
+                                <div class="col-md-6 mb-3">
+                                    <label for="txtHoraFin">Hora Fin : </label>	
+                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true">
+                                        <input type="text" class="form-control" id="txtHoraFin"> <span class="input-group-append"><span class="input-group-text"><i class="fa fa-clock-o"></i></span></span>
+                                    </div> 	
+                                    <span class="errores" id="errorHoraFin">*Debe seleccionar una Hora Fin</span>		        	                                        
+                                </div>                                                                                        
+                            </div>        
+                            <div class="form-row">                                  
+                                <div class="col-md-12 mb-3">                                
+                                    <label for="txtHorarioNombreAmbiente">Ambiente : </label>				        	
+                                    <div class="form-inline">                                                                        
+                                        <input type="text" class="form-control" id="txtHorarioNombreAmbiente" disabled>                                                                        
+                                        <input type="text" id="txtHorarioIdAmbiente" hidden>                            
+                                    </div>
+                                    <span class="errores" id="errorHorarioNombreAmbiente">*Debe seleccionar un Ambiente</span>
+                                </div>                                                              
+                            </div> 
+                            <div class="form-group">
+                                <div class="col-1">
+                                    <button id="btnBuscarAmbiente" onclick="CargarModalAmbienteParaHorario()" type="button" rel="tooltip" title="Buscar Docente"class="btn btn-secondary btn-link btn-sm">
+                                    <span class="fa fa-search" style="color:black"></button>            		            		           
+                                </div> 
+                            </div>
+                            <div class="form-group text-center" >
+                                <button onclick = "AgregarHorario()"  rel="tooltip" title="Agregar" type="button" class="btn btn-outline-success"><span class="fa fa-plus" style="color:black"></button>
+                                <button onclick = "LimpiarFormHorario()"  rel="tooltip" title="Limpiar Campos" type="button" class="btn btn-outline-secondary"><span class="fa fa-refresh" style="color:black"></button>                    
+                            </div>
+
+                            <input type="text" id="txtIdCursoHorario" hidden>  
+                            <input type="text" id="txtProgramaCursoHorario" hidden>  
+                            <input type="text" id="txtFechaInicioCurso" hidden>  
+                            <input type="text" id="txtFechaFinCurso" hidden>  
+
+                        </div>    
+                                      
+                    </div>
+                </div>  
+
+                <div class="form-group text-center" >
+                    <button onclick = "GuardarHorarios()"  id="btnGuardarHorario"  type="button" class="btn btn-outline-primary">GUARDAR</button>                    
+                    <button onclick="CancelarIngresoHorario()" type="button" class="btn btn-outline-danger">CANCELAR</button>                    
+                </div>
+            </div>    
+        </div>
+        <partial name="~/Views/Horario/ListarHorariosRegular.cshtml"></partial>    
+     </div>
+ </div>
+ 
+ 
+
+
+        
+
+<div class="modal fade modalBuscarAmbiente-modal-lg" id="modalBuscarAmbiente" tabindex="-1" data-focus-on="input:first" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+	<form>
+	  <div class="modal-dialog modal-lg" id="modalDialog">
+	    <div class="modal-content" >	
+            <div class="modal-header">
+              	<h4 class="modal-title" id="etiquetaTituloModal"> Lista De Ambientes  </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 style="font-size: 18px;">Seleccione el Ambiente : </h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tablaAmbienteModal">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Ambiente</th>                                            
+                                            <th>Aula</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenidoTablaAmbiente">
+
+                                    </tbody>
+                                </table>
+                            </div>                                                  
+                        </div>                                                
+                    </div>                                    	               		        		            	
+	   	        </div>
+	        </div>
+
+	    </div>
+	  </div>
+	</form>	
+</div>

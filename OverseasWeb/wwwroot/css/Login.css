@@ -1,0 +1,92 @@
+﻿
+body, html{
+    margin: 0;
+    padding: 0;
+    background: url(../assets/images/fondoLogin.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: sans-serif;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+
+
+
+.login {
+    width: 350px;
+    height: 450px;
+    background: rgba(0, 0, 0,0.5);
+    color: #fff;
+    top: 50%;
+    left: 25%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+    border-radius: 5%;
+}
+
+@media (max-width: 400px){
+    .login{
+        width:90%;
+    }
+}
+
+h1{
+    margin:0;
+    padding: 0 0 20px;
+    text-align: center;
+    font-size: 22px;
+    color: #fff;
+}
+
+.login label {
+    margin: 0;
+    padding: 0;
+}
+
+
+.login input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+
+.login input[type="email"], input[type="password"]{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    font-size: 16px;
+    color: #fff;
+}
+
+
+.login input[type="submit"] {
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #0f71ea;
+    color: #fff;
+    font-size: 17px;
+    border-radius: 20px;
+}
+
+.login input[type="submit"]:hover {
+    cursor: pointer;
+    background: #0057c3;
+    color: #000;
+}
+
+
+.alert-validacion{
+    color: #f61818;
+}
+
+
+
+

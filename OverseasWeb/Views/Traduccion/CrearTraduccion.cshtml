@@ -1,0 +1,126 @@
+<div class="col-md-6">
+         <div class="containerRegistroTraduccion">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4> Nueva Traduccion</h4>
+                        <br>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="txtClienteTraduccion">Cliente : </label>				        	
+                            <input type="text" class="form-control" id="txtClienteTraduccion">
+                            <span class="errores" id="errorClienteTraduccion">*Debe llenar el campo Cliente</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                            <label for="txtDetalleTraduccion">Detalle : </label>				        	
+                            <input type="text" class="form-control" id="txtDetalleTraduccion">
+                            <span class="errores" id="errorDetalleTraduccion">*Debe llenar el campo Detalle</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="txtIdiomaOrigen">Idioma Origen : </label>				        	
+                            <input type="text" class="form-control" id="txtIdiomaOrigen">
+                            <span class="errores" id="errorIdiomaOrigen">*Debe llenar el campo Idioma Origen</span>
+                        </div>        
+                        <div class="col-md-6 mb-3">
+                            <label for="txtIdiomaDestino">Idioma Destino : </label>				        	
+                            <input type="text" class="form-control" id="txtIdiomaDestino">
+                            <span class="errores" id="errorIdiomaDestino">*Debe llenar el campo Idioma Destino</span>
+                        </div>                                
+                    </div>                    
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="txtFechaTraduccion">Fecha : </label>				        	
+                            <input type="date" class="form-control" id="txtFechaTraduccion">
+                            <span class="errores" id="errorFechaTraduccion">*Debe llenar el campo Fecha</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="txtTipoTraduccion">Tipo : </label>				        	
+                            <input type="text" class="form-control" id="txtTipoTraduccion">
+                            <span class="errores" id="errorTipoTraduccion">*Debe llenar el campo Tipo</span>
+                        </div>                    
+                    </div>                         
+                    <div class="form-row">                                  
+                        <div class="col-md-12 mb-3">                                
+                            <label for="txtNombreDocente">Docente : </label>				        	
+                            <div class="form-inline">                                                                        
+                                <input type="text" class="form-control" id="txtNombreDocente" disabled>                                          
+                                <div class="col-1">
+                                    <button id="btnBuscarDocenteCurso" onclick="cargarModalDocentesUnCurso()" type="button" rel="tooltip" title="Buscar Docente"class="btn btn-secondary btn-link btn-sm">
+                                    <span class="fa fa-search" style="color:black"></button>            		            		           
+                                </div>  
+                                <input type="text" id="txtIdTraduccion" hidden> 
+                                <input type="text" id="txtIdDocente" hidden>
+                                <input type="text" id="txtIdCurso" hidden>                                                                                                                  
+                            </div>                              
+                        </div>                                                              
+					</div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="habilitar" id="checkBoxDocente" name="checkBoxDocente">
+                            <label class="form-check-label" for="checkBoxDocente">
+                             Docente Sin Asignar
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+					    <div class="col text-center" >
+                            <div id="divGuardarTraduccion">
+                                <button onclick='GuardarEditarTraduccion("Guardar")' rel="tooltip" title="Guardar Traduccion" type="button" class="btn btn-outline-success"><span class="fa fa-save" style="color:black"></button>
+                                <button onclick='CargarTablaListadoTraduccion()' rel="tooltip" title="Cancelar"  type="button" class="btn btn-outline-danger"><span class="fa fa-remove" style="color:black"></button>
+					        </div>
+                            <div id="divEditarTraduccion">
+                                <button onclick='GuardarEditarTraduccion("Editar")' rel="tooltip" title="Editar Traduccion" type="button" class="btn btn-outline-warning"><span class="fa fa-save" style="color:black"></button>
+                                <button onclick='CargarTablaListadoTraduccion()' rel="tooltip" title="Cancelar"  type="button" class="btn btn-outline-danger"><span class="fa fa-remove" style="color:black"></button>
+					        </div>                            
+					    </div>
+				    </div>
+                </div>
+            </div>
+         </div>
+     </div>
+
+<div class="modal fade modalCrearCurso-modal-lg" id="modalDocentesUnCurso" tabindex="-1" data-focus-on="input:first" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+	<form>
+	  <div class="modal-dialog modal-lg" id="modalDialog">
+	    <div class="modal-content" >	
+            <div class="modal-header">
+              	<h4 class="modal-title" id="etiquetaTituloModal"> Lista De Docentes  </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 style="font-size: 18px;">Seleccione el Docente : </h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tablaDocenteUnCurso">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Docente</th>                                                                                
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenidoTablaDocenteUnCurso">
+
+                                    </tbody>
+                                </table>
+                            </div>                                                      
+                        </div>                                                
+                    </div>                                    	               		        		            	
+	   	        </div>
+	        </div>
+	    </div>
+	  </div>
+	</form>	
+</div>
+
+

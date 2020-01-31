@@ -1,0 +1,153 @@
+﻿
+     <div class="col-md-6">
+         <div class="containerRegistroCurso">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h4> Nuevo Curso</h4>
+                        <h1 id="bandera" hidden>0</h1>                        
+                        <br>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="txtNombreCurso">Curso : </label>				        	
+                            <input type="text" class="form-control" id="txtNombreCurso" disabled>
+                        </div>                                
+                        <div class="col-md-6 mb-3">
+                            <label for="txtIdioma">Idioma : </label>				        	
+                            <select class="form-control" id="selectorIdioma">
+                                <option value="0"> -- Seleccione -- </option>
+                                <option value="Inglés"> Inglés </option>                                                                                              
+                            </select> 
+                            <span class="errores" id="errorIdioma">*Debe llenar el campo Idioma</span>
+                        </div>                                                                                
+                    </div>
+                    <div class="form-row">
+                        <div id="divModalidadCurso" class="col-md-6 mb-3">
+                            <label for="txtModalidadCurso" >Modalidad : </label>                        
+                            <select class="form-control" id="selectorModalidadCurso">
+                                <option selected value="0"> -- Seleccione -- </option>
+                                <option value="Personalizada"> Personalizada </option>
+                                <option value="Grupal"> Grupal </option>
+                            </select> 
+                            <span class="errores" id="errorModalidadCurso">*Debe seleccionar una Modalidad para el Curso</span>
+                        </div>
+
+                        <!-- DIV PARA LA EMPRESA EN CURSO CORPORATIVO -->  
+                        <div id="divEmpresa" class="col-md-6 mb-3">
+                            <label for="txtNombreEmpresaCurso">Empresa : </label>				        	
+                            <input type="text" class="form-control" id="txtNombreEmpresaCurso">
+                            <span class="errores" id="errorNombreEmpresaCurso">*Debe llenar el campo Empresa</span>
+                        </div> 
+
+                         <!-- DIV PARA EL TIPO EN EXAM. INTERNACIONAL -->   
+                        <div id="divTipo" class="col-md-6 mb-3">
+                            <label for="txtTipoExamInter">Tipo : </label>				        	
+                            <input type="text" class="form-control" id="txtTipoExamInter">
+                            <span class="errores" id="errorTipoExamInter">*Debe llenar el Tipo de Examen</span>
+                        </div>                                        
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="txtNivel">Nivel : </label>				        	
+                            <input type="text" class="form-control" id="txtNivel">
+                            <span class="errores" id="errorNivel">*Debe llenar el campo Nivel</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="txtCiclo">Ciclo : </label>				        	
+                            <input type="number" class="form-control" id="txtCiclo">
+                            <span class="errores" id="errorCiclo">*Debe llenar el campo Ciclo</span>
+                        </div>                    
+                    </div>                                          
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="txtFechaInicio">Fecha Inicio : </label>		
+                            <div class="input-group">
+                                <input type="text"  class="form-control mdate" id="txtFechaInicio" placeholder="yyyy-mm-dd">
+                                <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div> 		        	                            
+                            <span class="errores" id="errorFechaInicio">*Debe llenar el campo Fecha Inicio</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="txtFechaFin">Fecha Fin : </label>	
+                            <div class="input-group">
+                                <input type="text" class="form-control mdate" id="txtFechaFin" placeholder="yyyy-mm-dd">
+                                <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>
+                            
+                            <span class="errores" id="errorFechaFin">*Debe llenar el campo Fecha Fin</span>
+                        </div>                    
+                    </div>                                 
+
+                    <div class="form-row">                                  
+                        <div class="col-md-12 mb-3">                                
+                            <label for="txtNombreDocente">Docente : </label>				        	
+                            <div class="form-inline">                                                                        
+                                <input type="text" class="form-control" id="txtNombreDocente" disabled>                                          
+                                <div class="col-1">
+                                    <button id="btnBuscarDocenteCurso" onclick="CargarModalDocentesParaCurso()" type="button" rel="tooltip" title="Buscar Docente"class="btn btn-secondary btn-link btn-sm">
+                                    <span class="fa fa-search" style="color:black"></button>            		            		           
+                                </div>   
+                                <input type="text" id="txtIdDocente" hidden>
+                                <input type="text" id="txtIdCurso" hidden>
+                                <input type="text" id="txtPrograma" hidden>                                                                                   
+                            </div>                              
+                        </div>                                                              
+					</div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="habilitar" id="checkBoxDocente" name="checkBoxDocente">
+                            <label class="form-check-label" for="checkBoxDocente">
+                             Docente Sin Asignar
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+					    <div class="col text-center" id="divBotones">
+
+					    </div>
+				    </div>
+                </div>
+            </div>
+         </div>
+     </div>
+
+<div class="modal fade modalCrearCurso-modal-lg" id="modalDocentesUnCurso" tabindex="-1" data-focus-on="input:first" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+	<form>
+	  <div class="modal-dialog modal-lg" id="modalDialog">
+	    <div class="modal-content" >	
+            <div class="modal-header">
+              	<h4 class="modal-title" id="etiquetaTituloModal"> Lista De Docentes  </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 style="font-size: 18px;">Seleccione el Docente : </h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tablaDocenteUnCurso">
+                                    <thead>
+                                        <tr>
+                                            <th>N°</th>
+                                            <th>Docente</th>                                                                                
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenidoTablaDocenteUnCurso">
+
+                                    </tbody>
+                                </table>
+                            </div>                                                      
+                        </div>                                                
+                    </div>                                    	               		        		            	
+	   	        </div>
+	        </div>
+	    </div>
+	  </div>
+	</form>	
+</div>
+

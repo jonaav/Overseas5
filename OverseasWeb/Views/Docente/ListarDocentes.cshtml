@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Entidades.Docente>
+
+@{
+    ViewData["Title"] = "ListarDocentes";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container mt-3" id="viewListarDocentes">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col">
+                        <a class="btn btn-info" asp-action="RegistrarDocente">Nuevo Docente</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="dataTableDocente">
+                            <thead>
+                                <tr>
+                                    <th>DNI</th>
+                                    <th>APELLIDOS</th>
+                                    <th>NOMBRES</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="datosDocentes">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.DniPersona)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.ApellidosPersona)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.NombresPersona)</td>
+
+                                        <td>
+                                            <div class="form-check-inline"><a class="btn btn-outline-info" asp-action="EditarDocente" asp-route-id="@item.IdDocente" rel="tooltip" title="Datos"><span class="fa fa-user"></span></a></div>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

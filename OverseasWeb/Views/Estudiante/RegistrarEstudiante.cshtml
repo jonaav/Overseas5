@@ -1,0 +1,79 @@
+﻿
+
+@{
+    ViewData["Title"] = "RegistrarEstudiante";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container mt-3" id="viewRegistroEstudiantes">
+    <div class="row">
+        <div class="col-lg-3 col-md-2">
+        </div>
+
+        <div class="card border-dark col-lg-6 col-md-9 col-sm-12 ">
+            <div class="card-header mt-2 ml-3">
+                <h3 class="color-pale-sky">Registro de Estudiante</h3>
+            </div>
+
+            <div class="card-body">
+                <form>
+                    <partial name="~/Views/Estudiante/_FormEstudiante.cshtml">
+
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="txtPoseeApoderado">Tiene apoderado:</label>
+                                <select class="custom-select" id="txtPoseeApoderado" required>
+                                    <option selected value="1">No</option>
+                                    <option value="2">Si</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md pl-3">
+                                <label for="txtApoderado" class="control-label ml-3"> Apoderado: </label>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-info" id="btnAgregarApoderado" data-toggle="modal" data-target="#registrarApoderadoModal" disabled>Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <span class="errores" id="errorPoseeApoderado">Debe ingresar los datos del Apoderado</span>
+                    </div>
+
+                    <div class="form-group p-2">
+                        <button type="button" class="btn btn-info" onclick="RegistrarEstudiantes()">Guardar</button>
+                        <a class="btn btn-danger" asp-action="ListarEstudiantes">Regresar</a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="registrarApoderadoModal" tabindex="-1" role="dialog" aria-labelledby="registrarApoderadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrarApoderadoModalLabel">Datos del Apoderado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <partial name="~/Views/Estudiante/_FormApoderado.cshtml">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-warning" onclick="LimpiarFormApoderado()">Limpiar</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

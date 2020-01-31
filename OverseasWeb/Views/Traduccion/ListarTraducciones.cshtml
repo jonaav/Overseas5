@@ -1,0 +1,55 @@
+﻿
+
+@{
+    ViewData["Title"] = "ListarTraducciones";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <div class="container-fluid">
+        <!-- Table -->
+        <div id="containerListadoTraduccion">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="containerListadoTraduccion">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">
+                                    <h3>Lista de Traducciones</h3>
+                                </div>
+                                <div class="form-row">
+                                        <div class="col-2"><h4 > Nueva Traduccion</h4></div>                                
+                                        <div><button type="button" id="btnAgregarTraduccion" rel="tooltip" title="Agregar"class="btn btn-secondary btn-link btn-sm">
+                                            <span class="fa fa-plus" style="color:black"></span></button></div>
+                                    </div>
+                                <div class="table-responsive ">
+                                    <table class="table table-hover table-sm" style="width:100%" id="tablaTraduccion">
+                                        <thead>
+                                            <tr>
+                                                <th>N°</th>
+                                                <th>Tipo</th>
+                                                <th>Cliente</th>
+                                                <th>Detalle</th>
+                                                <th>Docente</th>
+                                                <th>Fecha Traduccion</th>
+                                                <th>Idioma Origen</th>
+                                                <th>Idioma Destino</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contenidoTablaTraduccion">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div> 
+        <div id="containerRegistroTraduccion">
+            <partial name="~/Views/Traduccion/CrearTraduccion.cshtml">            
+        </div>       
+    </div>
+

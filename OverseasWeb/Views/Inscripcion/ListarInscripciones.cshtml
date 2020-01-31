@@ -1,0 +1,54 @@
+﻿
+
+@{
+    ViewData["Title"] = "ListarInscripciones";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="container mt-3" id="viewListarInscripciones">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+
+                        <div class="header-right">
+                            <a class="btn btn-info" asp-action="RegistrarInscripcion">Nueva Matricula</a>
+                        </div>
+                        <partial name="~/Views/Inscripcion/_BuscadorCursoInscripcion.cshtml">
+
+                            <div class="form-check-inline p-2">
+                                <div class="col">
+                                    <h4 class="color-pale-sky">ESTUDIANTES MATRICULADOS</h4>
+                                </div>
+                            </div>
+
+                            <div>
+                                <table class="table table-hover table-bordered" id="tableInscripciones">
+                                    <thead>
+                                        <tr>
+                                            <th>DNI</th>
+                                            <th>APELLIDOS</th>
+                                            <th>NOMBRES</th>
+                                            <th>FECHA INSCRIPCION</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dataInscripciones">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<partial name="~/Views/Inscripcion/_ModalTablaCursosInscripcion.cshtml">

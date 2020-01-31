@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Entidades.Estudiante>
+
+@{
+    ViewData["Title"] = "ListarEstudiantes";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-3" id="viewListarEstudiantes">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col">
+                        <a class="btn btn-info" asp-action="RegistrarEstudiante">Nuevo Estudiante</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="dataTableEstudiante">
+                            <thead>
+                                <tr>
+                                    <th>DNI</th>
+                                    <th>APELLIDOS</th>
+                                    <th>NOMBRES</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="datosEstudiantes">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.DniPersona)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.ApellidosPersona)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Persona.NombresPersona)</td>
+
+                                        <td>
+                                            <div class="form-check-inline"><a class="btn btn-outline-info" id="btnEditarEstudiante" asp-action="EditarEstudiante" asp-route-id="@item.IdEstudiante" rel="tooltip" title="Datos"><span class="fa fa-user"></span></a></div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+

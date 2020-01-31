@@ -1,0 +1,53 @@
+<div class="col-md-5 ml-auto">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title text-center">
+                <h4>Crear Ambiente</h4>
+            </div>
+            <form id="formAmbiente">                        
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <div class="col md-12">                        
+                        <label for="txtAmbiente" >Ambiente : </label>                        
+                        <select class="form-control" id="selectorAmbiente">
+                            <option value="Overseas"> Overseas </option>
+                            <option value="Domicilio"> Domicilio </option>
+                            <option value="Empresa"> Empresa </option>
+                        </select>                                             
+                    </div>
+                </div>
+
+                <div id="divNombreEmpresa" class="form-group">                                              
+                    <div class="col-md-12">    
+                        <label for="txtNombreEmpresa"  class="control-label"> Nombre de la Empresa : </label>                      
+                        <input type="text" class="form-control" id="txtNombreEmpresa">
+                        <span class="errores" id="errorNombreEmpresa">*Debe ingresar un Nombre para la Empresa</span>
+                    </div>
+                </div>  
+
+                <div class="form-group">                                              
+                    <div class="col-md-5">
+                        <label for="txtAula"  class="control-label"> Aula </label>                                                        
+                    </div>
+                    <div class="col-md-5">                        
+                        <input type="text" class="form-control" id="txtAula">
+                        <span class="errores" id="errorAula">*Debe ingresar una Aula</span>
+                    </div>
+                </div>                
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="txtDireccionAmbiente"  class="control-label"> Direccion </label>
+                        <textArea id="txtDireccionAmbiente"  class="form-control"></textArea>    
+                        <span class="errores" id="errorDireccionAmbiente">*Debe ingresar una Dirección</span>                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-9 ml-auto">   
+                        <button type="button"  onclick='RegistrarAmbiente()' class="btn btn-outline-success">Registrar</button>
+                        <button type="button" onclick='LimpiarCamposAmbiente()' class="btn btn-outline-danger">Cancelar</button>
+                    </div>
+                </div>                                                                
+            </form>
+        </div>
+    </div>
+</div>  

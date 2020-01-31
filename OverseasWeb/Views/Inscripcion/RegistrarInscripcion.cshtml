@@ -1,0 +1,64 @@
+﻿
+
+@{
+    ViewData["Title"] = "RegistrarInscripcion";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+
+<div class="container mt-3" id="viewRegistroInscripcion">
+    <div class="card border-dark">
+        <div class="card-header">
+            <h3 class="color-pale-sky">Registro de Matricula</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <partial name="~/Views/Inscripcion/_BuscadorCursoInscripcion.cshtml">
+                <partial name="~/Views/Inscripcion/_BuscadorEstudianteInscripcion.cshtml">
+
+                <div>
+                    <button class="btn btn-info" id="btnRegistroInscripcion" onclick="RegistrarInscripcion()">Guardar</button>
+                    <a class="btn btn-danger" asp-action="ListarInscripciones">Regresar</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<partial name="~/Views/Inscripcion/_ModalTablaCursosInscripcion.cshtml">
+
+
+
+<div class="modal fade" id="formEstudianteInscripcionModal" tabindex="-1" role="dialog" aria-labelledby="estudianteInscripcionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="estudianteInscripcionModalLabel">SELECCIONE UN IDIOMA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="dataTableEstudianteInscripcion">
+                        <thead>
+                            <tr>
+                                <th>DNI</th>
+                                <th>APELLIDOS</th>
+                                <th>NOMBRES</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataEstudianteInscripcion">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
