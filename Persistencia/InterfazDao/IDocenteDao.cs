@@ -9,6 +9,7 @@ namespace Persistencia.InterfazDao
     {
 
         List<Docente> ListarDocentes();
+        List<Docente> ListarDocentesHabilitados();
         Docente BuscarDocenteDNI(string dni);
         Docente BuscarDocenteID(int id);
         Docente BuscarDocenteCorreo(string correo);

@@ -23,6 +23,7 @@ namespace Persistencia.ImplementacionDao
                                                                                             c.TipoCurso.NombreCurso == nombreCurso))
                                                                                 .Include(c => c.TipoCurso)
                                                                                 .Include(c => c.Docente)
+                                                                                    .ThenInclude(d => d.Persona)
                                                                                 .ToList();
 
 

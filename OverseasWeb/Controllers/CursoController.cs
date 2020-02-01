@@ -41,12 +41,20 @@ namespace OverseasWeb.Controllers
             return Json(cursos);
 
         }
+        
 
-        [HttpPost]
-        public IActionResult CrearCurso(Curso curso)
+        public IActionResult ListarDocentes()
         {
-            var mensaje = _cursoService.RegistrarCurso(curso);
-            return Json(mensaje);
+            List<Docente> docentes = _cursoService.ListarDocentes();
+            return Json(docentes);
+
+        }
+
+
+        public IActionResult BuscarDocentePorID(int idDocente)
+        {
+            Docente docente = _cursoService.BuscarDocentePorID(idDocente);
+            return Json(docente);
         }
 
         public IActionResult BuscarCurso(int idCurso)
@@ -55,12 +63,34 @@ namespace OverseasWeb.Controllers
             return Json(curso);
         }
 
+        public IActionResult BuscarTipoCurso(string nombreCurso)
+        {
+            TipoCurso tipoCurso = _cursoService.BuscarTipoCursoPorNombre(nombreCurso);
+            return Json(tipoCurso);
+        }
+
+
+        public IActionResult RegistrarCurso()
+        {
+            return View();
+        }
+
+
         [HttpPost]
-        public IActionResult EditarCursoRegular(Curso curso)
+        public IActionResult RegistrarCurso(Curso curso)
+        {
+            var mensaje = _cursoService.RegistrarCurso(curso);
+            return Json(mensaje);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditarCurso(Curso curso)
         {
             var mensaje = _cursoService.EditarCurso(curso);
             return Json(mensaje);
         }
+
 
         [HttpPost]
         public IActionResult EliminarCurso(int idCurso)

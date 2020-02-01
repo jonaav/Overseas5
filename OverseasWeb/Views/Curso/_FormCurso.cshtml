@@ -1,0 +1,90 @@
+﻿
+<div class="container mt-3">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-3 col-md-2">
+            </div>
+
+            <div class="card col-lg-6 col-md-9 col-sm-12 ">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3 class="color-pale-sky" id="cursoFormHeader"></h3>
+                    </div>
+                    <form>
+                        <div class="form-group form-row">
+                            <div class="col-6">
+                                <label class="control-label">Programa</label>
+                                <input id="txtProgramaCurso" class="form-control" disabled />
+                                <span class="errores"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="control-label">Modalidad</label>
+                                <input id="txtModalidadCurso" class="form-control" />
+                                <span class="errores"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <div class="col-6">
+                                <label class="control-label" id="labelIdiomaCurso">Idioma</label>
+                                <select class="custom-select form-control" id="txtIdiomaCurso">
+                                    @*<option selected value="1">No</option>
+                                    <option value="2">Si</option>*@
+                                </select>
+                                <span class="errores"></span>
+                            </div>
+                            <div class="col-6">
+                                <label id="labelDetalleCurso" class="control-label"></label>
+                                <input id="txtDetalleCurso" class="form-control" />
+                                <span class="errores"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <div class="col-6">
+                                <label class="control-label">Nivel</label>
+                                <input id="txtNivelCurso" class="form-control" />
+                                <span class="errores"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="control-label">Ciclo</label>
+                                <input id="txtCicloCurso" class="form-control" />
+                                <span class="errores"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <div class="col-6">
+                                <label class="control-label">Fecha Inicio</label>
+                                <input id="txtFechaInicioDeCurso" class="form-control" type="date" />
+                                <span class="errores"></span>
+                            </div>
+                            <div class="col-6">
+                                <label class="control-label">Fecha Fin</label>
+                                <input id="txtFechaFinDeCurso" class="form-control" type="date" />
+                                <span class="errores"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Docente</label>
+                            <div class="form-check-inline col-12">
+                                <input id="txtDocenteCurso" class="form-control"/>
+                                <button onclick="ListarDocentesActivos()" type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#modalBuscarDocente" rel="tooltip" title="Buscar Docente">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info" onclick="GuardarCurso()">Guardar</button>
+                            <button class="btn btn-danger" onclick="ListarCursos()">Regresar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -21,7 +21,7 @@ namespace Persistencia.ImplementacionDao
         }
 
 
-        #region metodos
+        #region public
 
 
         /*
@@ -193,7 +193,7 @@ namespace Persistencia.ImplementacionDao
                                                     .Count();
 
 
-        #endregion metodos
+        #endregion public
 
 
         #region private

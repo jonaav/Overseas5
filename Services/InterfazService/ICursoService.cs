@@ -10,7 +10,10 @@ namespace Services.InterfazService
     {
         List<Curso> ListarCursos(string nombreCurso, string programa);
         List<Curso> ListarCursosHabiles();
+        Docente BuscarDocentePorID(int idDocente);
         Curso BuscarCursoPorID(int idCurso);
+        TipoCurso BuscarTipoCursoPorNombre(string nombreCurso);
+        List<Docente> ListarDocentes();
         String RegistrarCurso(Curso curso);
         String EditarCurso(Curso curso);
         String EliminarCurso(int idCurso);

@@ -41,14 +41,6 @@ namespace OverseasWeb.Controllers
             return View(docentes);
         }
 
-
-        /**/
-        public IActionResult ListarDocentesParaCurso()
-        {
-            List<Docente> docentes = _docenteService.ListarDocentes();            
-            return Json(docentes);
-        }
-
         /**/
         public IActionResult BuscarDocente(int id)
         {

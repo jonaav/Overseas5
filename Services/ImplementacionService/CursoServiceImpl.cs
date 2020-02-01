@@ -10,12 +10,18 @@ namespace Services.ImplementacionService
     public class CursoServiceImpl:ICursoService
     {
         private readonly ICursoDao _cursoDao;
+        private readonly IDocenteDao _docenteDao;
+        private readonly ITipoCursoDao _tipoCursoDao;
 
         public CursoServiceImpl(
-            ICursoDao cursoDao
+            ICursoDao cursoDao,
+            IDocenteDao docenteDao,
+            ITipoCursoDao tipoCursoDao
         )
         {
             _cursoDao = cursoDao;
+            _docenteDao = docenteDao;
+            _tipoCursoDao = tipoCursoDao;
         }
 
 
@@ -41,7 +47,26 @@ namespace Services.ImplementacionService
 
 
 
+        /*
+         *  Listar Docentes Habiles - estado = 1
+         */
+        public List<Docente> ListarDocentes()
+        {
+            List<Docente> docentes = _docenteDao.ListarDocentesHabilitados();
+            return docentes;
+        }
 
+        
+
+        /*
+         *  Buscar Docente
+         */
+        public Docente BuscarDocentePorID(int idDocente)
+        {
+            Docente docente = _docenteDao.BuscarDocenteID(idDocente);
+            return docente;
+        }
+        
 
         /*
          *  Buscar Curso
@@ -50,6 +75,17 @@ namespace Services.ImplementacionService
         {
             Curso curso = _cursoDao.BuscarCursoPorID(idCurso);
             return curso;
+        }
+
+        
+
+        /*
+         *  Buscar TipoCurso por nombre
+         */
+        public TipoCurso BuscarTipoCursoPorNombre(string nombreCurso)
+        {
+            TipoCurso tipoCurso = _tipoCursoDao.BuscarTipoCursoPorNombre(nombreCurso);
+            return tipoCurso;
         }
 
 

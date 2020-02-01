@@ -44,6 +44,18 @@ namespace Persistencia.ImplementacionDao
         public TipoCurso BuscarTipoCursoPorID(int idTipoCurso) => _context.TipoCurso
                                                                 .Where(tc => tc.IdTipoCurso == idTipoCurso)
                                                                 .FirstOrDefault();
+        
+
+
+        /*
+         *  Buscar TipoCurso por nombre
+         */
+        public TipoCurso BuscarTipoCursoPorNombre(string nombreCurso) => _context.TipoCurso
+                                                                .Where(tc => tc.NombreCurso == nombreCurso)
+                                                                .FirstOrDefault();
+
+
+
 
         /*
          *  Crear TipoCurso
