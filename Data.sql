@@ -58,10 +58,10 @@ SET IDENTITY_INSERT [dbo].[Persona] OFF
 
 
 SET IDENTITY_INSERT [dbo].[TipoCurso] ON 
-INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (1, N'Ingles Niños')
-INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (2, N'Ingles Regular')
+INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (1, N'Inglés Niños')
+INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (2, N'Inglés Regular')
 INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (3, N'P. Exam. Internacional')
-INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (4, N'Coorporativo')
+INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (4, N'Corporativo')
 INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (5, N'Domicilio')
 INSERT [dbo].[TipoCurso] ([IdTipoCurso], [NombreCurso]) VALUES (6, N'Otros Idiomas')
 SET IDENTITY_INSERT [dbo].[TipoCurso] OFF
