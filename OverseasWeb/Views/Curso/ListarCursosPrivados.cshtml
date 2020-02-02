@@ -1,89 +1,187 @@
 ﻿@*
+    @{
+        ViewData["Title"] = "ListarCursosPrivados";
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+
+    <div id="containerPrincipalCursoPrivado" class="container-fluid">
+
+        <!-- <div class=" text-center">
+            <h1 class="tituloProgramaCurso"> CURSOS PRIVADOS </h1>
+        </div> -->
+        <br><br>
+         <div class="form-group">
+            <div class="row text-center">
+                <div class="col-sm-2">
+                    <button id="btnInglesNiños" onclick="SeleccionarCurso('Inglés Para Niños', 'Privado')" class="btn btn-outline-primary">
+                        Inglés Para Niños
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <button id="btnInglesGeneral" onclick="SeleccionarCurso('Inglés General', 'Privado')" class="btn btn-outline-primary">
+                        Inglés General
+                    </button>
+                </div>
+                <div class="col-sm-3">
+                    <button id="btnPreExamInter" onclick="SeleccionarCurso('P. Exam. Internacional', 'Privado')" class="btn btn-outline-primary">
+                        P. Exam. Internacional
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <button id="btnDomicilio" onclick="SeleccionarCurso('Domicilio','Privado')" class="btn btn-outline-primary">
+                        Domicilio
+                    </button>
+                </div>
+                <div class="col-sm-2">
+                    <button id="btnCorporativo" onclick="SeleccionarCurso('Corporativo', 'Privado')" class="btn btn-outline-primary">
+                        Corporativo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div id="containerListadoCurso">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="containerListadoCurso">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-2"><h4 > Nuevo Curso</h4></div>
+                                    <h4 id="nombreCursoSeleccionado" hidden></h4>
+                                    <h1 id="bandera" hidden>0</h1>
+                                    <div><button type="button" id="btnAgregarCursoPrivado" rel="tooltip" title="Agregar"class="btn btn-secondary btn-link btn-sm">
+                                        <span class="fa fa-plus" style="color:black"></button></div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="tablaCursosPrivado">
+                                        <thead id="cabeceraTablaCursosRegular">
+                                            <tr>
+                                                <th>N°</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contenidoTablaCursosRegular">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="containerRegistroCurso">
+            <partial name="~/Views/Curso/CrearCursoRegular.cshtml">
+        </div>
+
+        <div id="containerRegistroHorario">
+            <partial name="~/Views/Horario/CrearHorario.cshtml">
+        </div>
+
+
+    </div>
+
+
+*@
+
+
+
+
+
+
+
 @{
-    ViewData["Title"] = "ListarCursosPrivados";
+    ViewData["Title"] = "ListarCursosRegular";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div id="containerPrincipalCursoPrivado" class="container-fluid">    
-
-    <!-- <div class=" text-center">
-        <h1 class="tituloProgramaCurso"> CURSOS PRIVADOS </h1>
-    </div> -->
-    <br><br>
-     <div class="form-group">
-        <div class="row text-center">        
-            <div class="col-sm-2">            
-                <button id="btnInglesNiños" onclick="SeleccionarCurso('Inglés Para Niños', 'Privado')" class="btn btn-outline-primary">
-                    Inglés Para Niños
-                </button>                                
-            </div>
-            <div class="col-sm-2">                                                  
-                <button id="btnInglesGeneral" onclick="SeleccionarCurso('Inglés General', 'Privado')" class="btn btn-outline-primary">
+<div id="ViewCursosPrivados" class="container mt-3">
+    <div id="containerCursosPrivados" class="container">
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <button onclick="SelecInglesGeneral()" class="btn btn-outline-info">
                     Inglés General
-                </button>                      
-            </div>                           
-            <div class="col-sm-3">                      
-                <button id="btnPreExamInter" onclick="SeleccionarCurso('P. Exam. Internacional', 'Privado')" class="btn btn-outline-primary">
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="SelecInglesNiños()" class="btn btn-outline-info">
+                    Inglés Para Niños
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="SelecExamInter()" class="btn btn-outline-info">
                     P. Exam. Internacional
-                </button>                
-            </div>
-            <div class="col-sm-2">                      
-                <button id="btnDomicilio" onclick="SeleccionarCurso('Domicilio','Privado')" class="btn btn-outline-primary">
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="SelecDomicilio()" class="btn btn-outline-info">
                     Domicilio
-                </button>                
-            </div> 
-            <div class="col-sm-2">                      
-                <button id="btnCorporativo" onclick="SeleccionarCurso('Corporativo', 'Privado')" class="btn btn-outline-primary">
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="SelecCorporativo()" class="btn btn-outline-info">
                     Corporativo
-                </button>                
-            </div> 
-        </div>
-    </div>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="SelecOtrosIdiomas()" class="btn btn-outline-info">
+                    Otros Idiomas
+                </button>
+            </li>
+        </ul>
 
-    <br>
-
-    <div id="containerListadoCurso">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="containerListadoCurso">
+        <div class="row mt-3">
+            <div>
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="col-2"><h4 > Nuevo Curso</h4></div>
-                                <h4 id="nombreCursoSeleccionado" hidden></h4>
-                                <h1 id="bandera" hidden>0</h1>
-                                <div><button type="button" id="btnAgregarCursoPrivado" rel="tooltip" title="Agregar"class="btn btn-secondary btn-link btn-sm">
-                                    <span class="fa fa-plus" style="color:black"></button></div>
+                                <button type="button" class="btn btn-info" onclick="MostrarFormCurso()" rel="tooltip" title="Agregar">Nuevo curso</button>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-hover" id="tablaCursosPrivado">
-                                    <thead id="cabeceraTablaCursosRegular">
+                                    <thead id="cabeceraTablaCursosPrivado">
                                         <tr>
-                                            <th>N°</th>
+                                            <th>Nombre</th>
+                                            <th>Idioma</th>
+                                            <th>Nivel</th>
+                                            <th>Ciclo</th>
+                                            <th id="cabeceraDetalleCursoPrivado"></th>
+                                            <th>Docente</th>
+                                            <th>Periodo</th>
+                                            <th>Estado</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="contenidoTablaCursosRegular">
-
+                                    <tbody id="contenidoTablaCursosPrivado">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>
         </div>
     </div>
 
-    <div id="containerRegistroCurso">
-        <partial name="~/Views/Curso/CrearCursoRegular.cshtml">            
+    <div id="containerFormCurso">
+        <partial name="~/Views/Curso/_FormCurso.cshtml">
+            <partial name="~/Views/Curso/_ModalBuscarDocente.cshtml">
     </div>
 
-    <div id="containerRegistroHorario">
-        <partial name="~/Views/Horario/CrearHorario.cshtml">          
-    </div>
-    
+    @*<div id="containerRegistroHorario">
+            <partial name="~/Views/Horario/CrearHorario.cshtml">
+        </div>*@
+
+
 
 </div>
 
 
-*@
+
+
+

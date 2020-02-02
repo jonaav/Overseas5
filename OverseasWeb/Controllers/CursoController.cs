@@ -57,7 +57,7 @@ namespace OverseasWeb.Controllers
             return Json(docente);
         }
 
-        public IActionResult BuscarCurso(int idCurso)
+        public IActionResult BuscarCursoPorID(int idCurso)
         {
             Curso curso = _cursoService.BuscarCursoPorID(idCurso);
             return Json(curso);

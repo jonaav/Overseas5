@@ -43,6 +43,7 @@ namespace Persistencia.ImplementacionDao
                                                     .Where(c => c.IdCurso == idCurso)
                                                     .Include(c => c.TipoCurso)
                                                     .Include(c => c.Docente)
+                                                        .ThenInclude(d => d.Persona)
                                                     .FirstOrDefault();
 
         /*
