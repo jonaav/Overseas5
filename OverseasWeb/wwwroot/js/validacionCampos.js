@@ -1,5 +1,7 @@
 function VerificarCampoVacio(campo){
     var vacio = 0;
+    console.log("campo validado");
+    console.log($('#txt' + campo).val());
     if ($('#txt' + campo).val().length == 0){
         $('#error'+campo).fadeIn("slow");
         setTimeout(function(){$('#error'+campo).fadeOut("slow");},3000);

@@ -229,6 +229,7 @@ function ListarCursos() {
     let nombreCurso = tipoCurso.nombreCurso;
     let estadoCurso;
     let detalle = '-';
+    let nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>';
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",
@@ -243,6 +244,8 @@ function ListarCursos() {
                     if (res.estado == 1) { estadoCurso = "Activo"; }
                     if (res.estado == 0) { estadoCurso = "Desactivado"; }
                     if (res.detalle != null) { detalle = res.detalle; }
+                    if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
+                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                     //Botones
                     btnHorario = '<button onclick = "CargarFormHorario(' + res.idCurso + ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
                     btnEditar = '<button onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
@@ -255,7 +258,7 @@ function ListarCursos() {
                         '<td>' + res.nivel + '</td>' +
                         '<td>' + res.ciclo + '</td>' +
                         '<td class="contenidoDetalleCurso">' + detalle + '</td>'+
-                        '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' +
+                        nombreDocente+
                         '<td>' + res.fechaInicio.substr(0, 10) + ' / ' + res.fechaFin.substr(0, 10) + '</td>' +
                         '<td>' + estadoCurso + '</td>' +
                         '<td> <div class="form-check-inline">' + btnHorario + btnEditar + btnEliminar + '</div> </td>' +
@@ -428,34 +431,37 @@ function GuardarCurso() {
     console.log('nuevoCurso');
     console.log(nuevoCurso);
 
-    $.ajax({
-        type: "post",
-        url: "/Curso/"+action,
-        datatype: 'json',
-        data: {curso: nuevoCurso},
-        success: function (res) {
-            if (res == "Registrado") {
-            } else {
-                msgError(res);
-            }
-            switch (res) {
-                case 'Registrado': {
-                    msgExito(res);
-                    ListarCursos();
-                    break;
-                }
-                case 'Exito': {
-                    msgExito(res);
-                    ListarCursos();
-                    break;
-                }
-                default: {
+    if (VerificarCamposVaciosCurso() == 0) {
+        $.ajax({
+            type: "post",
+            url: "/Curso/" + action,
+            datatype: 'json',
+            data: { curso: nuevoCurso },
+            success: function (res) {
+                if (res == "Registrado") {
+                } else {
                     msgError(res);
                 }
+                switch (res) {
+                    case 'Registrado': {
+                        msgExito(res);
+                        ListarCursos();
+                        break;
+                    }
+                    case 'Exito': {
+                        msgExito(res);
+                        ListarCursos();
+                        break;
+                    }
+                    default: {
+                        msgError(res);
+                    }
+                }
+                console.log(res);
             }
-            console.log(res);
-        }
-    });
+        });
+    }
+    
 }
 
 
@@ -499,6 +505,29 @@ function EliminarCurso(id) {
     
 }
 
+
+
+/* 
+ * VERIFICAR CAMPOS VACIOS 
+ */
+
+function VerificarCamposVaciosCurso() {
+    let valido = 
+        VerificarCampoVacio("IdiomaCurso") +
+        VerificarCampoVacio("NivelCurso") +
+        VerificarCampoVacio("CicloCurso") +
+        VerificarCampoVacio("FechaInicioDeCurso") +
+        VerificarCampoVacio("FechaFinDeCurso") +
+        VerificarCampoVacio("ModalidadCurso");
+    let detalleValido = 0;
+    if (tipoCurso.nombreCurso == 'P. Exam. Internacional' || tipoCurso.nombreCurso == 'Corporativo') {
+        detalleValido = VerificarCampoVacio("DetalleCurso");
+    }
+
+    console.log("RETURN");
+    console.log(valido);
+    return valido + detalleValido;
+}
 
 
 

@@ -19,8 +19,11 @@
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Modalidad</label>
-                                <input id="txtModalidadCurso" class="form-control" />
-                                <span class="errores"></span>
+                                <select class="custom-select form-control color-dark" id="txtModalidadCurso">
+                                    <option selected value="Grupal">Grupal</option>
+                                    <option value="Personalizado">Personalizado</option>
+                                </select>
+                                <span class="errores" id="errorModalidadCurso">Seleccione una modalidad</span>
                             </div>
                         </div>
 
@@ -28,15 +31,13 @@
                             <div class="col-6">
                                 <label class="control-label" id="labelIdiomaCurso">Idioma</label>
                                 <select class="custom-select form-control" id="txtIdiomaCurso">
-                                    @*<option selected value="1">No</option>
-                                    <option value="2">Si</option>*@
                                 </select>
-                                <span class="errores"></span>
+                                <span class="errores" id="errorIdiomaCurso">Seleccione un idioma</span>
                             </div>
                             <div class="col-6">
                                 <label id="labelDetalleCurso" class="control-label"></label>
                                 <input id="txtDetalleCurso" class="form-control" />
-                                <span class="errores"></span>
+                                <span class="errores" id="errorDetalleCurso">El campo esta vacio</span>
                             </div>
                         </div>
 
@@ -44,12 +45,12 @@
                             <div class="col-6">
                                 <label class="control-label">Nivel</label>
                                 <input id="txtNivelCurso" class="form-control" />
-                                <span class="errores"></span>
+                                <span class="errores" id="errorNivelCurso">El campo esta vacio</span>
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Ciclo</label>
                                 <input id="txtCicloCurso" class="form-control" />
-                                <span class="errores"></span>
+                                <span class="errores" id="errorCicloCurso">El campo esta vacio</span>
                             </div>
                         </div>
 
@@ -57,12 +58,12 @@
                             <div class="col-6">
                                 <label class="control-label">Fecha Inicio</label>
                                 <input id="txtFechaInicioDeCurso" class="form-control" type="date" />
-                                <span class="errores"></span>
+                                <span class="errores" id="errorFechaInicioDeCurso">Ingrese una fecha inicio</span>
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Fecha Fin</label>
                                 <input id="txtFechaFinDeCurso" class="form-control" type="date" />
-                                <span class="errores"></span>
+                                <span class="errores" id="errorFechaFinDeCurso">Ingrese una fecha fin</span>
                             </div>
                         </div>
 

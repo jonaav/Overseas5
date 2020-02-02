@@ -96,9 +96,16 @@ namespace Services.ImplementacionService
         public String RegistrarCurso(Curso curso)
         {
             String mensaje = "No se pudo registrar";
-            if (_cursoDao.RegistrarCurso(curso))
+            if (curso.ValidarFechaFin())
             {
-                mensaje = "Registrado";
+                if (_cursoDao.RegistrarCurso(curso))
+                {
+                    mensaje = "Registrado";
+                }
+            }
+            else
+            {
+                mensaje = "La fecha fin debe ser mayor que la fecha inicio";
             }
             return mensaje;
         }
@@ -109,9 +116,17 @@ namespace Services.ImplementacionService
         public String EditarCurso(Curso curso)
         {
             String mensaje = "No se pudo actualizar los datos";
-            if (_cursoDao.EditarCurso(curso))
+            
+            if (curso.ValidarFechaFin())
             {
-                mensaje = "Exito";
+                if (_cursoDao.EditarCurso(curso))
+                {
+                    mensaje = "Exito";
+                }
+            }
+            else
+            {
+                mensaje = "La fecha fin debe ser mayor que la fecha inicio";
             }
             return mensaje;
         }
@@ -130,9 +145,6 @@ namespace Services.ImplementacionService
             }
             return mensaje;
         }
-
-
-
 
 
 

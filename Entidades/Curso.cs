@@ -23,15 +23,37 @@ namespace Entidades
         public TipoCurso TipoCurso { get; set; }
 
         [ForeignKey("IdDocente")]
-        public int IdDocente { get; set;}
-        public Docente Docente { get; set; }
+        public int? IdDocente { get; set;}
+        public virtual Docente Docente { get; set; }
         public ICollection<HistorialEvaluacion> HistorialEvaluacion { get; set; }
         public ICollection<Horario> Horario { get; set; }
         public ICollection<Inscripcion> Inscripcion { get; set; }
 
-        public string SoloFechaInicio()
+
+        #region Metodos
+
+
+        //public string SoloFechaInicio()
+        //{
+        //    return this.FechaInicio.ToShortDateString();
+        //}
+
+
+        /*
+         * Validar fecha fin > fecha inicio
+         */
+
+        public bool ValidarFechaFin()
         {
-            return this.FechaInicio.ToShortDateString();
+            return (FechaFin > FechaInicio) ? true : false;
         }
+
+        
+
+
+
+        #endregion Metodos
+
+
     }
 }
