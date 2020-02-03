@@ -9,7 +9,7 @@ using Persistencia.InterfazDao;
 
 namespace Persistencia.ImplementacionDao
 {
-    public class EvaluacionDao
+    public class EvaluacionDao: IEvaluacionDao
     {
 
         private readonly DB_OverseasContext _context;
@@ -17,7 +17,6 @@ namespace Persistencia.ImplementacionDao
         {
             _context = context;
         }
-
 
 
         /*
@@ -28,6 +27,66 @@ namespace Persistencia.ImplementacionDao
             .Include(a => a.HistorialEvaluacion).ToList();
 
 
+        /*
+         *  Registrar Evaluacion
+         */
 
+        public void RegistrarEvaluacion(Evaluacion evaluacion)
+        {
+            try
+            {
+                _context.Evaluacion.Add(evaluacion);
+                _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
+
+
+        /*
+         *  Editar Evaluacion
+         */
+
+        public bool EditarEvaluacion(Evaluacion evaluacion)
+        {
+            try
+            {
+                _context.Evaluacion.Attach(evaluacion);
+                _context.Evaluacion.Update(evaluacion);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
+
+
+
+        /*
+         *  Eliminar Evaluacion
+         */
+
+        public bool EliminarEvaluacion(int idEvaluacion)
+        {
+            Evaluacion evaluacion = _context.Evaluacion.Find(idEvaluacion);
+            try
+            {
+                _context.Evaluacion.Remove(evaluacion);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

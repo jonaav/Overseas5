@@ -229,7 +229,7 @@ function ListarCursos() {
     let nombreCurso = tipoCurso.nombreCurso;
     let estadoCurso;
     let detalle = '-';
-    let nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>';
+    let nombreDocente;
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",

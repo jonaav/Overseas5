@@ -34,6 +34,7 @@ namespace Persistencia.ImplementacionDao
                                                     .Where(c => c.Estado == 1)
                                                     .Include(c => c.TipoCurso)
                                                     .Include(c => c.Docente)
+                                                        .ThenInclude(d => d.Persona)
                                                     .ToList();
         
         /*

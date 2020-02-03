@@ -42,23 +42,28 @@ if ($("#viewRegistroInscripcion").is(':visible')) {
 }
 
 function ListarCursosInscripcion() {
+    let nombreDocente;
     $.ajax({
         type: "get",
-        url: "/Inscripcion/ListarCursos",
+        url: "/Inscripcion/ListarCursosHabiles",
         datatype: 'json',
         success: function (response) {
+            console.log("CURSOS");
+            console.log(response);
             dataCursoInscripcion.html("");
             if (response != "") {
                 tableCursoInscripcion.clear().destroy();
                 $.each(response, function (i, res) {
+                    if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
+                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                     dataCursoInscripcion.append(
                         '<tr>' +
                         '<td>' + res.idCurso + '</td>' +
                         '<td>' + res.programa + '</td>' +
-                        '<td>' + res.nombreCurso + '</td>' +
+                        '<td>' + res.tipoCurso.nombreCurso + '</td>' +
                         '<td>' + res.nivel + ' - ' + res.ciclo + '</td>' +
                         '<td>' + res.fechaInicio.substr(0, 10) + ' - ' + res.fechaFin.substr(0, 10) + '</td>' +
-                        '<td>' + res.docente.persona.nombresPersona + '</td>' +
+                        nombreDocente +
                         '<td>' +
                         '<button onclick="agregarCursoInscripcion(' + res.idCurso + ')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>' +
                         '</td>' +
@@ -102,15 +107,18 @@ function ListarEstudiantesInscripcion() {
 }
 
 function ListarInscripciones() {
+    console.log("LISTAR INSCRIPCIONES");
+    console.log("idCursoselec: " + idCursoSelec);
     $.ajax({
         type: "get",
         url: "/Inscripcion/ListarInscripcionesPorCurso",
         datatype: 'json',
         data: { idCurso: idCursoSelec },
         success: function (response) {
-            dataInscripciones.html("");
+            console.log("ESTUDIANTES INSCRITOS");
+            console.log(response);
             if (response != "") {
-                console.log(response);
+                dataInscripciones.html("");
                 tableInscripciones.clear().destroy();
                 $.each(response, function (i, res) {
                     dataInscripciones.append(
@@ -125,9 +133,10 @@ function ListarInscripciones() {
                         '</tr>');
                 });
                 tableInscripciones = $("#tableInscripciones").DataTable(dataTableConfig);
-            } else {
-                console.log(response);
             }
+        },
+        error: function (err) {
+            console.log(err);
         }
     });
 }
@@ -137,30 +146,37 @@ function ListarInscripciones() {
  * AGREGAR CURSO
  */
 function agregarCursoInscripcion(idCurso) {
+    let nombreDocente;
     $.ajax({
         type: "get",
         url: "/Inscripcion/BuscarCurso",
         datatype: 'json',
         data: { idCurso },
         success: function (response) {
+            console.log(response);
             dataCursoSeleccionado.html("");
             if (response != "") {
                 idCursoSelec = response.idCurso;
                 console.log(idCursoSelec);
+                if (response.docente != null) { nombreDocente = '<td>' + response.docente.persona.nombresPersona + ' ' + response.docente.persona.apellidosPersona + '</td>' }
+                else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                 dataCursoSeleccionado.append(
                     '<tr>' +
                     '<td>' + response.programa + '</td>' +
-                    '<td>' + response.nombreCurso + '</td>' +
+                    '<td>' + response.tipoCurso.nombreCurso + '</td>' +
                     '<td>' + response.nivel + ' - ' + response.ciclo + '</td>' +
                     '<td>' + response.fechaInicio.substr(0, 10) + ' - ' + response.fechaFin.substr(0, 10) + '</td>' +
-                    '<td>' + response.docente.persona.nombresPersona + '</td>' +
+                     nombreDocente +
                     '</tr>'
                 );
-            } else {
-                console.log(response);
-            }
+            } 
+
             if ($("#viewListarInscripciones").is(':visible')) {
                 ListarInscripciones();
+            }
+            if ($("#viewCalificacionAdmin").is(':visible')) {
+                console.log("LISTANDO");
+                ListarEstudiantesDeUnCurso();
             }
 
         }
