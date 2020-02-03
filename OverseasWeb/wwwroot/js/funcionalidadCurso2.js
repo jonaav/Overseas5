@@ -1,12 +1,11 @@
 ﻿
-
 /*
  * ELEMENTOS 
  */
 let btnRegresarRegular = $("#btnRegresarRegular");
 let btnRegresarPrivado = $("#btnRegresarPrivado");
 
-let containerCursos;
+let containerListaCursos = $("#containerListadoCurso");
 let containerFormCurso = $("#containerFormCurso");
 
 let tablaCursos;
@@ -53,6 +52,8 @@ function BuscarTipoCurso(nombreCurso) {
         success: function (res) {
             console.log(res);
             tipoCurso = res;
+            containerFormCurso.hide();
+            containerListaCursos.show();            
             ListarCursos();
             cursoFormHeader.html(tipoCurso.nombreCurso);
         }
@@ -66,7 +67,6 @@ function BuscarTipoCurso(nombreCurso) {
 
 if ($("#ViewCursosRegulares").is(":visible")) {
     programaCurso = 'Regular';
-
     //form
     containerFormCurso.hide();
     btnRegresarPrivado.hide();
@@ -75,7 +75,7 @@ if ($("#ViewCursosRegulares").is(":visible")) {
     txtModalidadCurso.prop('disabled', true);
     txtModalidadCurso.val('Grupal');
 
-    containerCursos = $("#containerCursosRegulares");
+    //containerListaCursos = $("#containerListaCursosRegulares");
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoRegular");
     tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
@@ -83,6 +83,8 @@ if ($("#ViewCursosRegulares").is(":visible")) {
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
 }
+
+
 
 if ($("#ViewCursosPrivados").is(":visible")) {
     programaCurso = 'Privado';
@@ -94,13 +96,39 @@ if ($("#ViewCursosPrivados").is(":visible")) {
     txtDocenteCurso.prop('disabled', true);
     txtModalidadCurso.prop('disabled', false);
 
-    containerCursos = $("#containerCursosPrivados");
+    //containerListaCursos = $("#containerListaCursosPrivados");
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoPrivado");
     tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
     contenidoTablaCursos = $("#contenidoTablaCursosPrivado");
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
+}
+
+/*
+* PINTAR BOTONES DE LOS TIPOS DE CURSOS
+*/
+
+function ActivarColorBoton(boton){
+    $('#btn'+boton).removeClass('btn-outline-info');
+    $('#btn'+boton).addClass('btn-info');                        
+}
+
+
+function DesactivarColorBoton(boton){
+    $('#btn'+boton).removeClass('btn-info');
+    $('#btn'+boton).addClass('btn-outline-info');
+    
+}
+
+
+function PintarBotonTipoCurso(nombreCurso){
+    let tipoCursos = ['InglesGeneral', 'InglesNiños', 'ExamInter', 'OtrosIdiomas', 'Domicilio', 'Corporativo'];    
+    ActivarColorBoton(nombreCurso);
+    for(let i=0; i<tipoCursos.length; i++){        
+        if(nombreCurso != tipoCursos[i])                    
+            DesactivarColorBoton(tipoCursos[i]);                
+    }
 }
 
 /*
@@ -111,6 +139,7 @@ function SelecInglesGeneral() {
     BuscarTipoCurso('Inglés General');
     OcultarIdioma(true);
     OcultarDetalle(true);
+    PintarBotonTipoCurso('InglesGeneral');    
 }
 
 
@@ -118,6 +147,8 @@ function SelecInglesNiños() {
     BuscarTipoCurso('Inglés Niños');
     OcultarIdioma(true);
     OcultarDetalle(true);
+    PintarBotonTipoCurso('InglesNiños');
+    
 }
 
 
@@ -126,6 +157,7 @@ function SelecExamInter() {
     OcultarIdioma(false);
     OcultarDetalle(false);
     labelDetalleCurso.html('Tipo de Examen Internacional');
+    PintarBotonTipoCurso('ExamInter');
 }
 
 
@@ -133,6 +165,7 @@ function SelecOtrosIdiomas() {
     BuscarTipoCurso('Otros Idiomas');
     OcultarIdioma(false);
     OcultarDetalle(true);
+    PintarBotonTipoCurso('OtrosIdiomas');
 }
 
 
@@ -141,6 +174,7 @@ function SelecDomicilio() {
     BuscarTipoCurso('Domicilio');
     OcultarIdioma(false);
     OcultarDetalle(true);
+    PintarBotonTipoCurso('Domicilio');
 }
 
 
@@ -149,6 +183,7 @@ function SelecCorporativo() {
     OcultarIdioma(false);
     OcultarDetalle(false);
     labelDetalleCurso.html('Empresa');
+    PintarBotonTipoCurso('Corporativo');
 }
 
 
@@ -191,17 +226,14 @@ function OcultarIdioma(oculto) {
     }
 }
 
-
-
 /*
  * OCULTAR O MOSTRAR FORM CURSO
  */
 
 function MostrarFormCurso() {
     containerFormCurso.show();
-    containerCursos.hide();
+    containerListaCursos.hide();
 };
-
 
 function ModificarCabeceraDetalle() {
     cabeceraDetalleCurso.hide();
@@ -217,9 +249,6 @@ function ModificarCabeceraDetalle() {
         $('.contenidoDetalleCurso').show();
     }
 }
-
-
-
 
 /*
  * LISTAR CURSOS
@@ -252,8 +281,7 @@ function ListarCursos() {
                     btnEliminar = '<button onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
                     //Rellena datos
                     contenidoTablaCursos.append(
-                        '<tr>' +
-                        '<td>' + res.tipoCurso.nombreCurso + '</td>' +
+                        '<tr>' +   
                         '<td>' + res.idioma + '</td>' +
                         '<td>' + res.nivel + '</td>' +
                         '<td>' + res.ciclo + '</td>' +
@@ -274,10 +302,6 @@ function ListarCursos() {
         }
     });
 }
-
-
-
-
 
 /*
  * RELLENAR SELECT IDIOMAS
