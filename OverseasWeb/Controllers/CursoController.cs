@@ -75,7 +75,6 @@ namespace OverseasWeb.Controllers
             return View();
         }
 
-
         [HttpPost]
         public IActionResult RegistrarCurso(Curso curso)
         {
