@@ -265,9 +265,10 @@ function ModificarCabeceraDetalle() {
 function ListarCursos() {    
     let nombreCurso = tipoCurso.nombreCurso;
     let estadoCurso;
-    let detalle = '-';
-    let nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>';
+    let detalle = '-';    
+    let nombreDocente;
     MostrarTablaListaCursos();
+    
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",

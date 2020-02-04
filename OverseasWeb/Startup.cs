@@ -52,8 +52,6 @@ namespace OverseasWeb
             });
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Login/Login");
 
-            //services.AddDbContext<DB_OverseasContext>(c => c.UseInMemoryDatabase(Guid.NewGuid().ToString()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-
             services.AddDbContext<DB_OverseasContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -81,13 +79,16 @@ namespace OverseasWeb
             services.AddScoped<IAmbienteDao, AmbienteDao>();
             services.AddScoped<ICursoDao, CursoDao>();
             services.AddScoped<ITipoCursoDao, TipoCursoDao>();
-            services.AddScoped<ITipoEvaluacionDao, TipoEvaluacionDao>();
             services.AddScoped<IHorarioDao, HorarioDao>();
             services.AddScoped<ISesionDao, SesionDao>();
             services.AddScoped<ITraduccionDao, TraduccionDao>();
 
+            services.AddScoped<ITipoEvaluacionDao, TipoEvaluacionDao>();
+            services.AddScoped<IHistorialEvaluacionDao, HistorialEvaluacionDao>();
 
-            
+
+
+
             //SERVICE
             services.AddScoped<IEstudianteService, EstudianteServiceImpl>();
             services.AddScoped<IApoderadoService, ApoderadoServiceImpl>();
@@ -105,6 +106,11 @@ namespace OverseasWeb
             services.AddScoped<IAmbienteService, AmbienteServiceImpl>();
             services.AddScoped<IHorarioService, HorarioServiceImpl>();
             services.AddScoped<ISesionService, SesionServiceImpl>();
+
+
+            services.AddScoped<ICalificacionesService, CalificacionesServiceImpl>();
+
+
             
         }
 
