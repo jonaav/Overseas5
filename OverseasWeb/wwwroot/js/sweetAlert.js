@@ -32,3 +32,20 @@ function msgExito(msg) {
         timer: 2000
     });
 }
+
+
+function msgExitoCurso(msg){
+    swal({
+        title: "Correcto!",
+        text: msg,
+        icon: "success",                      
+        button: "Aceptar",
+        timer: 2000
+    }).then(
+        function () {
+            if (true) {                         
+                ListarCursos();                                                           
+            }
+        }
+    )          
+}

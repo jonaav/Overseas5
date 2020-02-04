@@ -39,6 +39,18 @@ let labelDetalleCurso = $("#labelDetalleCurso");
 
 
 
+function LimpiarCamposFormCurso(){
+    txtDetalleCurso.val("");
+    txtNivelCurso.val("");
+    txtCicloCurso.val("");
+    txtFechaInicioCurso.val("");
+    txtFechaFinCurso.val("");
+    txtDocenteCurso.val("");
+    idCursoEdit = 0;
+    idDocenteSelec = null;
+}
+
+
 /*
  * SELECCIONAR CURSOS
  */
@@ -51,9 +63,7 @@ function BuscarTipoCurso(nombreCurso) {
         data: { nombreCurso },
         success: function (res) {
             console.log(res);
-            tipoCurso = res;
-            containerFormCurso.hide();
-            containerListaCursos.show();            
+            tipoCurso = res;            
             ListarCursos();
             cursoFormHeader.html(tipoCurso.nombreCurso);
         }
@@ -73,9 +83,7 @@ if ($("#ViewCursosRegulares").is(":visible")) {
     txtProgramaCurso.val(programaCurso);
     txtDocenteCurso.prop('disabled', true);
     txtModalidadCurso.prop('disabled', true);
-    txtModalidadCurso.val('Grupal');
-
-    //containerListaCursos = $("#containerListaCursosRegulares");
+    txtModalidadCurso.val('Grupal');    
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoRegular");
     tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
@@ -88,15 +96,12 @@ if ($("#ViewCursosRegulares").is(":visible")) {
 
 if ($("#ViewCursosPrivados").is(":visible")) {
     programaCurso = 'Privado';
-
     //form
     containerFormCurso.hide();
     btnRegresarRegular.hide();
     txtProgramaCurso.val(programaCurso);
     txtDocenteCurso.prop('disabled', true);
-    txtModalidadCurso.prop('disabled', false);
-
-    //containerListaCursos = $("#containerListaCursosPrivados");
+    txtModalidadCurso.prop('disabled', false);    
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoPrivado");
     tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
@@ -186,9 +191,6 @@ function SelecCorporativo() {
     PintarBotonTipoCurso('Corporativo');
 }
 
-
-
-
 /*
  * OCULTAR O MOSTRAR DETALLE
  */
@@ -232,8 +234,14 @@ function OcultarIdioma(oculto) {
 
 function MostrarFormCurso() {
     containerFormCurso.show();
-    containerListaCursos.hide();
+    containerListaCursos.hide();    
 };
+
+function MostrarTablaListaCursos(){
+    containerFormCurso.hide();
+    containerListaCursos.show();
+    LimpiarCamposFormCurso();                        
+}
 
 function ModificarCabeceraDetalle() {
     cabeceraDetalleCurso.hide();
@@ -254,11 +262,12 @@ function ModificarCabeceraDetalle() {
  * LISTAR CURSOS
  */
 
-function ListarCursos() {
+function ListarCursos() {    
     let nombreCurso = tipoCurso.nombreCurso;
     let estadoCurso;
     let detalle = '-';
     let nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>';
+    MostrarTablaListaCursos();
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",
@@ -276,9 +285,9 @@ function ListarCursos() {
                     if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
                     else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                     //Botones
-                    btnHorario = '<button onclick = "CargarFormHorario(' + res.idCurso + ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
-                    btnEditar = '<button onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
-                    btnEliminar = '<button onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
+                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick = "CargarFormHorario(' + res.idCurso + ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
+                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
+                    btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
                     //Rellena datos
                     contenidoTablaCursos.append(
                         '<tr>' +   
@@ -332,9 +341,6 @@ function ListarIdiomasCurso() {
         }
     });
 }
-
-
-
 
 /*
  * BUSCAR DOCENTES
@@ -390,9 +396,6 @@ function AgregarDocenteCurso(id) {
         }
     });
 }
-
-
-
 /*
  * BUSCAR CURSO
  */
@@ -462,19 +465,13 @@ function GuardarCurso() {
             datatype: 'json',
             data: { curso: nuevoCurso },
             success: function (res) {
-                if (res == "Registrado") {
-                } else {
-                    msgError(res);
-                }
                 switch (res) {
                     case 'Registrado': {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                         break;
                     }
                     case 'Exito': {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                         break;
                     }
                     default: {
@@ -514,15 +511,14 @@ function EliminarCurso(id) {
                 success: function (res) {
                     console.log(res);
                     if (res == 'Eliminado') {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                     } else {
                         msgError(res);
                     }
                 }
             });
         } else {
-            msgCancelado("No se eliminara el idioma");
+            msgCancelado("No se eliminara el Curso");
         }
     });
 
@@ -552,6 +548,8 @@ function VerificarCamposVaciosCurso() {
     console.log(valido);
     return valido + detalleValido;
 }
+
+
 
 
 

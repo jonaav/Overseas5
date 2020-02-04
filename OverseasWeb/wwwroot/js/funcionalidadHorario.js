@@ -1,5 +1,28 @@
 var cont = 0;
 var filaHorario = 0;
+let idCursoHorario;
+let idAmbienteSelec;
+
+/**
+ * Elementos Horario
+ * REGULAR
+ */
+
+ let selectorDia = $('#selectorHorarioDia');
+ let txtHoraInicio = $('#txtHoraInicio');
+ let txtHoraFin = $('#txtHoraFin');
+ let txtAmbienteHorario = $('#txtHorarioNombreAmbiente');
+ 
+ /**
+  * Privado
+  */
+
+  let txtNumeroSesion = $('#txtNumeroSesion');
+  let txtFechaSesion = $('#txtFechaSesion');
+
+  /**
+   * FALTA CAMBIAR, pero ya me dio pereza xd
+   */
 
 
 function CancelarIngresoHorario(){

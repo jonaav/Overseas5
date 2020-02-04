@@ -1,11 +1,8 @@
 ﻿
 <div class="container mt-3">
-    <div class="col-12">
-        <div class="row">
-            <div class="col-lg-3 col-md-2">
-            </div>
-
-            <div class="card col-lg-6 col-md-9 col-sm-12 ">
+    <div class="col-md-6">
+        <div class="containerRegistroCurso">            
+            <div class="card">
                 <div class="card-body">
                     <div class="card-title">
                         <h3 class="color-pale-sky" id="cursoFormHeader"></h3>
@@ -57,12 +54,18 @@
                         <div class="form-group form-row">
                             <div class="col-6">
                                 <label class="control-label">Fecha Inicio</label>
-                                <input id="txtFechaInicioDeCurso" class="form-control" type="date" />
+                                <div class="input-group">
+                                    <input type="text"  class="form-control mdate" id="txtFechaInicioDeCurso" placeholder="yyyy-mm-dd">
+                                    <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                </div>                                 
                                 <span class="errores" id="errorFechaInicioDeCurso">Ingrese una fecha inicio</span>
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Fecha Fin</label>
-                                <input id="txtFechaFinDeCurso" class="form-control" type="date" />
+                                 <div class="input-group">
+                                    <input type="text"  class="form-control mdate" id="txtFechaFinDeCurso" placeholder="yyyy-mm-dd">
+                                    <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                                </div>                                 
                                 <span class="errores" id="errorFechaFinDeCurso">Ingrese una fecha fin</span>
                             </div>
                         </div>
@@ -76,10 +79,9 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group text-center">
                             <button type="button" class="btn btn-info" onclick="GuardarCurso()">Guardar</button>
-                            <a id="btnRegresarRegular" class="btn btn-danger" asp-action="ListarCursosRegulares">Regresar</a>
-                            <a id="btnRegresarPrivado" class="btn btn-danger" asp-action="ListarCursosPrivados">Regresar</a>
+                            <button type="button" class="btn btn-danger" onclick="ListarCursos()" asp-action="ListarCursosRegulares">Cancelar</button>                            
                         </div>
                     </form>
                 </div>
