@@ -1,12 +1,13 @@
-﻿
-/*
+﻿/*
  * ELEMENTOS 
  */
+
 let btnRegresarRegular = $("#btnRegresarRegular");
 let btnRegresarPrivado = $("#btnRegresarPrivado");
 
 let containerListaCursos = $("#containerListadoCurso");
 let containerFormCurso = $("#containerFormCurso");
+
 
 let tablaCursos;
 let contenidoTablaCursos;
@@ -135,7 +136,6 @@ function PintarBotonTipoCurso(nombreCurso){
             DesactivarColorBoton(tipoCursos[i]);                
     }
 }
-
 /*
  * SELECCIONAR CURSOS
  */
@@ -234,12 +234,13 @@ function OcultarIdioma(oculto) {
 
 function MostrarFormCurso() {
     containerFormCurso.show();
-    containerListaCursos.hide();    
+    containerListaCursos.hide();        
 };
 
-function MostrarTablaListaCursos(){
-    containerFormCurso.hide();
+function MostrarTablaListaCursos(){    
     containerListaCursos.show();
+    containerFormCurso.hide();
+    containerFormHorario.hide();
     LimpiarCamposFormCurso();                        
 }
 
@@ -286,7 +287,9 @@ function ListarCursos() {
                     if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
                     else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                     //Botones
-                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick = "CargarFormHorario(' + res.idCurso + ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
+                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
+                                 ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
                     btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
                     btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
                     //Rellena datos
@@ -521,9 +524,7 @@ function EliminarCurso(id) {
         } else {
             msgCancelado("No se eliminara el Curso");
         }
-    });
-
-    
+    });    
 }
 
 

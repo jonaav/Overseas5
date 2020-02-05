@@ -62,8 +62,7 @@
                                 <div class="col-md-12 mb-3">                                
                                     <label for="txtHorarioNombreAmbiente">Ambiente : </label>				        	
                                     <div class="form-inline">                                                                        
-                                        <input type="text" class="form-control" id="txtHorarioNombreAmbiente" disabled>                                                                        
-                                        <input type="text" id="txtHorarioIdAmbiente" hidden>                            
+                                        <input type="text" class="form-control" id="txtHorarioNombreAmbiente" disabled>                                                                                                                                          
                                     </div>
                                     <span class="errores" id="errorHorarioNombreAmbiente">*Debe seleccionar un Ambiente</span>
                                 </div>                                                              
@@ -77,12 +76,7 @@
                             <div class="form-group text-center" >
                                 <button onclick = "AgregarHorario()"  rel="tooltip" title="Agregar" type="button" class="btn btn-outline-success"><span class="fa fa-plus" style="color:black"></button>
                                 <button onclick = "LimpiarFormHorario()"  rel="tooltip" title="Limpiar Campos" type="button" class="btn btn-outline-secondary"><span class="fa fa-refresh" style="color:black"></button>                    
-                            </div>
-
-                            <input type="text" id="txtIdCursoHorario" hidden>  
-                            <input type="text" id="txtProgramaCursoHorario" hidden>  
-                            <input type="text" id="txtFechaInicioCurso" hidden>  
-                            <input type="text" id="txtFechaFinCurso" hidden>  
+                            </div>                                                                                                                
 
                         </div>    
                                       
@@ -91,7 +85,7 @@
 
                 <div class="form-group text-center" >
                     <button onclick = "GuardarHorarios()"  id="btnGuardarHorario"  type="button" class="btn btn-outline-primary">GUARDAR</button>                    
-                    <button onclick="CancelarIngresoHorario()" type="button" class="btn btn-outline-danger">CANCELAR</button>                    
+                    <button onclick="SalirFormHorario()" type="button" class="btn btn-outline-danger">CANCELAR</button>                    
                 </div>
             </div>    
         </div>
