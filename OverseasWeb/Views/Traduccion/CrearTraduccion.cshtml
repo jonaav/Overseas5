@@ -49,14 +49,13 @@
                         <div class="col-md-12 mb-3">                                
                             <label for="txtNombreDocente">Docente : </label>				        	
                             <div class="form-inline">                                                                        
-                                <input type="text" class="form-control" id="txtNombreDocente" disabled>                                          
+                                <input type="text" class="form-control" id="txtDocenteTraduccion" disabled>                                          
                                 <div class="col-1">
-                                    <button id="btnBuscarDocenteCurso" onclick="cargarModalDocentesUnCurso()" type="button" rel="tooltip" title="Buscar Docente"class="btn btn-secondary btn-link btn-sm">
-                                    <span class="fa fa-search" style="color:black"></button>            		            		           
-                                </div>  
-                                <input type="text" id="txtIdTraduccion" hidden> 
-                                <input type="text" id="txtIdDocente" hidden>
-                                <input type="text" id="txtIdCurso" hidden>                                                                                                                  
+                                    <button onclick='ListarDocentesActivosTraduccion()' type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#modalBuscarDocente" rel="tooltip" title="Buscar Docente">
+                                    <span class="fa fa-search"></span>
+                                    </button>                                                		            		           
+                                </div>                                  
+                                <input type="text" id="txtIdDocente" hidden>                                
                             </div>                              
                         </div>                                                              
 					</div>
@@ -70,14 +69,8 @@
                     </div>
                     <div class="form-group" >
 					    <div class="col text-center" >
-                            <div id="divGuardarTraduccion">
-                                <button onclick='GuardarEditarTraduccion("Guardar")' rel="tooltip" title="Guardar Traduccion" type="button" class="btn btn-outline-success"><span class="fa fa-save" style="color:black"></button>
-                                <button onclick='CargarTablaListadoTraduccion()' rel="tooltip" title="Cancelar"  type="button" class="btn btn-outline-danger"><span class="fa fa-remove" style="color:black"></button>
-					        </div>
-                            <div id="divEditarTraduccion">
-                                <button onclick='GuardarEditarTraduccion("Editar")' rel="tooltip" title="Editar Traduccion" type="button" class="btn btn-outline-warning"><span class="fa fa-save" style="color:black"></button>
-                                <button onclick='CargarTablaListadoTraduccion()' rel="tooltip" title="Cancelar"  type="button" class="btn btn-outline-danger"><span class="fa fa-remove" style="color:black"></button>
-					        </div>                            
+                            <button onclick = 'GuardarEditarTraduccion("Guardar")'  id="btnGuardarTraduccion"  type="button" class="btn btn-outline-primary">GUARDAR</button>                    
+                            <button onclick="CargarTablaListadoTraduccion()" type="button" class="btn btn-outline-danger">CANCELAR</button>                                                  
 					    </div>
 				    </div>
                 </div>
@@ -85,42 +78,6 @@
          </div>
      </div>
 
-<div class="modal fade modalCrearCurso-modal-lg" id="modalDocentesUnCurso" tabindex="-1" data-focus-on="input:first" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-	<form>
-	  <div class="modal-dialog modal-lg" id="modalDialog">
-	    <div class="modal-content" >	
-            <div class="modal-header">
-              	<h4 class="modal-title" id="etiquetaTituloModal"> Lista De Docentes  </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 style="font-size: 18px;">Seleccione el Docente : </h3>
-                            <div class="table-responsive">
-                                <table class="table table-hover" id="tablaDocenteUnCurso">
-                                    <thead>
-                                        <tr>
-                                            <th>N°</th>
-                                            <th>Docente</th>                                                                                
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="contenidoTablaDocenteUnCurso">
 
-                                    </tbody>
-                                </table>
-                            </div>                                                      
-                        </div>                                                
-                    </div>                                    	               		        		            	
-	   	        </div>
-	        </div>
-	    </div>
-	  </div>
-	</form>	
-</div>
 
 

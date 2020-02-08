@@ -49,3 +49,19 @@ function msgExitoCurso(msg){
         }
     )          
 }
+
+function msgExitoTraduccion(msg){
+    swal({
+        title: "Correcto!",
+        text: msg,
+        icon: "success",                      
+        button: "Aceptar",
+        timer: 2000
+    }).then(
+        function () {
+            if (true) {                                                            
+                ListarTraducciones();                                                                              
+            }
+        }
+    )      
+}

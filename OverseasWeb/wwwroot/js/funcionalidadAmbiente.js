@@ -7,13 +7,16 @@
  let txtNombreEmpresa = $('#txtNombreEmpresa');
  let selectorAmbiente = $('#selectorAmbiente');
  let divNombreEmpresa = $('#divNombreEmpresa');
+ let tablaAmbiente = $("#tablaAmbiente");
+ let dataTableAmbiente; 
 
 
-    if($('#tablaAmbiente').is(':visible')){
+    if(tablaAmbiente.is(':visible')){
         ListarAmbientes();
         CargarDireccionOverseas();
         divNombreEmpresa.hide();   
         cambiarTitulo("AMBIENTES");     
+        dataTableAmbiente = tablaAmbiente.DataTable(dataTableConfig);        
     }
 
     if(selectorAmbiente.on('change',function(){
@@ -140,8 +143,7 @@
             });
     }
 
-    function ListarAmbientes(){           
-        let table = $('#tablaAmbiente').DataTable();    
+    function ListarAmbientes(){                      
         let campoAula, id = 0;                 
         $.ajax({
             type: 'GET',
@@ -149,7 +151,7 @@
             dataType: 'json',  
             success: function (ambientes) {
                 $("#contenidoTablaAmbiente").html("");
-                table.clear().destroy();
+                dataTableAmbiente.clear().destroy();
                 if(ambientes!=""){                    
                     $.each(ambientes, function (i, ambiente){                                                    
                         id++;
@@ -163,7 +165,7 @@
                         '<td> <button onclick="EliminarAmbiente('+ambiente.idAmbiente+')" class="btn btn-outline-danger"><span class="fa fa-trash" style="color:black"></button></td>'+
                         '</tr>');    
                     });
-                    table = CrearDatatable("tablaAmbiente");                     
+                    dataTableAmbiente = tablaAmbiente.DataTable(dataTableConfig);                     
                 }                                
             }            
         });

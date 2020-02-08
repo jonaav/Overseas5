@@ -69,12 +69,12 @@
         '</tr>');
   }
 
-  function ModificarBotonHorario(accion){
+  function ModificarBotonGuardar(accion, boton){
     let removeColor, addColor;    
     (accion == 'Guardar') ? (removeColor = 'warning', addColor = 'primary') : (removeColor = 'primary', addColor = 'warning')
-    btnGuardarHorario.html(accion);
-    btnGuardarHorario.removeClass('btn-outline-'+ removeColor);
-    btnGuardarHorario.addClass('btn-outline-'+ addColor);
+    boton.html(accion);
+    boton.removeClass('btn-outline-'+ removeColor);
+    boton.addClass('btn-outline-'+ addColor);
   }
 
   function BuscarHorariosCurso(){ 
@@ -90,7 +90,7 @@
         success: function (res) {        
             if(programaCursoHorario == 'Privado')  ActualizarNumeroSesionHorario(res.length + 1) ;
             if(res!=""){                                       
-                ModificarBotonHorario('Editar');                                                       
+                ModificarBotonGuardar('Editar', btnGuardarHorario);                                                       
                 $.each(res, function (i, res){      
                     (accionHorario == 'BuscarSesionesCurso') ? (horario = res.horario, numSesion = res.numeroSesion,
                                                                                        fechaSesion = res.fechaSesion ) 
@@ -100,7 +100,7 @@
                     horario.ambiente.aula, horario.ambiente.idAmbiente,0);                                                                                                                                                                                                                                                                             
                 });                              
             }else{                
-                ModificarBotonHorario('Guardar');                    
+                ModificarBotonGuardar('Guardar', btnGuardarHorario);                    
             }
         }
     });

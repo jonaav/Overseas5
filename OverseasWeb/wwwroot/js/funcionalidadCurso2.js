@@ -269,14 +269,12 @@ function ListarCursos() {
     let detalle = '-';    
     let nombreDocente;
     MostrarTablaListaCursos();
-    
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",
         datatype: 'json',
         data: { nombreCurso: nombreCurso, programa: programaCurso },
-        success: function (res) {
-            console.log(res);
+        success: function (res) {            
             contenidoTablaCursos.html("");
             if (res != "") {
                 tablaCursos.clear().destroy();
@@ -350,8 +348,8 @@ function ListarIdiomasCurso() {
  * BUSCAR DOCENTES
  */
 
-function ListarDocentesActivos() {
-    let btnAgregar = "";
+function ListarDocentesActivosCurso() {
+    let btnAgregar = "", nombres, apellidos;
     $.ajax({
         type: "get",
         url: "/Curso/ListarDocentes",
@@ -362,13 +360,16 @@ function ListarDocentesActivos() {
             if (res != "") {
                 tablaDocenteCurso.clear().destroy();
                 $.each(res, function (i, res) {
+                    nombres = res.persona.nombresPersona;
+                    apellidos = res.persona.apellidosPersona;
                     //Botones
-                    btnAgregar = '<button onclick = "AgregarDocenteCurso(' + res.idDocente + ')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';
+                    btnAgregar = '<button onclick = "AgregarDocenteCurso('+res.idDocente+','+"'"+nombres+
+                    " "+apellidos+ "'"+')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';
                     //Rellena datos
                     contenidoTablaDocenteCurso.append(
                         '<tr>' +
                         '<td>' + res.persona.dniPersona + '</td>' +
-                        '<td>' + res.persona.nombresPersona + ' ' + res.persona.apellidosPersona  + '</td>' +
+                        '<td>' + nombres + ' ' + apellidos  + '</td>' +
                         '<td> <div class="form-check-inline">' + btnAgregar + '</div> </td>' +
                         '</tr>');
                 });
@@ -378,27 +379,14 @@ function ListarDocentesActivos() {
     });
 }
 
-
 /*
  * SELECCIONAR DOCENTE
  */
 
-function AgregarDocenteCurso(id) {
-    $.ajax({
-        type: "get",
-        url: "/Curso/BuscarDocentePorID",
-        datatype: 'json',
-        data: { idDocente: id },
-        success: function (res) {
-            console.log(res);
-            if (res != "") {
-                //Rellena campo docente
-                txtDocenteCurso.val(res.persona.nombresPersona + ' ' + res.persona.apellidosPersona);
-                idDocenteSelec = id;
-                console.log("ID::"+idDocenteSelec);
-            }
-        }
-    });
+
+function AgregarDocenteCurso(id, docente){
+    txtDocenteCurso.val(docente);
+    idDocenteSelec = id;    
 }
 /*
  * BUSCAR CURSO
@@ -444,7 +432,6 @@ function GuardarCurso() {
     let action;
     //Seleccionar Action
     (idCursoEdit == 0) ? action = "RegistrarCurso" : action = "EditarCurso";
-
     let nuevoCurso = {
         IdCurso: idCursoEdit,
         Programa: programaCurso,
@@ -549,6 +536,12 @@ function VerificarCamposVaciosCurso() {
     console.log("RETURN");
     console.log(valido);
     return valido + detalleValido;
+}
+
+
+function EstablecerCampoSinDocente(){
+    $('#txtNombreDocente').val("");
+    $('#txtIdDocente').val("");        
 }
 
 

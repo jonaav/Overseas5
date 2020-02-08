@@ -17,7 +17,7 @@ namespace Entidades
         public DateTime FechaTraduccion { get; set; }
         public int EstadoTraduccion { get; set; }
         [ForeignKey("IdDocente")]
-        public int IdDocente { get; set; }
+        public int? IdDocente { get; set; }
 
         public Docente Docente { get; set; }
     }

@@ -68,8 +68,7 @@ namespace Persistencia.ImplementacionDao
         {
             try
             {
-                traduccion.Docente = new Docente();
-                traduccion.Docente.IdDocente = traduccion.IdDocente;
+                
                 _context.Traduccion.Attach(traduccion);
                 _context.Traduccion.Update(traduccion);
                 _context.SaveChanges();
@@ -87,8 +86,7 @@ namespace Persistencia.ImplementacionDao
             {
                 Traduccion traduccion = BuscarTraduccion(idTraduccion);
                 if (traduccion != null)
-                {
-                    traduccion.Docente.IdDocente = traduccion.IdDocente;
+                {                    
                     traduccion.EstadoTraduccion = 0;
                     _context.Traduccion.Attach(traduccion);
                     _context.Traduccion.Update(traduccion);
