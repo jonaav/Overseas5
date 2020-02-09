@@ -42,6 +42,13 @@
 	color : #3C37E4 ;
 }
 
+.tituloCurso{
+	color: #3C37E4;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+}
+
 .containerListadoCurso  {		
 	margin-left: 38px;
 	margin-right: -168px;	

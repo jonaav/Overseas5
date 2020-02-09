@@ -89,6 +89,7 @@ if ($("#ViewCursosRegulares").is(":visible")) {
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoRegular");
     tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
     contenidoTablaCursos = $("#contenidoTablaCursosRegular");
+    cambiarTitulo("CURSOS REGULARES");     
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
 }
@@ -107,6 +108,7 @@ if ($("#ViewCursosPrivados").is(":visible")) {
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoPrivado");
     tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
     contenidoTablaCursos = $("#contenidoTablaCursosPrivado");
+    cambiarTitulo("CURSOS PRIVADOS");          
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
 }
@@ -268,6 +270,7 @@ function ListarCursos() {
     let estadoCurso;
     let detalle = '-';    
     let nombreDocente;
+    let tituloCurso = '';
     MostrarTablaListaCursos();
     $.ajax({
         type: "get",
@@ -279,14 +282,17 @@ function ListarCursos() {
             if (res != "") {
                 tablaCursos.clear().destroy();
                 $.each(res, function (i, res) {
+                    tituloCurso += res.idioma + ' - ';
                     if (res.estado == 1) { estadoCurso = "Activo"; }
                     if (res.estado == 0) { estadoCurso = "Desactivado"; }
-                    if (res.detalle != null) { detalle = res.detalle; }
+                    if (res.detalle != null) { detalle = res.detalle; tituloCurso += res.detalle + ' - '; }
                     if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
                     else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
+                    tituloCurso += res.nivel + ' - ' + res.ciclo;
                     //Botones
                     btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ tituloCurso + "'"+
                                  ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
                     btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
                     btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';

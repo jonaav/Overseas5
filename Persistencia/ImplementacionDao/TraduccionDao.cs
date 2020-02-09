@@ -5,50 +5,20 @@ using System.Linq;
 using Entidades;
 using Persistencia;
 using Persistencia.InterfazDao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia.ImplementacionDao
 {
     public class TraduccionDao : ITraduccionDao
     {
         private readonly DB_OverseasContext _context;
-        public TraduccionDao(DB_OverseasContext context)
-        {
-            _context = context;
-        }
+        public TraduccionDao(DB_OverseasContext context) => _context = context;        
 
-        public Traduccion BuscarTraduccion(int idTraduccion)
-        {
-            Traduccion traduccion = new Traduccion();
-            try
-            {
-                traduccion =    (from t in _context.Traduccion join
-                                d in _context.Docente on t.IdDocente equals d.IdDocente join
-                                p in _context.Persona on d.IdPersona equals p.IdPersona
-                                where t.EstadoTraduccion == 1 && t.IdTraduccion == idTraduccion
-                                select new Traduccion
-                                {
-                                    IdTraduccion = t.IdTraduccion,
-                                    ClienteTraduccion = t.ClienteTraduccion,
-                                    TipoTraduccion = t.TipoTraduccion,
-                                    DetalleTraduccion = t.DetalleTraduccion,
-                                    IdiomaOrigenTraduccion = t.IdiomaOrigenTraduccion,
-                                    IdiomaDestinoTraduccion = t.IdiomaDestinoTraduccion,
-                                    FechaTraduccion = t.FechaTraduccion,
-                                    EstadoTraduccion = t.EstadoTraduccion,
-                                    IdDocente = t.IdDocente,
-                                    Docente = new Docente
-                                    {
-                                        Persona = t.Docente.Persona
-                                    }
-                                }).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
-            return traduccion;
-        }
+        public Traduccion BuscarTraduccion(int idTraduccion) => _context.Traduccion
+                                                        .Where(t => t.IdTraduccion == idTraduccion)
+                                                        .Include(t => t.Docente)
+                                                            .ThenInclude(d => d.Persona)
+                                                        .FirstOrDefault();
 
         public bool CrearTraduccion(Traduccion traduccion)
         {
@@ -104,42 +74,11 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public List<Traduccion> ListarTraducciones()
-        {
-            List<Traduccion> traducciones = new List<Traduccion>();
-            try
-            {
-                    traducciones = (from t in _context.Traduccion join 
-                                    d in _context.Docente on t.IdDocente equals d.IdDocente join
-                                    p in _context.Persona on d.IdPersona equals p.IdPersona
-                                    where t.EstadoTraduccion == 1
-                                select new Traduccion
-                                {
-                                    IdTraduccion = t.IdTraduccion,
-                                    ClienteTraduccion = t.ClienteTraduccion,
-                                    TipoTraduccion = t.TipoTraduccion,
-                                    DetalleTraduccion = t.DetalleTraduccion,
-                                    IdiomaOrigenTraduccion = t.IdiomaOrigenTraduccion,
-                                    IdiomaDestinoTraduccion = t.IdiomaDestinoTraduccion,
-                                    FechaTraduccion = t.FechaTraduccion,
-                                    EstadoTraduccion = t.EstadoTraduccion,
-                                    IdDocente = t.IdDocente,
-                                    Docente = new Docente
-                                    {
-                                        Persona = t.Docente.Persona
-                                    }
-                                }).ToList();
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-
-            return traducciones;
-        }
-
-
-
+        public List<Traduccion> ListarTraducciones() => _context.Traduccion
+                                                        .Where(t => t.EstadoTraduccion == 1)
+                                                        .Include(t => t.Docente)
+                                                            .ThenInclude(d => d.Persona)
+                                                        .ToList();
 
 
         public int CantidadDeTraduccionesPendientes() => _context.Traduccion

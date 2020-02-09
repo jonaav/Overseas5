@@ -2,7 +2,7 @@
  * ELEMENTOS
  */
 
- let idDocenteTradSelec;
+ let idDocenteTradSelec = null;
  let datatableTraduccion;
  let tablaTraduccion = $('#tablaTraduccion');
  let btnGuardarTraduccion = $('#btnGuardarTraduccion');
@@ -35,10 +35,23 @@ function LimpiarFormTraduccion(){
     txtFechaTraduccion.val("");
     txtTipoTraduccion.val("");
     idTraduccionEdit = 0;
+    txtDocenteTraduccion.val("");
+    idDocenteTradSelec = null;    
     $('#checkBoxDocente').prop('checked',false);
-    $('#btnBuscarDocenteCurso').prop('disabled',false);
-    EstablecerCampoSinDocente();
+    $('#btnBuscarDocenteCurso').prop('disabled',false);    
 }
+
+$('#checkBoxDocente').on('change',function(){
+    if($(this).is(':checked')){
+        txtDocenteTraduccion.val("");
+        idDocenteTradSelec = null; 
+        $('#btnBuscarDocenteCurso').prop('disabled',true);
+    }else{
+        $('#btnBuscarDocenteCurso').prop('disabled',false);
+    }
+})
+
+
 
 
 function EditarTraduccion(id){
@@ -103,7 +116,7 @@ $('#btnAgregarTraduccion').click(function(){
 
 
 function ListarTraducciones(){
-    var campoDocente = "";           
+    var nombreDocente = "";           
     var id = 0;
     CargarTablaListadoTraduccion();
     $.ajax({
@@ -117,16 +130,14 @@ function ListarTraducciones(){
                 datatableTraduccion.clear().destroy(); 
                 $.each(traducciones, function (i, traduccion){ 
                     id++;
-                    if(traduccion.docente.persona.nombresPersona == "Prueba")
-                            campoDocente = '    <td style = "color:red"> - Sin Asignar - </td>';                            
-                        else
-                            campoDocente = '    <td>'+ traduccion.docente.persona.nombresPersona+'</td>';                 
+                    if (traduccion.docente != null) { nombreDocente = '<td>' + traduccion.docente.persona.nombresPersona + ' ' + traduccion.docente.persona.apellidosPersona + '</td>' }
+                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }                   
                     $('#contenidoTablaTraduccion').append('<tr>' +
                     '<td>' + id + '</td>' +
                     '<td>' + traduccion.tipoTraduccion + '</td>' +
                     '<td>' + traduccion.clienteTraduccion + '</td>' +
                     '<td>' + traduccion.detalleTraduccion + '</td>' +
-                    campoDocente +
+                    nombreDocente +
                     '<td>' + traduccion.fechaTraduccion.substr(0,10) + '</td>' +
                     '<td>' + traduccion.idiomaOrigenTraduccion + '</td>' +
                     '<td>' + traduccion.idiomaDestinoTraduccion + '</td>' +                    

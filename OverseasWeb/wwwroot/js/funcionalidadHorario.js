@@ -22,6 +22,7 @@
  let txtHoraInicio = $('#txtHoraInicio');
  let txtHoraFin = $('#txtHoraFin');
  let txtAmbienteHorario = $('#txtHorarioNombreAmbiente');
+ let tituloCursoHorario = $('#tituloCursoHorario');
  
  /**
   * Privado
@@ -36,13 +37,14 @@
    * FALTA CAMBIAR, pero ya me dio pereza xd
    */
 
-  function CargarFormHorario(idCurso, programa, fechaInicio, fechaFin){ 
+  function CargarFormHorario(idCurso, programa, fechaInicio, fechaFin, tituloCurso){ 
     idCursoHorario = idCurso;
     programaCursoHorario = programa;
     fechaInicioCursoHorario = fechaInicio;
     fechaFinCursoHorario = fechaFin;    
     containerListaCursos.hide();
-    containerFormHorario.show();             
+    containerFormHorario.show();
+    AddTituloCursoAlFormHorario(tituloCurso);
     if(programa == "Privado"){
         divDatosHorarioPrivado.show();
         divDiaHorario.hide();
@@ -361,4 +363,9 @@ function AgregarHorario(){
         AgregarFilaTablaHorario(txtNumeroSesion.val(), txtFechaSesion.val(), selectorDia.val(),
                                 txtHoraInicio.val(), txtHoraFin.val(), txtAmbienteHorario.val(), idAmbienteSelecHorario, filaHorario);        
     }        
+}
+
+function AddTituloCursoAlFormHorario(titulo){  
+    tituloCursoHorario.html("")  
+    tituloCursoHorario.html(titulo);
 }

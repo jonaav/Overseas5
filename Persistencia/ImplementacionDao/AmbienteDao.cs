@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Entidades;
 using Persistencia.InterfazDao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia.ImplementacionDao
 {
@@ -11,25 +12,11 @@ namespace Persistencia.ImplementacionDao
     {
 
         private readonly DB_OverseasContext _context;
-        public AmbienteDao(DB_OverseasContext context)
-        {
-            _context = context;
-        }
-        public Ambiente BuscarAmbiente(int idAmbiente)
-        {
-            Ambiente ambiente = new Ambiente();
-            try
-            {
-                ambiente = (from a in _context.Ambiente
-                            where a.Estado == 1 && a.IdAmbiente == idAmbiente
-                            select a).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return ambiente;
-        }
+        public AmbienteDao(DB_OverseasContext context) => _context = context;
+        
+        public Ambiente BuscarAmbiente(int idAmbiente) => _context.Ambiente
+                                                          .Where(a => a.IdAmbiente == idAmbiente && a.Estado == 1)
+                                                          .FirstOrDefault();
 
         public bool CrearAmbiente(Ambiente ambiente)
         {
@@ -69,20 +56,8 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public List<Ambiente> ListarAmbientes()
-        {
-            List<Ambiente> ambientes = new List<Ambiente>();
-            try
-            {
-                ambientes = (from a in _context.Ambiente
-                             where a.Estado == 1
-                             select a).ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return ambientes;
-        }
+        public List<Ambiente> ListarAmbientes() => _context.Ambiente
+                                                   .Where(a => a.Estado == 1)
+                                                   .ToList();
     }
 }
