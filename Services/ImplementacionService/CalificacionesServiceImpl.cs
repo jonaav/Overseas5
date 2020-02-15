@@ -13,46 +13,55 @@ namespace Services.ImplementacionService
         private readonly IEvaluacionDao _evaluacionDao;
         private readonly ITipoEvaluacionDao _tipoEvaluacionDao;
         private readonly ITipoCursoDao _tipoCursoDao;
+        private readonly ICursoDao _cursoDao;
 
         public CalificacionesServiceImpl(
             IHistorialEvaluacionDao historialEvaluacionDao,
             IEvaluacionDao evaluacionDao,
             ITipoEvaluacionDao tipoEvaluacionDao,
-            ITipoCursoDao tipoCursoDao
+            ITipoCursoDao tipoCursoDao,
+            ICursoDao cursoDao
         )
         {
             _historialEvaluacionDao = historialEvaluacionDao;
             _evaluacionDao = evaluacionDao;
             _tipoEvaluacionDao = tipoEvaluacionDao;
             _tipoCursoDao = tipoCursoDao;
+            _cursoDao = cursoDao;
         }
 
 
-        public bool RegistrarHistorialEvaluacion(HistorialEvaluacion nuevoHistorial)
+        public void RegistrarHistorialEvaluacion(HistorialEvaluacion nuevoHistorial)
         {
-            HistorialEvaluacion historial = _historialEvaluacionDao.RegistrarHistorialEvaluacion(nuevoHistorial);
-            if (historial != null)
+            List<Evaluacion> evaluaciones = new List<Evaluacion>();
+            if (_historialEvaluacionDao.RegistrarHistorialEvaluacion(nuevoHistorial))
             {
-                List<TipoEvaluacion> tiposEvaluacion = _tipoCursoDao.BuscarEvaluacionesDeUnTipoCurso(historial.Curso.IdTipoCurso);
-                foreach(TipoEvaluacion te in tiposEvaluacion)
+                HistorialEvaluacion historial = _historialEvaluacionDao.BuscarHistorialPorEstudianteYCurso(nuevoHistorial.IdEstudiante, nuevoHistorial.IdCurso);
+                historial.Curso = _cursoDao.BuscarCursoPorID(historial.IdCurso);
+                if (historial != null)
                 {
-                    Evaluacion evaluacion = new Evaluacion
+                    List<TipoEvaluacion> tiposEvaluacion = _tipoCursoDao.BuscarEvaluacionesDeUnTipoCurso(historial.Curso.IdTipoCurso);
+                    foreach (TipoEvaluacion te in tiposEvaluacion)
                     {
-                        CalificacionEvaluacion = 0,
-                        IdHistorialEvaluacion = historial.IdHistorialEvaluacion,
-                        IdTipoEvaluacion = te.IdTipoEvaluacion
-                    };
-                    _evaluacionDao.RegistrarEvaluacion(evaluacion);
+                        Evaluacion evaluacion = new Evaluacion
+                        {
+                            IdEvaluacion = 0,
+                            CalificacionEvaluacion = 0,
+                            IdHistorialEvaluacion = historial.IdHistorialEvaluacion,
+                            IdTipoEvaluacion = te.IdTipoEvaluacion
+                        };
+                        evaluaciones.Add(evaluacion);
+                    }
+
+                    foreach (Evaluacion e in evaluaciones)
+                    {
+                        bool reg = _evaluacionDao.RegistrarEvaluacion(e);
+                    }
                 }
             }
-            return false;
+            
         }
 
-        public String RegistrarEvaluacion(Evaluacion evaluacion)
-        {
-            String mensaje = "";
-            return mensaje;
-        }
 
         public String EditarEvaluacion(Evaluacion evaluacion)
         {
@@ -67,7 +76,11 @@ namespace Services.ImplementacionService
         }
 
 
-
+        public List<Evaluacion> VerNotasDelEstudiantePorCurso(int idCurso, int idEstudiante)
+        {
+            List<Evaluacion> evaluaciones = _evaluacionDao.ListarEvaluacionesPorEstudianteYCurso(idEstudiante, idCurso);
+            return evaluaciones;
+        }
 
 
     }

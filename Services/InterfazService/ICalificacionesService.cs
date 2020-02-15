@@ -7,9 +7,9 @@ namespace Services.InterfazService
 {
     public interface ICalificacionesService
     {
-        bool RegistrarHistorialEvaluacion(HistorialEvaluacion historial);
-        String RegistrarEvaluacion(Evaluacion evaluacion);
+        void RegistrarHistorialEvaluacion(HistorialEvaluacion historial);
         String EditarEvaluacion(Evaluacion evaluacion);
         String EliminarCalificaciones(int idHistorial);
+        List<Evaluacion> VerNotasDelEstudiantePorCurso(int idCurso, int idEstudiante);
     }
 }

@@ -13,13 +13,17 @@ namespace Services.ImplementacionService
     {
         private readonly IEstudianteDao _estudianteDao;
         private readonly IInscripcionDao _inscripcionDao;
+        private readonly ICalificacionesService _calificacionesService;
 
         public InscripcionServiceImpl(
             IEstudianteDao estudianteDao,
-            IInscripcionDao inscripcionDao
-        ){
+            IInscripcionDao inscripcionDao,
+            ICalificacionesService calificacionesService
+        )
+        {
             _estudianteDao = estudianteDao;
             _inscripcionDao = inscripcionDao;
+            _calificacionesService = calificacionesService;
         }
 
         #region metodos
@@ -59,14 +63,21 @@ namespace Services.ImplementacionService
 
         public bool RegistrarInscripcion(int idCurso, int idEstudiante)
         {
+            bool registro = false;
             Inscripcion inscripcion = new Inscripcion
             {
                 IdEstudiante = idEstudiante,
                 IdCurso = idCurso
             };
-            bool registro = false;
             if(!_inscripcionDao.BuscarInscripcion(inscripcion))
                 registro = _inscripcionDao.RegistrarInscripcion(inscripcion);
+            HistorialEvaluacion historial = new HistorialEvaluacion
+            {
+                FeedbackHistorialEvaluacion = "",
+                IdCurso = idCurso,
+                IdEstudiante = idEstudiante
+            };
+            _calificacionesService.RegistrarHistorialEvaluacion(historial);
             return registro;
         }
 

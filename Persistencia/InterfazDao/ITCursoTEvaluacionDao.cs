@@ -7,7 +7,8 @@ namespace Persistencia.InterfazDao
 {
     public interface ITCursoTEvaluacionDao
     {
+        List<TipoCursoTipoEvaluacion> ListarTCursoTEvaluacion(int idCurso);
         bool RegistrarTCursoTEvaluacion(TipoCursoTipoEvaluacion cursoEvaluacion);
-        bool EliminarTCursoTEvaluacion(int idtcurso, int idtEvaluacion);
+        bool EliminarTCursoTEvaluacion(int idtt);
     }
 }

@@ -7,8 +7,9 @@ namespace Persistencia.InterfazDao
 {
     public interface IEvaluacionDao
     {
-        void RegistrarEvaluacion(Evaluacion evaluacion);
+        bool RegistrarEvaluacion(Evaluacion evaluacion);
         bool EditarEvaluacion(Evaluacion evaluacion);
         bool EliminarEvaluacion(int idEvaluacion);
+        List<Evaluacion> ListarEvaluacionesPorEstudianteYCurso(int idEstudiante, int idCurso);
     }
 }

@@ -15,7 +15,7 @@ namespace Entidades
         [ForeignKey("IdTipoEvaluacion")]
         public int IdTipoEvaluacion { get; set; }
 
-        public HistorialEvaluacion HistorialEvaluacion { get; set; }
         public TipoEvaluacion TipoEvaluacion { get; set; }
+        public HistorialEvaluacion HistorialEvaluacion { get; set; }
     }
 }

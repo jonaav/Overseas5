@@ -28,7 +28,7 @@ namespace Persistencia
         public DbSet<Estudiante> Estudiante { get; set; }
         public DbSet<Evaluacion> Evaluacion { get; set; }
         public DbSet<TipoEvaluacion> TipoEvaluacion { get; set; }
-        public DbSet<TipoCursoTipoEvaluacion> TCursoTEvaluacion { get; set; }
+        public DbSet<TipoCursoTipoEvaluacion> TipoCursoTipoEvaluacion { get; set; }
         public DbSet<HistorialEvaluacion> HistorialEvaluacion { get; set; }
         public DbSet<Horario> Horario { get; set; }
         public DbSet<Inscripcion> Inscripcion { get; set; }

@@ -24,19 +24,22 @@ namespace Persistencia.ImplementacionDao
          */
         public List<Evaluacion> ListarEvaluacionesPorEstudianteYCurso(int idEstudiante, int idCurso) => _context.Evaluacion
             .Where(e => (e.HistorialEvaluacion.IdEstudiante == idEstudiante && e.HistorialEvaluacion.Curso.IdCurso == idCurso))
-            .Include(a => a.HistorialEvaluacion).ToList();
+            .Include(e => e.HistorialEvaluacion).ThenInclude(h => h.Estudiante).ThenInclude(e => e.Persona)
+            .Include(e => e.TipoEvaluacion)
+            .ToList();
 
 
         /*
          *  Registrar Evaluacion
          */
 
-        public void RegistrarEvaluacion(Evaluacion evaluacion)
+        public bool RegistrarEvaluacion(Evaluacion evaluacion)
         {
             try
             {
                 _context.Evaluacion.Add(evaluacion);
                 _context.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {

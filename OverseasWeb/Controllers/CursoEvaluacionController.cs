@@ -39,11 +39,48 @@ namespace OverseasWeb.Controllers
             List <TipoEvaluacion> tiposEvaluacion= _cursoEvaluacionService.ListarTiposEvaluacion();
             return Json(tiposEvaluacion);
         }
+        
+
+        public IActionResult ListarTCursoTEvaluacion(int idCurso)
+        {
+            List <TipoCursoTipoEvaluacion> tt= _cursoEvaluacionService.ListarTCursoTEvaluacion(idCurso);
+            return Json(tt);
+        }
+
+        
+        public IActionResult ListarTEvaluacionFaltantes(int idCurso)
+        {
+            List <TipoEvaluacion> tiposEvaluacion = _cursoEvaluacionService.ListarTEvaluacionFaltantes(idCurso);
+            return Json(tiposEvaluacion);
+        }
+
+
 
         [HttpPost]
         public IActionResult RegistrarTipoEvaluacion(TipoEvaluacion tEvaluacion)
         {
             var mensaje = _cursoEvaluacionService.RegistrarTipoEvaluacion(tEvaluacion);
+            return Json(mensaje);
+        }
+        
+        [HttpPost]
+        public IActionResult EliminarTipoEvaluacion(int idTipoEvaluacion)
+        {
+            var mensaje = _cursoEvaluacionService.EliminarTipoEvaluacion(idTipoEvaluacion);
+            return Json(mensaje);
+        }
+
+        [HttpPost]
+        public IActionResult RegistrarTCursoTEvaluacion(TipoCursoTipoEvaluacion tt)
+        {
+            var mensaje = _cursoEvaluacionService.RegistrarTCursoTEvaluacion(tt);
+            return Json(mensaje);
+        }
+        
+        [HttpPost]
+        public IActionResult EliminarTCursoTEvaluacion(int idtt)
+        {
+            var mensaje = _cursoEvaluacionService.EliminarTCursoTEvaluacion(idtt);
             return Json(mensaje);
         }
 
