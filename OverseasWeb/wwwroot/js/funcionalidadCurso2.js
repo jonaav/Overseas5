@@ -1,12 +1,13 @@
-﻿
-/*
+﻿/*
  * ELEMENTOS 
  */
+
 let btnRegresarRegular = $("#btnRegresarRegular");
 let btnRegresarPrivado = $("#btnRegresarPrivado");
 
 let containerListaCursos = $("#containerListadoCurso");
 let containerFormCurso = $("#containerFormCurso");
+
 
 let tablaCursos;
 let contenidoTablaCursos;
@@ -39,6 +40,18 @@ let labelDetalleCurso = $("#labelDetalleCurso");
 
 
 
+function LimpiarCamposFormCurso(){
+    txtDetalleCurso.val("");
+    txtNivelCurso.val("");
+    txtCicloCurso.val("");
+    txtFechaInicioCurso.val("");
+    txtFechaFinCurso.val("");
+    txtDocenteCurso.val("");
+    idCursoEdit = 0;
+    idDocenteSelec = null;
+}
+
+
 /*
  * SELECCIONAR CURSOS
  */
@@ -51,9 +64,7 @@ function BuscarTipoCurso(nombreCurso) {
         data: { nombreCurso },
         success: function (res) {
             console.log(res);
-            tipoCurso = res;
-            containerFormCurso.hide();
-            containerListaCursos.show();            
+            tipoCurso = res;            
             ListarCursos();
             cursoFormHeader.html(tipoCurso.nombreCurso);
         }
@@ -73,13 +84,12 @@ if ($("#ViewCursosRegulares").is(":visible")) {
     txtProgramaCurso.val(programaCurso);
     txtDocenteCurso.prop('disabled', true);
     txtModalidadCurso.prop('disabled', true);
-    txtModalidadCurso.val('Grupal');
-
-    //containerListaCursos = $("#containerListaCursosRegulares");
+    txtModalidadCurso.val('Grupal');    
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoRegular");
     tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
     contenidoTablaCursos = $("#contenidoTablaCursosRegular");
+    cambiarTitulo("CURSOS REGULARES");     
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
 }
@@ -88,19 +98,17 @@ if ($("#ViewCursosRegulares").is(":visible")) {
 
 if ($("#ViewCursosPrivados").is(":visible")) {
     programaCurso = 'Privado';
-
     //form
     containerFormCurso.hide();
     btnRegresarRegular.hide();
     txtProgramaCurso.val(programaCurso);
     txtDocenteCurso.prop('disabled', true);
-    txtModalidadCurso.prop('disabled', false);
-
-    //containerListaCursos = $("#containerListaCursosPrivados");
+    txtModalidadCurso.prop('disabled', false);    
     //tabla
     cabeceraDetalleCurso = $("#cabeceraDetalleCursoPrivado");
     tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
     contenidoTablaCursos = $("#contenidoTablaCursosPrivado");
+    cambiarTitulo("CURSOS PRIVADOS");          
     //Por defecto lista un tipo de curso
     SelecInglesGeneral();
 }
@@ -130,7 +138,6 @@ function PintarBotonTipoCurso(nombreCurso){
             DesactivarColorBoton(tipoCursos[i]);                
     }
 }
-
 /*
  * SELECCIONAR CURSOS
  */
@@ -186,9 +193,6 @@ function SelecCorporativo() {
     PintarBotonTipoCurso('Corporativo');
 }
 
-
-
-
 /*
  * OCULTAR O MOSTRAR DETALLE
  */
@@ -232,8 +236,15 @@ function OcultarIdioma(oculto) {
 
 function MostrarFormCurso() {
     containerFormCurso.show();
-    containerListaCursos.hide();
+    containerListaCursos.hide();        
 };
+
+function MostrarTablaListaCursos(){    
+    containerListaCursos.show();
+    containerFormCurso.hide();
+    containerFormHorario.hide();
+    LimpiarCamposFormCurso();                        
+}
 
 function ModificarCabeceraDetalle() {
     cabeceraDetalleCurso.hide();
@@ -254,31 +265,37 @@ function ModificarCabeceraDetalle() {
  * LISTAR CURSOS
  */
 
-function ListarCursos() {
+function ListarCursos() {    
     let nombreCurso = tipoCurso.nombreCurso;
     let estadoCurso;
-    let detalle = '-';
+    let detalle = '-';    
     let nombreDocente;
+    let tituloCurso = '';
+    MostrarTablaListaCursos();
     $.ajax({
         type: "get",
         url: "/Curso/ListarCursos",
         datatype: 'json',
         data: { nombreCurso: nombreCurso, programa: programaCurso },
-        success: function (res) {
-            console.log(res);
+        success: function (res) {            
             contenidoTablaCursos.html("");
             if (res != "") {
                 tablaCursos.clear().destroy();
                 $.each(res, function (i, res) {
+                    tituloCurso += res.idioma + ' - ';
                     if (res.estado == 1) { estadoCurso = "Activo"; }
                     if (res.estado == 0) { estadoCurso = "Desactivado"; }
-                    if (res.detalle != null) { detalle = res.detalle; }
+                    if (res.detalle != null) { detalle = res.detalle; tituloCurso += res.detalle + ' - '; }
                     if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
                     else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
+                    tituloCurso += res.nivel + ' - ' + res.ciclo;
                     //Botones
-                    btnHorario = '<button onclick = "CargarFormHorario(' + res.idCurso + ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
-                    btnEditar = '<button onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
-                    btnEliminar = '<button onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
+                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ tituloCurso + "'"+
+                                 ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
+                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
+                    btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
                     //Rellena datos
                     contenidoTablaCursos.append(
                         '<tr>' +   
@@ -333,15 +350,12 @@ function ListarIdiomasCurso() {
     });
 }
 
-
-
-
 /*
  * BUSCAR DOCENTES
  */
 
-function ListarDocentesActivos() {
-    let btnAgregar = "";
+function ListarDocentesActivosCurso() {
+    let btnAgregar = "", nombres, apellidos;
     $.ajax({
         type: "get",
         url: "/Curso/ListarDocentes",
@@ -352,13 +366,16 @@ function ListarDocentesActivos() {
             if (res != "") {
                 tablaDocenteCurso.clear().destroy();
                 $.each(res, function (i, res) {
+                    nombres = res.persona.nombresPersona;
+                    apellidos = res.persona.apellidosPersona;
                     //Botones
-                    btnAgregar = '<button onclick = "AgregarDocenteCurso(' + res.idDocente + ')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';
+                    btnAgregar = '<button onclick = "AgregarDocenteCurso('+res.idDocente+','+"'"+nombres+
+                    " "+apellidos+ "'"+')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';
                     //Rellena datos
                     contenidoTablaDocenteCurso.append(
                         '<tr>' +
                         '<td>' + res.persona.dniPersona + '</td>' +
-                        '<td>' + res.persona.nombresPersona + ' ' + res.persona.apellidosPersona  + '</td>' +
+                        '<td>' + nombres + ' ' + apellidos  + '</td>' +
                         '<td> <div class="form-check-inline">' + btnAgregar + '</div> </td>' +
                         '</tr>');
                 });
@@ -368,31 +385,15 @@ function ListarDocentesActivos() {
     });
 }
 
-
 /*
  * SELECCIONAR DOCENTE
  */
 
-function AgregarDocenteCurso(id) {
-    $.ajax({
-        type: "get",
-        url: "/Curso/BuscarDocentePorID",
-        datatype: 'json',
-        data: { idDocente: id },
-        success: function (res) {
-            console.log(res);
-            if (res != "") {
-                //Rellena campo docente
-                txtDocenteCurso.val(res.persona.nombresPersona + ' ' + res.persona.apellidosPersona);
-                idDocenteSelec = id;
-                console.log("ID::"+idDocenteSelec);
-            }
-        }
-    });
+
+function AgregarDocenteCurso(id, docente){
+    txtDocenteCurso.val(docente);
+    idDocenteSelec = id;    
 }
-
-
-
 /*
  * BUSCAR CURSO
  */
@@ -437,7 +438,6 @@ function GuardarCurso() {
     let action;
     //Seleccionar Action
     (idCursoEdit == 0) ? action = "RegistrarCurso" : action = "EditarCurso";
-
     let nuevoCurso = {
         IdCurso: idCursoEdit,
         Programa: programaCurso,
@@ -462,19 +462,13 @@ function GuardarCurso() {
             datatype: 'json',
             data: { curso: nuevoCurso },
             success: function (res) {
-                if (res == "Registrado") {
-                } else {
-                    msgError(res);
-                }
                 switch (res) {
                     case 'Registrado': {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                         break;
                     }
                     case 'Exito': {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                         break;
                     }
                     default: {
@@ -514,19 +508,16 @@ function EliminarCurso(id) {
                 success: function (res) {
                     console.log(res);
                     if (res == 'Eliminado') {
-                        msgExito(res);
-                        ListarCursos();
+                        msgExitoCurso(res);                        
                     } else {
                         msgError(res);
                     }
                 }
             });
         } else {
-            msgCancelado("No se eliminara el idioma");
+            msgCancelado("No se eliminara el Curso");
         }
-    });
-
-    
+    });    
 }
 
 
@@ -552,6 +543,14 @@ function VerificarCamposVaciosCurso() {
     console.log(valido);
     return valido + detalleValido;
 }
+
+
+function EstablecerCampoSinDocente(){
+    $('#txtNombreDocente').val("");
+    $('#txtIdDocente').val("");        
+}
+
+
 
 
 

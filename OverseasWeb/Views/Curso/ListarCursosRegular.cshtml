@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     ViewData["Title"] = "ListarCursosRegular";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -31,13 +29,13 @@
         </ul>
 
         <div id="containerListadoCurso">        
-            <div class="row mt-3">
-                <div>
-                    <div class="col-12">
+            <div class="row mt-4">
+                <div class="col-md-10">
+                    <div class="containerListadoCurso">
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-row">
-                                    <button type="button" class="btn btn-info" onclick="MostrarFormCurso()" rel="tooltip" title="Agregar">Nuevo curso</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="MostrarFormCurso()" rel="tooltip" title="Agregar">Nuevo curso</button>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-hover" id="tablaCursosRegular">
@@ -70,9 +68,9 @@
         <partial name="~/Views/Curso/_ModalBuscarDocente.cshtml">
     </div>
 
-    @*<div id="containerRegistroHorario">
+    <div id="containerFormHorario">
         <partial name="~/Views/Horario/CrearHorario.cshtml">
-    </div>*@
+    </div>
 
 
 

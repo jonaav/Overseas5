@@ -1,20 +1,127 @@
-var cont = 0;
-var filaHorario = 0;
+ let cont = 0;
+ let filaHorario = 0;
+ /**
+  * Datos Utilizar
+  */
+ let idCursoHorario;
+ let fechaInicioCursoHorario;
+ let fechaFinCursoHorario;
+ let idAmbienteSelecHorario = 0;
+ let programaCursoHorario;
+
+/**
+ * Elementos Horario
+ * REGULAR
+ */
+ let dias = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+ let cabeceraTablaHorarios = $('#cabeceraTablaHorarios');
+ let contenidoTablaHorarios = $('#contenidoTablaHorarios');
+ let containerFormHorario = $('#containerFormHorario');
+ let btnGuardarHorario = $("#btnGuardarHorario");
+ let selectorDia = $('#selectorHorarioDia');
+ let txtHoraInicio = $('#txtHoraInicio');
+ let txtHoraFin = $('#txtHoraFin');
+ let txtAmbienteHorario = $('#txtHorarioNombreAmbiente');
+ let tituloCursoHorario = $('#tituloCursoHorario');
+ 
+ /**
+  * Privado
+  */
+
+ let txtNumeroSesion = $('#txtNumeroSesion');
+ let txtFechaSesion = $('#txtFechaSesion');
+ let divDatosHorarioPrivado = $('#divDatosHorarioPrivado');
+ let divDiaHorario = $('#divDiaHorario');
+ 
+  /**
+   * FALTA CAMBIAR, pero ya me dio pereza xd
+   */
+
+  function CargarFormHorario(idCurso, programa, fechaInicio, fechaFin, tituloCurso){ 
+    idCursoHorario = idCurso;
+    programaCursoHorario = programa;
+    fechaInicioCursoHorario = fechaInicio;
+    fechaFinCursoHorario = fechaFin;    
+    containerListaCursos.hide();
+    containerFormHorario.show();
+    AddTituloCursoAlFormHorario(tituloCurso);
+    if(programa == "Privado"){
+        divDatosHorarioPrivado.show();
+        divDiaHorario.hide();
+    }else{
+        divDiaHorario.show();
+        divDatosHorarioPrivado.hide();                           
+    }            
+    AgregarCabeceraTablaHorario();
+    contenidoTablaHorarios.html("");
+    BuscarHorariosCurso();
+  }
+  
+  function AgregarCabeceraTablaHorario(){
+    let columnasHorario = "";
+    cabeceraTablaHorarios.html("");
+    (programaCursoHorario == "Privado") ? columnasHorario = '<th> N° Sesión </th> <th> Fecha Sesión </th>' : columnasHorario = '<th> Dia </th>';
+    cabeceraTablaHorarios.append('<tr>'+                 
+        columnasHorario +
+        '<th>Hora Inicio</th>'+
+        '<th>Hora Fin</th>'+
+        '<th>Ambiente</th>'+
+        '<th hidden></th>'+
+        '<th></th>'+            
+        '</tr>');
+  }
+
+  function ModificarBotonGuardar(accion, boton){
+    let removeColor, addColor;    
+    (accion == 'Guardar') ? (removeColor = 'warning', addColor = 'primary') : (removeColor = 'primary', addColor = 'warning')
+    boton.html(accion);
+    boton.removeClass('btn-outline-'+ removeColor);
+    boton.addClass('btn-outline-'+ addColor);
+  }
+
+  function BuscarHorariosCurso(){ 
+    let accionHorario = "", numSesion = "", fechaSesion = "", horario;    
+    (programaCursoHorario == 'Regular') ? accionHorario = 'BuscarHorariosCurso' : accionHorario = 'BuscarSesionesCurso';    
+    $.ajax({
+        type: 'GET',
+        url: "/Horario/" + accionHorario,            
+        dataType:"json",            
+        data: {
+            idCurso : idCursoHorario                
+        },
+        success: function (res) {        
+            if(programaCursoHorario == 'Privado')  ActualizarNumeroSesionHorario(res.length + 1) ;
+            if(res!=""){                                       
+                ModificarBotonGuardar('Editar', btnGuardarHorario);                                                       
+                $.each(res, function (i, res){      
+                    (accionHorario == 'BuscarSesionesCurso') ? (horario = res.horario, numSesion = res.numeroSesion,
+                                                                                       fechaSesion = res.fechaSesion ) 
+                                                             : horario = res;
+                    cont++;                                                                                                                                                                                                                   
+                    AgregarFilaTablaHorario(numSesion, fechaSesion, horario.dia, horario.horaInicio, horario.horaFin, horario.ambiente.descripcionAmbiente + " "+
+                    horario.ambiente.aula, horario.ambiente.idAmbiente,0);                                                                                                                                                                                                                                                                             
+                });                              
+            }else{                
+                ModificarBotonGuardar('Guardar', btnGuardarHorario);                    
+            }
+        }
+    });
+}
 
 
-function CancelarIngresoHorario(){
+function SalirFormHorario(){
     LimpiarFormHorario();
-    SeleccionarCurso(cursoSeleccionado, $('#txtProgramaCursoHorario').val());
+    ListarCursos();
 }
 
 function LimpiarFormHorario(){
     $('#txtNumeroSesion').val($('#txtNumeroActualSesion').val());
-    $('#txtFechaSesion').val("");
-    $('#selectorHorarioDia').val(0);
-    $('#txtHoraInicio').val("");
-    $('#txtHoraFin').val("");
-    $('#txtHorarioIdAmbiente').val("");
-    $('#txtHorarioNombreAmbiente').val("");
+    txtFechaSesion.val("");
+    selectorDia.val(0);
+    txtHoraInicio.val("");
+    txtHoraFin.val("");
+    idAmbienteSelecHorario = 0;
+    txtAmbienteHorario.val("");    
 }
     
 function MostrarAmbientesParaHorario(){
@@ -39,8 +146,6 @@ function MostrarAmbientesParaHorario(){
                 });
                 table = CrearDatatable("tablaAmbienteModal");                    
             }            
-        },
-        error: function () {
         }
     });
 }
@@ -52,45 +157,27 @@ function CargarModalAmbienteParaHorario(){
 
 function AsignarAmbienteAlFormHorario( idAmbiente, descripcion){
     $('#modalBuscarAmbiente').modal("hide");
-    $('#txtHorarioIdAmbiente').val(idAmbiente);
-    $('#txtHorarioNombreAmbiente').val(descripcion);    
+    idAmbienteSelecHorario = idAmbiente;
+    txtAmbienteHorario.val(descripcion);        
 }  
 
-function CargarFormHorario(idCursoHorario, programa, fechaInicioCurso, fechaFinCurso){
-    $('#containerListadoCurso').hide();
-    $('#containerRegistroHorario').show();
-    $('#txtIdCursoHorario').val(idCursoHorario);        
-    if(programa == "Privado"){
-        $('#divDatosHorarioPrivado').show();
-        $('#divDiaHorario').hide();
-    }else{
-        $('#divDatosHorarioPrivado').hide();
-        $('#divDiaHorario').show();
-        $('#txtFechaInicioCurso').val(fechaInicioCurso);  
-        $('#txtFechaFinCurso').val(fechaFinCurso);    
-    }        
-    $('#txtProgramaCursoHorario').val(programa);
-    AgregarCabeceraTablaHorario(programa);
-    BuscarHorariosCurso(idCursoHorario, programa);
-}
 
 function EditarfilaHorario(fila){
-    var indice = 0;
-    if($('#divDatosHorarioPrivado').is(':visible')){
-        $('#txtNumeroSesion').val($('#'+fila).find("td").eq(0).html());
-        $('#txtFechaSesion').val($('#'+fila).find("td").eq(1).html());
+    let indice = 0;
+    if(programaCursoHorario == 'Privado'){
+        txtNumeroSesion.val($('#'+fila).find("td").eq(0).html());
+        txtFechaSesion.val($('#'+fila).find("td").eq(1).html());
         indice+=2;
     }else{
-        $('#selectorHorarioDia').val($('#'+fila).find("td").eq(indice).html());  
+        selectorDia.val($('#'+fila).find("td").eq(indice).html());  
         indice+=1;
     }                                    
-    $('#txtHoraInicio').val($('#'+fila).find("td").eq(indice).html());    
-    $('#txtHoraFin').val($('#'+fila).find("td").eq(indice+1).html());   
-    $('#txtHorarioNombreAmbiente').val($('#'+fila).find("td").eq(indice+2).html());  
-    $('#txtHorarioIdAmbiente').val($('#'+fila).find("td").eq(indice+3).html());                                 
+    txtHoraInicio.val($('#'+fila).find("td").eq(indice).html());    
+    txtHoraFin.val($('#'+fila).find("td").eq(indice+1).html());   
+    txtAmbienteHorario.val($('#'+fila).find("td").eq(indice+2).html());  
+    idAmbienteSelecHorario = $('#'+fila).find("td").eq(indice+3).html();
     filaHorario = fila;
 }
-
 
 function EliminarfilaHorario(fila){
     var numeroActualSesion = $('#txtNumeroActualSesion').val()-1;
@@ -99,32 +186,21 @@ function EliminarfilaHorario(fila){
 }
 
 function CrearHorariosSesionesCurso(){
-    var cantidadHorarios = 0;
-    var listaDeHorarios = [];  
-    var listaDeSesiones = [];              
-    var idCurso = $('#txtIdCursoHorario').val();        
-    var fechaInicioCurso = new Date($('#txtFechaInicioCurso').val());
-    var fechaFinCurso = new Date($('#txtFechaFinCurso').val()); 
-    var activo = true;             
-    var dia = "";
-    var programa = "Regular";
-    var numSesion = "";
-    var sesion = 0;
-    var fechaSesion = "";
-    var horaInicio = "";
-    var horaFin = "";
-    var idAmbiente = "";         
-    var indice = 0;  
-    var dias = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    let cantidadHorarios = 0;
+    let listaDeHorarios = [], listaDeSesiones = [];                   
+    let fechaInicioCurso = new Date(fechaInicioCursoHorario);
+    let fechaFinCurso = new Date(fechaFinCursoHorario); 
+    let fecha, activo = true;             
+    let dia = "", numSesion = "", sesion = 0, fechaSesion = "", horaInicio = "", horaFin = "", idAmbiente = "";         
+    let indice = 0;      
     
     $('#tablaHorarios tbody tr').each(function(){
         indice = 0;
-        if($('#divDatosHorarioPrivado').is(':visible')){
-            programa = "Privado";
+        if(programaCursoHorario == 'Privado'){            
             numSesion = $(this).find('td').eq(indice).html(); 
             fechaSesion = $(this).find('td').eq(indice+1).html();                 
-            let date = new Date(fechaSesion);
-            dia = dias[date.getDay()];
+            fecha = new Date(fechaSesion);
+            dia = dias[fecha.getDay()];
             objSesion = {AsistenciaDocente : 0, FechaSesion : fechaSesion, NumeroSesion : numSesion, IdHorario : 0};
             listaDeSesiones.push(objSesion);                                 
             indice+=1;                
@@ -132,19 +208,18 @@ function CrearHorariosSesionesCurso(){
         else{
             dia = $(this).find('td').eq(indice).html();                                        
         }
-
         horaInicio = $(this).find('td').eq(indice+1).html();
         horaFin = $(this).find('td').eq(indice+2).html();
         idAmbiente = $(this).find('td').eq(indice+4).html();
-        objHorario = { Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCurso, IdAmbiente : idAmbiente};
+        objHorario = { Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCursoHorario, IdAmbiente : idAmbiente};
         listaDeHorarios.push(objHorario); 
         cantidadHorarios++;                        
     });
-                         
+
+    //Al convertir las fechas en formato Date, estas se reducen en 1 dia, aquí se le vuelve a sumar. 
     fechaInicioCurso.setDate(fechaInicioCurso.getDate()+1);             
     fechaFinCurso.setDate(fechaFinCurso.getDate()+1);   
             
-
     if(cantidadHorarios!=0){               
             $.ajax({
                 type: 'POST',
@@ -154,15 +229,15 @@ function CrearHorariosSesionesCurso(){
                 data: JSON.stringify(listaDeHorarios),
                 success: function (horarios) {
                     if(horarios!=""){                            
-                        var indice = 0;
-                        if(programa == "Privado"){                                
+                        indice = 0;                        
+                        if(programaCursoHorario == "Privado"){                                
                             $.each(horarios, function (i, horario){                                    
                                 listaDeSesiones[indice].IdHorario = horario.idHorario;
                                 indice++;                                                                        
                             });     
                         }else{
-                            while(activo){                                
-                                $.each(horarios, function (i, horario){
+                            while(activo){                                                              
+                                $.each(horarios, function (i, horario){                                    
                                     if(fechaInicioCurso <= fechaFinCurso){
                                         if(dias[fechaInicioCurso.getDay()] == horario.dia){
                                             sesion++;
@@ -176,7 +251,7 @@ function CrearHorariosSesionesCurso(){
                                 });                                                                        
                                 fechaInicioCurso.setDate(fechaInicioCurso.getDate()+1);
                             }
-                        }                                                    
+                        }                                                                         
                         $.ajax({
                             type: 'POST',
                             url: "/Horario/CrearSesion",
@@ -194,36 +269,28 @@ function CrearHorariosSesionesCurso(){
                                     }).then(
                                         function () {
                                             if (true) {                                        
-                                                LimpiarFormHorario();
-                                                SeleccionarCurso(cursoSeleccionado, programa);
+                                                SalirFormHorario();
                                             }
                                         }
                                     )                                    
                                 }                                                                              
-                            },
-                            error: function () {
-                            }            
-                        });                                  
+                            }        
+                        });                         
                     }
-                },
-                error: function () {
                 }            
-            });                        
-                                                        
+            });                                                                                
     }else{
         alert("Para Guardar, necesita registrar por lo menos 1 Horario.");
     }          
 }
 
-
-function GuardarHorarios(){
-    var id = $('#txtIdCursoHorario').val();
-    if($("#btnGuardarHorario").html() == "Editar"){
+function GuardarHorarios(){    
+    if(btnGuardarHorario.html() == "Editar"){
         $.ajax({
             type: 'POST',
             url: "/Horario/EliminarHorariosCurso",
             data: {
-                idCurso: id,                                
+                idCurso: idCursoHorario,                                
             },
             datatype: 'json',
             success: function (response) {
@@ -241,139 +308,45 @@ function ActualizarNumeroSesionHorario(numero){
     $('#txtNumeroActualSesion').val(numero);
 }
 
-function BuscarHorariosCurso(id,programa){
-    var numSesion = "";
-    var fechaSesion = "";    
-    if(programa == "Privado"){
-        $.ajax({
-            type: 'GET',
-            url: "/Horario/BuscarSesionesCurso",            
-            dataType:"json",            
-            data: {
-                idCurso : id                
-            },
-            success: function (sesiones) {                            
-                if(sesiones!=""){                                                                        
-                    ActualizarNumeroSesionHorario(sesiones.length + 1)                                                 
-                    $("#btnGuardarHorario").html('Editar'); 
-                    $('#btnGuardarHorario').removeClass('btn-outline-primary');
-                    $('#btnGuardarHorario').addClass('btn-outline-warning');                                                        
-                    $.each(sesiones, function (i, sesiones){    
-                        cont++;                                                                                                                                                                             
-                        AgregarFilaTablaHorario(programa, sesiones.numeroSesion, sesiones.fechaSesion, sesiones.horario.dia, sesiones.horario.horaInicio, sesiones.horario.horaFin, 
-                            sesiones.horario.ambiente.descripcionAmbiente + " "+ sesiones.horario.ambiente.aula, sesiones.horario.ambiente.idAmbiente,0);                                                                                                                                                                                                                                              
-                    });                            
-                }else{
-                    ActualizarNumeroSesionHorario(1);                            
-                    $("#btnGuardarHorario").html('Guardar'); 
-                    $('#btnGuardarHorario').removeClass('btn-outline-warning');  
-                    $('#btnGuardarHorario').addClass('btn-outline-primary');
-                    
-                }
-                    }
-                });   
+function AgregarFilaTablaHorario(numSesion, fechaSesion, dia, hInicio, hFin, ambiente, idAmbiente, fila){    
+    let campoSegunTipoHorario = "", id=0 ;
+    var numeroSesionSiguiente = parseInt(numSesion,numeroSesionSiguiente) + 1;
+    if(fila==0){      
+        (programaCursoHorario == 'Privado') ? ( campoSegunTipoHorario = '<td>'+numSesion+'</td> <td>'+fechaSesion.substr(0,10)+'</td>',
+                                                ActualizarNumeroSesionHorario(numeroSesionSiguiente)) 
+                                            : campoSegunTipoHorario = '<td>'+dia+'</td>';                            
+        contenidoTablaHorarios.append('<tr id="'+cont+'">' +                       
+                    campoSegunTipoHorario +                                              
+                    '<td>' + hInicio.substr(0,5) +'</td>' +                        
+                    '<td>' + hFin.substr(0,5) +'</td>' +                        
+                    '<td>' + ambiente +'</td>' + 
+                    '<td hidden>' + idAmbiente +'</td>' +                         
+                    '<td> <button onclick="EditarfilaHorario('+cont+')" rel="tooltip" title="Editar"'+
+                    '      type="" class="btn btn-warning btn-link btn-sm"><span class="fa fa-edit" style="color:black"></button>'+              
+                    '     <button onclick="EliminarfilaHorario('+cont+')" rel="tooltip" title="Eliminar"'+
+                    '      class="btn btn-danger btn-link btn-sm"><span class="fa fa-trash" style="color:black"></button></td>'+                       
+                    '</tr>');            
     }else{
-        $.ajax({
-            type: 'GET',
-            url: "/Horario/BuscarHorariosCurso",            
-            dataType:"json",            
-            data: {
-                idCurso : id                
-            },
-            success: function (horarios) {                            
-                        if(horarios!=""){       
-                            var indice = 0;                                                                                                                                
-                            $("#btnGuardarHorario").html('Editar'); 
-                            $('#btnGuardarHorario').removeClass('btn-outline-primary');
-                            $('#btnGuardarHorario').addClass('btn-outline-warning');                                                        
-                            $.each(horarios, function (i, horario){      
-                                cont++;                                                                                                                                                                                                                   
-                                AgregarFilaTablaHorario(programa, numSesion, fechaSesion, horario.dia, horario.horaInicio, horario.horaFin, horario.ambiente.descripcionAmbiente + " "+
-                                horario.ambiente.aula, horario.ambiente.idAmbiente,0);                                                                                                                                                                                                                                                            
-                            });                                                                                                                                                         
-                        }else{                                                            
-                            $("#btnGuardarHorario").html('Guardar'); 
-                            $('#btnGuardarHorario').removeClass('btn-outline-warning');  
-                            $('#btnGuardarHorario').addClass('btn-outline-primary');                                
-                        }
-                    }
-                });
-    }        
-}
-
-function AgregarCabeceraTablaHorario(programa){
-    $('#cabeceraTablaHorarios').html("");
-    var columnaNumeroSesion = " ";
-    var columnaFechaSesion = " ";
-    var columnaDia = "";
-    if(programa == "Privado"){
-        columnaNumeroSesion = '<th> N° Sesión </th>';
-        columnaFechaSesion = '<th> Fecha Sesión </th>';
-    }else{
-        columnaDia = '<th> Dia </th>';
-    }
-    $('#cabeceraTablaHorarios').append('<tr>'+         
-        columnaNumeroSesion +
-        columnaFechaSesion +                       
-        columnaDia +
-        '<th>Hora Inicio</th>'+
-        '<th>Hora Fin</th>'+
-        '<th>Ambiente</th>'+
-        '<th hidden></th>'+
-        '<th></th>'+            
-        '</tr>');
-}
- 
-function AgregarFilaTablaHorario(programa, numSesion, fechaSesion, dia, hInicio, hFin, ambiente, idAmbiente, fila){    
-        var campoNumeroSesion = "";
-        var campoFechaSesion = "";
-        var campoDia = "";  
-        var numeroSesionSiguiente = parseInt(numSesion,numeroSesionSiguiente) + 1;          
-        var id=0;
-        if(fila==0){      
-            if(programa == "Privado"){
-                campoNumeroSesion = '<td>'+numSesion+'</td>';
-                campoFechaSesion = '<td>'+fechaSesion.substr(0,10)+'</td>';
-                ActualizarNumeroSesionHorario(numeroSesionSiguiente);
-            }else{
-                campoDia = '<td>'+dia+'</td>';
-            }
-            $('#contenidoTablaHorarios').append('<tr id="'+cont+'">' +                       
-                        campoNumeroSesion + 
-                        campoFechaSesion +
-                        campoDia +                                              
-                        '<td>' + hInicio.substr(0,5) +'</td>' +                        
-                        '<td>' + hFin.substr(0,5) +'</td>' +                        
-                        '<td>' + ambiente +'</td>' + 
-                        '<td hidden>' + idAmbiente +'</td>' +                         
-                        '<td> <button onclick="EditarfilaHorario('+cont+')" rel="tooltip" title="Editar"'+
-                        '      type="" class="btn btn-warning btn-link btn-sm"><span class="fa fa-edit" style="color:black"></button>'+              
-                        '     <button onclick="EliminarfilaHorario('+cont+')" rel="tooltip" title="Eliminar"'+
-                        '      class="btn btn-danger btn-link btn-sm"><span class="fa fa-trash" style="color:black"></button></td>'+                       
-                        '</tr>');            
+        if(programaCursoHorario == "Privado"){
+            $('#'+fila).find("td").eq(id).html(numSesion);
+            $('#'+fila).find("td").eq(id+1).html(fechaSesion);    
+            id+=2;
         }else{
-            if(programa == "Privado"){
-                $('#'+fila).find("td").eq(id).html(numSesion);
-                $('#'+fila).find("td").eq(id+1).html(fechaSesion);    
-                id+=2;
-            }else{
-                $('#'+fila).find("td").eq(id).html(dia);
-                id+=1;    
-            }                
-            $('#'+fila).find("td").eq(id).html(hInicio);
-            $('#'+fila).find("td").eq(id+1).html(hFin);
-            $('#'+fila).find("td").eq(id+2).html(ambiente);
-            $('#'+fila).find("td").eq(id+3).html(idAmbiente);
-            filaHorario = 0;
-        }        
-        LimpiarFormHorario();
-    
-    
+            $('#'+fila).find("td").eq(id).html(dia);
+            id+=1;    
+        }                
+        $('#'+fila).find("td").eq(id).html(hInicio);
+        $('#'+fila).find("td").eq(id+1).html(hFin);
+        $('#'+fila).find("td").eq(id+2).html(ambiente);
+        $('#'+fila).find("td").eq(id+3).html(idAmbiente);
+        filaHorario = 0;        
+    }        
+    LimpiarFormHorario();        
 }
 
-function ValidarCamposHorario(programa){
+function ValidarCamposHorario(){
     var resultado = VerificarCampoVacio("HoraInicio") + VerificarCampoVacio("HoraFin") + VerificarCampoVacio("HorarioNombreAmbiente");
-    if(programa == "Privado")
+    if(programaCursoHorario == "Privado")
         resultado += VerificarCampoVacio("FechaSesion");
     else
         resultado += VerificarSelectorVacio("HorarioDia");      
@@ -383,18 +356,16 @@ function ValidarCamposHorario(programa){
         return "Correcto";
 }
 
-function AgregarHorario(){
-    var dia = $('#formHorario option:selected').val();
-    var horaInicio = $('#txtHoraInicio').val();
-    var horaFin = $('#txtHoraFin').val();
-    var ambiente = $('#txtHorarioNombreAmbiente').val();  
-    var idAmbiente = $('#txtHorarioIdAmbiente').val();    
-    var numeroSesion = $('#txtNumeroSesion').val();
-    var fechaSesion = $('#txtFechaSesion').val();    
-    var programa = $('#txtProgramaCursoHorario').val();      
-    if(ValidarCamposHorario(programa) == "Correcto"){
+function AgregarHorario(){    
+    if(ValidarCamposHorario() == "Correcto"){
         if(filaHorario==0)
             cont++;            
-        AgregarFilaTablaHorario(programa, numeroSesion, fechaSesion, dia,horaInicio,horaFin,ambiente,idAmbiente,filaHorario);        
+        AgregarFilaTablaHorario(txtNumeroSesion.val(), txtFechaSesion.val(), selectorDia.val(),
+                                txtHoraInicio.val(), txtHoraFin.val(), txtAmbienteHorario.val(), idAmbienteSelecHorario, filaHorario);        
     }        
+}
+
+function AddTituloCursoAlFormHorario(titulo){  
+    tituloCursoHorario.html("")  
+    tituloCursoHorario.html(titulo);
 }

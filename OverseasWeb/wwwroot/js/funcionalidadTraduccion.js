@@ -1,6 +1,63 @@
-if($('#tablaTraduccion').is(':visible')){
-    CargarTablaListadoTraduccion();
-    cambiarTitulo("TRADUCCIONES");     
+/**
+ * ELEMENTOS
+ */
+
+ let idDocenteTradSelec = null;
+ let datatableTraduccion;
+ let tablaTraduccion = $('#tablaTraduccion');
+ let btnGuardarTraduccion = $('#btnGuardarTraduccion');
+ let containerListadoTraduccion = $('#containerListadoTraduccion');
+ let containerFormTraduccion = $('#containerRegistroTraduccion'); 
+ let txtClienteTraduccion = $('#txtClienteTraduccion');
+ let txtDetalleTraduccion = $('#txtDetalleTraduccion');
+ let txtIdiomaOrigen = $('#txtIdiomaOrigen');
+ let txtIdiomaDestino =  $('#txtIdiomaDestino');
+ let txtFechaTraduccion = $('#txtFechaTraduccion');
+ let txtTipoTraduccion = $('#txtTipoTraduccion');
+ let txtDocenteTraduccion = $('#txtDocenteTraduccion');
+
+ let idTraduccionEdit = 0;
+
+
+
+if(tablaTraduccion.is(':visible')){    
+    cambiarTitulo("TRADUCCIONES");
+    datatableTraduccion = tablaTraduccion.DataTable(dataTableConfig); 
+    ListarTraducciones();
+}
+
+
+function LimpiarFormTraduccion(){    
+    txtClienteTraduccion.val("");
+    txtDetalleTraduccion.val("");
+    txtIdiomaOrigen.val("");
+    txtIdiomaDestino.val(""); 
+    txtFechaTraduccion.val("");
+    txtTipoTraduccion.val("");
+    idTraduccionEdit = 0;
+    txtDocenteTraduccion.val("");
+    idDocenteTradSelec = null;    
+    $('#checkBoxDocente').prop('checked',false);
+    $('#btnBuscarDocenteCurso').prop('disabled',false);    
+}
+
+$('#checkBoxDocente').on('change',function(){
+    if($(this).is(':checked')){
+        txtDocenteTraduccion.val("");
+        idDocenteTradSelec = null; 
+        $('#btnBuscarDocenteCurso').prop('disabled',true);
+    }else{
+        $('#btnBuscarDocenteCurso').prop('disabled',false);
+    }
+})
+
+
+
+
+function EditarTraduccion(id){
+    idTraduccionEdit = id;
+    BuscarTraduccion(id);
+    CargarFormTraduccion("Editar");
 }
 
 function BuscarTraduccion(idTrad){
@@ -12,185 +69,122 @@ function BuscarTraduccion(idTrad){
         },
         datatype: 'json',
         success: function (traduccion) {
-            if(traduccion!=""){
-                CargarFormTraduccion("Editar");
-                $('#txtIdTraduccion').val(traduccion.idTraduccion);
-                $('#txtClienteTraduccion').val(traduccion.clienteTraduccion);
-                $('#txtDetalleTraduccion').val(traduccion.detalleTraduccion);
-                $('#txtIdiomaOrigen').val(traduccion.idiomaOrigenTraduccion);
-                $('#txtIdiomaDestino').val(traduccion.idiomaDestinoTraduccion);
-                $('#txtFechaTraduccion').val(traduccion.fechaTraduccion.substr(0, 10));  
-                $('#txtTipoTraduccion').val(traduccion.tipoTraduccion); 
-                $('#txtIdDocente').val(traduccion.idDocente); 
-                $('#txtIdCurso').val(traduccion.tipoTraduccion);              
+            if(traduccion!=""){                                
+                txtClienteTraduccion.val(traduccion.clienteTraduccion);
+                txtDetalleTraduccion.val(traduccion.detalleTraduccion);
+                txtIdiomaOrigen.val(traduccion.idiomaOrigenTraduccion);
+                txtIdiomaDestino.val(traduccion.idiomaDestinoTraduccion);
+                txtFechaTraduccion.val(traduccion.fechaTraduccion.substr(0, 10));  
+                txtTipoTraduccion.val(traduccion.tipoTraduccion); 
+                idDocenteTradSelec = traduccion.idDocente;
+                $('#txtIdDocente').val(traduccion.idDocente);                             
                 if(traduccion.docente.persona.nombresPersona == "Prueba"){
                     $('#checkBoxDocente').prop('checked', true);
                     $('#btnBuscarDocenteCurso').prop('disabled',true);
                     establecerCampoSinDocente();
                 }                        
                 else{
-                    $('#txtNombreDocente').val(traduccion.docente.persona.nombresPersona + " "+ traduccion.docente.persona.apellidosPersona);
+                    txtDocenteTraduccion.val(traduccion.docente.persona.nombresPersona + " "+ traduccion.docente.persona.apellidosPersona);
                 }                              
-
-                console.log(traduccion);
-                
+                console.log(traduccion);                
             }
             else{
                 alert("Campos vacios");
             }                
-        },
-        error: function () {
         }
     });
 }
 
-function CargarFormTraduccion(metodo){    
-    LimpiarFormTraduccion();
-    $('#containerListadoTraduccion').hide();    
-    $('#containerRegistroTraduccion').show(); 
-    if(metodo=="Guardar"){
-        $('#divGuardarTraduccion').show();
-        $('#divEditarTraduccion').hide();
-    }else{
-        $('#divEditarTraduccion').show();
-        $('#divGuardarTraduccion').hide();
-    }
+function CargarFormTraduccion(metodo){        
+    containerListadoTraduccion.hide();    
+    containerFormTraduccion.show(); 
+    ModificarBotonGuardar(metodo, btnGuardarTraduccion);
 }
 
 function CargarTablaListadoTraduccion(){    
-    $('#containerListadoTraduccion').show();    
-    $('#containerRegistroTraduccion').hide();
-    ListarTraducciones();
-
+    containerListadoTraduccion.show();
+    containerFormTraduccion.hide();
+    LimpiarFormTraduccion();    
+    
 }
 
 $('#btnAgregarTraduccion').click(function(){            
     //SE CARGA EL FORM Y OCULTA LA LISTA
-    CargarFormTraduccion("Guardar");
+    CargarFormTraduccion('Guardar');
     //SE ESTABLECE DATOS POR DEFECTO EN EL FORM                                            
 });
 
+
 function ListarTraducciones(){
-    var campoDocente = "";       
-    var table = $('#tablaTraduccion').DataTable(); 
+    var nombreDocente = "";           
     var id = 0;
+    CargarTablaListadoTraduccion();
     $.ajax({
         type: 'GET',
         url: "/Traduccion/Listar",                                             
         dataType: 'json',  
         success: function (traducciones) {
-            $("#contenidoTablaTraduccion").html("");            
-            table.clear().destroy();
-            if(traducciones!=""){                                
+            $("#contenidoTablaTraduccion").html("");                        
+            if(traducciones!=""){ 
+                console.log(traducciones);                              
+                datatableTraduccion.clear().destroy(); 
                 $.each(traducciones, function (i, traduccion){ 
                     id++;
-                    if(traduccion.docente.persona.nombresPersona == "Prueba")
-                            campoDocente = '    <td style = "color:red"> - Sin Asignar - </td>';                            
-                        else
-                            campoDocente = '    <td>'+ traduccion.docente.persona.nombresPersona+'</td>';                 
+                    if (traduccion.docente != null) { nombreDocente = '<td>' + traduccion.docente.persona.nombresPersona + ' ' + traduccion.docente.persona.apellidosPersona + '</td>' }
+                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }                   
                     $('#contenidoTablaTraduccion').append('<tr>' +
                     '<td>' + id + '</td>' +
                     '<td>' + traduccion.tipoTraduccion + '</td>' +
                     '<td>' + traduccion.clienteTraduccion + '</td>' +
                     '<td>' + traduccion.detalleTraduccion + '</td>' +
-                    campoDocente +
+                    nombreDocente +
                     '<td>' + traduccion.fechaTraduccion.substr(0,10) + '</td>' +
                     '<td>' + traduccion.idiomaOrigenTraduccion + '</td>' +
                     '<td>' + traduccion.idiomaDestinoTraduccion + '</td>' +                    
-                    '<td>  <button  onclick="BuscarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-warning"><span class="fa fa-edit" style="color:black"></button> '+
+                    '<td>  <button  onclick="EditarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-warning"><span class="fa fa-edit" style="color:black"></button> '+
                     '</td>'+
                     '<td>'+
                           '<button  onclick="EliminarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-danger"><span class="fa fa-trash" style="color:black"></button>'+ 
                     '</td>'+
                     '</tr>');
-                });
-                
-                table = CrearDatatable("tablaTraduccion");                                                                                 
+                });                
+                datatableTraduccion = tablaTraduccion.DataTable(dataTableConfig);                                                                               
             }                        
-        },
-        error: function () {
-        }        
+        }      
     });
 }
 
-
-
-function LimpiarFormTraduccion(){
-    $('#txtIdTraduccion').val("");
-    $('#txtClienteTraduccion').val("");
-    $('#txtDetalleTraduccion').val("");
-    $('#txtIdiomaOrigen').val("");
-    $('#txtIdiomaDestino').val(""); 
-    $('#txtFechaTraduccion').val("");
-    $('#txtTipoTraduccion').val("");
-    $('#checkBoxDocente').prop('checked',false);
-    $('#btnBuscarDocenteCurso').prop('disabled',false);
-    EstablecerCampoSinDocente();
-}
-
-
-
 function ValidarCamposTraduccion(){
-    var resultado =VerificarCampoVacio("ClienteTraduccion") + VerificarCampoVacio("DetalleTraduccion") + VerificarCampoVacio("IdiomaOrigen") +
+    let resultado = VerificarCampoVacio("ClienteTraduccion") + VerificarCampoVacio("DetalleTraduccion") + VerificarCampoVacio("IdiomaOrigen") +
     VerificarCampoVacio("IdiomaDestino") + VerificarCampoVacio("FechaTraduccion") + VerificarCampoVacio("TipoTraduccion");    
-    if(resultado > 0)                 
-        return "Incorrecto";
-    else
-        return "Correcto";
+
+    return (resultado > 0) ? 'Incorrecto' : 'Correcto';            
 }
 
 
-
-function GuardarEditarTraduccion(metodo){
-    var idTraduccion = $('#txtIdTraduccion').val(); 
-    var cliente = $('#txtClienteTraduccion').val(); 
-    var detalle = $('#txtDetalleTraduccion').val(); 
-    var idiomaOrigen = $('#txtIdiomaOrigen').val(); 
-    var idiomaDestino = $('#txtIdiomaDestino').val(); 
-    var fecha = $('#txtFechaTraduccion').val();
-    var tipo =  $('#txtTipoTraduccion').val();
-    var idDocente = $('#txtIdDocente').val(); 
-    var estado = 1;   
-    var accion = "";
-    console.log(metodo);
-    if(metodo=="Guardar")
-        accion = "RegistrarTraduccion"; 
-    else
-        accion = "EditarTraduccion";
-    if(idDocente=="")
-        idDocente = 1; 
+function GuardarEditarTraduccion(metodo){          
+    let action = "";
+    (idTraduccionEdit == 0) ? action = "RegistrarTraduccion" : action = "EditarTraduccion";
+    console.log(metodo);         
     if(ValidarCamposTraduccion() == "Correcto"){
         $.ajax({
             type: 'POST',
-            url: "/Traduccion/"+ accion,
+            url: "/Traduccion/"+ action,
             data: {
-                IdTraduccion : idTraduccion,
-                ClienteTraduccion : cliente,
-                TipoTraduccion : tipo,
-                DetalleTraduccion : detalle,
-                IdiomaOrigenTraduccion : idiomaOrigen,
-                IdiomaDestinoTraduccion : idiomaDestino,
-                FechaTraduccion : fecha,
-                EstadoTraduccion : estado,            
-                IdDocente : idDocente
+                IdTraduccion : idTraduccionEdit,
+                ClienteTraduccion : txtClienteTraduccion.val(),
+                TipoTraduccion : txtTipoTraduccion.val(),
+                DetalleTraduccion : txtDetalleTraduccion.val(),
+                IdiomaOrigenTraduccion : txtIdiomaOrigen.val(),
+                IdiomaDestinoTraduccion : txtIdiomaDestino.val(),
+                FechaTraduccion : txtFechaTraduccion.val(),
+                EstadoTraduccion : 1,            
+                IdDocente : idDocenteTradSelec
             },
             datatype: 'json',
             success: function (resultado) {
                 if(resultado == "Correcto"){
-                    swal({
-                        title: "Correcto!",
-                        text: "Realizado exitosamente.",
-                        icon: "success",                      
-                        button: "Aceptar",
-                        timer: 2000
-                    }).then(
-                        function () {
-                            if (true) {        
-                                limpiarFormCurso();                        
-                                CargarTablaListadoTraduccion();                                                                              
-                            }
-                        }
-                    )        
+                    msgExitoTraduccion('Realizado exitosamente.');                    
                 }
             }
         });    
@@ -215,32 +209,47 @@ function EliminarTraduccion(id){
                     },
                     datatype: 'json',
                     success: function (response) {
-                        swal({
-                            title: "Correcto!",
-                            text: "Traduccion eliminada exitosamente.",
-                            icon: "success",
-                            button: "Aceptar",
-                            timer: 2000
-                        }).then(
-                            function () {
-                                if (true) {
-                                    CargarTablaListadoTraduccion(); 
-                                }
-                            }
-                        )
-                    },
-                    error: function () {                        
+                        msgExitoTraduccion('Traduccion eliminada exitosamente.');                        
                     }
                 });
             }
             else
             {
-                swal({
-                    title: "Cancelado!",
-                    icon : "error",                                        
-                    button: "Aceptar",
-                    timer: 2000
-                })
+                msgCancelado();
             }            
     });
+}
+
+function ListarDocentesActivosTraduccion() {
+    let btnAgregar = "", nombres, apellidos;
+    $.ajax({
+        type: "get",
+        url: "/Curso/ListarDocentes",
+        datatype: 'json',
+        success: function (res) {
+            console.log(res);
+            contenidoTablaDocenteCurso.html("");
+            if (res != "") {
+                tablaDocenteCurso.clear().destroy();
+                $.each(res, function (i, res) {
+                    nombres = res.persona.nombresPersona;
+                    apellidos = res.persona.apellidosPersona;                    
+                    btnAgregar = '<button onclick = "AgregarDocenteTraduccion('+res.idDocente+','+"'"+nombres+
+                    " "+apellidos+ "'"+')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';                    
+                    contenidoTablaDocenteCurso.append(
+                        '<tr>' +
+                        '<td>' + res.persona.dniPersona + '</td>' +
+                        '<td>' + nombres + ' ' + apellidos  + '</td>' +
+                        '<td> <div class="form-check-inline">' + btnAgregar + '</div> </td>' +
+                        '</tr>');
+                });
+                tablaDocenteCurso = $("#tablaDocenteCurso").DataTable(dataTableConfig);
+            }
+        }
+    });
+}
+
+function AgregarDocenteTraduccion(id, docente){
+    txtDocenteTraduccion.val(docente);
+    idDocenteTradSelec = id;
 }
