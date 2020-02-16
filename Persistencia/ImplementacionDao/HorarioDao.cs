@@ -24,8 +24,9 @@ namespace Persistencia.ImplementacionDao
                                                                         .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
                                                                                      h.IdHorario != idHorario))
                                                                         .ToList();
-        private List<Sesion> BuscarSesionesPorFecha(DateTime fecha, int idAmbiente) => _context.Sesion
-                                                                        .Where(s => s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente)
+        private List<Sesion> BuscarSesionesPorFecha(int idSesion, DateTime fecha, int idAmbiente) => _context.Sesion
+                                                                        .Where(s => (s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente &&
+                                                                                     s.IdSesion != idSesion))
                                                                         .Include(s => s.Horario)
                                                                             .ThenInclude(h => h.Ambiente)
                                                                         .ToList();
@@ -146,13 +147,13 @@ namespace Persistencia.ImplementacionDao
             return correcto;
         }
 
-        public bool EsSesionPermitida(Sesion sesion)
+        public bool EsSesionPermitida(Sesion sesionEvaluar)
         {
-            List<Sesion> sesiones = BuscarSesionesPorFecha(sesion.FechaSesion, sesion.Horario.IdAmbiente);
+            List<Sesion> sesiones = BuscarSesionesPorFecha(sesionEvaluar.IdSesion, sesionEvaluar.FechaSesion, sesionEvaluar.Horario.IdAmbiente);
             bool correcto = true;
             foreach (Sesion s in sesiones)
             {
-                if ((sesion.Horario.HoraFin <= s.Horario.HoraInicio) || (sesion.Horario.HoraInicio > s.Horario.HoraFin))
+                if ((sesionEvaluar.Horario.HoraFin <= s.Horario.HoraInicio) || (sesionEvaluar.Horario.HoraInicio > s.Horario.HoraFin))
                 {
                     correcto = true;
                 }

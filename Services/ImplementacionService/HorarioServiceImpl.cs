@@ -55,6 +55,11 @@ namespace Services.ImplementacionService
             return _horarioDao.EsHorarioPermitido(horarioEvaluar);
         }
 
+        public bool EsSesionPermitida(Sesion sesionEvaluar)
+        {
+            return _horarioDao.EsSesionPermitida(sesionEvaluar);
+        }
+
         public int ObtenerIdUltimoHorario()
         {
             return _horarioDao.ObtenerIdUltimoHorario();

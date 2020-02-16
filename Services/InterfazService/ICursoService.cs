@@ -8,7 +8,7 @@ namespace Services.InterfazService
 {
     public interface ICursoService
     {
-        List<Curso> ListarCursos(string nombreCurso, string programa);
+        List<Curso> ListarCursos(string nombreCurso, string programa, int estado);
         List<Curso> ListarCursosHabiles();
         Docente BuscarDocentePorID(int idDocente);
         Curso BuscarCursoPorID(int idCurso);
