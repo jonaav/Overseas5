@@ -19,10 +19,7 @@ namespace Services.InterfazService
 
         void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales);
         bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso);
-        /*List<Horario> BuscarHorariosParaIngresarDetalle(int id);
-        void EliminarHorariosCurso(int id, int idAula);
-        void EditarHorariosCurso(List<Horario> horarios, int idAula, int idCurso);
-        List<HorarioC> BuscarHorariosCurso(int id);
-        void RegistrarHorariosCurso(List<Horario> horarios, int idAula, int idCurso);*/
+
+        bool EsHorarioPermitido(Horario horarioEvaluar);        
     }
 }

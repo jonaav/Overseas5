@@ -4,54 +4,31 @@ using System.Text;
 using System.Linq;
 using Entidades;
 using Persistencia.InterfazDao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia.ImplementacionDao
 {
     public class HorarioDao : IHorarioDao
     {
         private readonly DB_OverseasContext _context;
-        public HorarioDao(DB_OverseasContext context)
-        {
-            _context = context;
-        }
+        public HorarioDao(DB_OverseasContext context) => _context = context;
 
-        public List<Horario> BuscarHorariosCurso(int idCurso)
-        {
-            List<Horario> horarios = new List<Horario>();
-            try
-            {
-                horarios = (from h in _context.Horario
-                            join c in _context.Curso on h.Curso.IdCurso equals c.IdCurso
-                            join a in _context.Ambiente on h.IdAmbiente equals a.IdAmbiente
-                            where h.IdCurso == idCurso 
 
-                            select new Horario
-                            {
-                                IdHorario = h.IdHorario,
-                                Dia = h.Dia,
-                                HoraInicio = h.HoraInicio,
-                                HoraFin = h.HoraFin,
-                                IdCurso = h.IdCurso,
-                                IdAmbiente = h.IdAmbiente,
-                                Curso =  new Curso
-                                {
-                                    IdCurso = c.IdCurso
-                                },
-                                Ambiente = new Ambiente
-                                {
-                                    IdAmbiente = a.IdAmbiente,
-                                    Aula = a.Aula,
-                                    DescripcionAmbiente = a.DescripcionAmbiente,
-                                    Direccion = a.Direccion                                    
-                                }
-                            }).ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return horarios;
-        }
+        public List<Horario> BuscarHorariosCurso(int idCurso) => _context.Horario
+                                                                 .Where(h => h.IdCurso == idCurso)                                                                 
+                                                                 .Include(h => h.Ambiente)
+                                                                 .ToList();
+
+       
+        private List<Horario> BuscarHorariosAmbiente(int idHorario, int idAmbiente, string dia) => _context.Horario
+                                                                        .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
+                                                                                     h.IdHorario != idHorario))
+                                                                        .ToList();
+        private List<Sesion> BuscarSesionesPorFecha(DateTime fecha, int idAmbiente) => _context.Sesion
+                                                                        .Where(s => s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente)
+                                                                        .Include(s => s.Horario)
+                                                                            .ThenInclude(h => h.Ambiente)
+                                                                        .ToList();
 
         public bool CrearHorarios(List<Horario> listaHorarios, List<Sesion> listaSesiones)
         {
@@ -150,5 +127,42 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
+        public bool EsHorarioPermitido(Horario horarioEvaluar)
+        {
+            List<Horario> horarios = BuscarHorariosAmbiente(horarioEvaluar.IdHorario, horarioEvaluar.IdAmbiente, horarioEvaluar.Dia);
+            bool correcto = true;
+            foreach (Horario h in horarios)
+            {
+                if ((horarioEvaluar.HoraFin <= h.HoraInicio) || (horarioEvaluar.HoraInicio > h.HoraFin))
+                {
+                    correcto = true;
+                }
+                else
+                {
+                    correcto = false;
+                    break;
+                }
+            }        
+            return correcto;
+        }
+
+        public bool EsSesionPermitida(Sesion sesion)
+        {
+            List<Sesion> sesiones = BuscarSesionesPorFecha(sesion.FechaSesion, sesion.Horario.IdAmbiente);
+            bool correcto = true;
+            foreach (Sesion s in sesiones)
+            {
+                if ((sesion.Horario.HoraFin <= s.Horario.HoraInicio) || (sesion.Horario.HoraInicio > s.Horario.HoraFin))
+                {
+                    correcto = true;
+                }
+                else
+                {
+                    correcto = false;
+                    break;
+                }
+            }
+            return correcto;
+        }
     }
 }

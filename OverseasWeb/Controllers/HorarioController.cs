@@ -43,6 +43,14 @@ namespace OverseasWeb.Controllers
                 return Json("");
         }
 
+        public IActionResult VerificarHorario(Horario horario)
+        {
+            if (_horarioService.EsHorarioPermitido(horario))
+                return Json("Correcto");
+            else
+                return Json("Incorrecto");
+        }
+
 
         //[HttpPost]
         //public IActionResult CrearHorarios([FromBody] DetalleHorarioSesion detalleHorariosSesiones)

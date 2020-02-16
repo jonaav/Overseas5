@@ -681,7 +681,7 @@ namespace Persistencia.Migrations
             modelBuilder.Entity("Entidades.Horario", b =>
                 {
                     b.HasOne("Entidades.Ambiente", "Ambiente")
-                        .WithMany("Horarios")
+                        .WithMany()
                         .HasForeignKey("IdAmbiente")
                         .OnDelete(DeleteBehavior.Cascade);
 

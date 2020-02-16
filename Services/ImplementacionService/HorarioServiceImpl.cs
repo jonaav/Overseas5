@@ -50,15 +50,15 @@ namespace Services.ImplementacionService
             _horarioDao.EliminarSesionesHorarioCurso(listaSesionesActuales);
         }
 
+        public bool EsHorarioPermitido(Horario horarioEvaluar)
+        {
+            return _horarioDao.EsHorarioPermitido(horarioEvaluar);
+        }
+
         public int ObtenerIdUltimoHorario()
         {
             return _horarioDao.ObtenerIdUltimoHorario();
         }
-
-
-
-
-
 
         /*
         private readonly DB_OverseasContext _context;
