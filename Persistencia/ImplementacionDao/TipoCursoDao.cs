@@ -26,6 +26,7 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Buscar Evaluaciones de un Tipo de Curso
          */
+        /*prob no usado*/
         public List<TipoEvaluacion> BuscarEvaluacionesDeUnTipoCurso(int idTipoCurso)
         {
             List<TipoCursoTipoEvaluacion> cursosEv = BuscarTipoCursoTipoEvaluaciones(idTipoCurso);
@@ -119,8 +120,8 @@ namespace Persistencia.ImplementacionDao
 
 
         #region private
-
-        private List<TipoCursoTipoEvaluacion> BuscarTipoCursoTipoEvaluaciones (int idTipoCurso) => _context.TCursoTEvaluacion
+        /*prob no usado*/
+        private List<TipoCursoTipoEvaluacion> BuscarTipoCursoTipoEvaluaciones (int idTipoCurso) => _context.TipoCursoTipoEvaluacion
             .Where(tt => tt.IdTipoCurso == idTipoCurso)
             .Include(tt => tt.TipoCurso).Include(tt => tt.TipoEvaluacion).ToList();
 

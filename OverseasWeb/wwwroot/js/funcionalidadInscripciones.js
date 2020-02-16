@@ -117,8 +117,8 @@ function ListarInscripciones() {
         success: function (response) {
             console.log("ESTUDIANTES INSCRITOS");
             console.log(response);
+            dataInscripciones.html("");
             if (response != "") {
-                dataInscripciones.html("");
                 tableInscripciones.clear().destroy();
                 $.each(response, function (i, res) {
                     dataInscripciones.append(

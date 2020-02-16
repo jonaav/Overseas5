@@ -9,5 +9,6 @@ namespace Persistencia.InterfazDao
     {
         List<TipoEvaluacion> ListarTiposEvaluacion();
         bool RegistrarTipoEvaluacion(TipoEvaluacion tEvaluacion);
+        bool EliminarTipoEvaluacion(int idTipoEvaluacion);
     }
 }

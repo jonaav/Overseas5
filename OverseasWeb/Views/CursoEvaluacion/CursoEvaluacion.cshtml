@@ -6,62 +6,120 @@
 
 
 <div class="container mt-3" id="ViewCursoEvaluacion">
-    <div class="row">
-
-        <div class="col-md-6 col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="color-pale-sky text-center">Tipos de Cursos</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered" id="tablaTiposCurso">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="contenidoTablaTiposCurso">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <h4 class="color-pale-sky">Nueva Evaluacion</h4>
-                            <div class="row">
-                                <input type="text" class="form-control col-8 ml-3" id="txtNombreTipoEvaluacion" placeholder="Agregar tipo de Evaluación" maxlength="45">
-                                <button type="button" class="btn btn-info" onclick="RegistrarTipoEvaluacion()">Agregar</button>
-                                <span class="errores" id="errorNombreTipoEvaluacionEsp">Debe llenar el campo</span>
-                            </div>
+    <div id="containerListarTCE" class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="color-pale-sky text-center">Tipos de Cursos</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="tablaTiposCurso">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenidoTablaTiposCurso">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="color-pale-sky text-center">Tipos de Evaluaciones</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered" id="tablaTiposEvaluacion">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="contenidoTablaTiposEvaluacion">
-                            </tbody>
-                        </table>
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <h4 class="color-pale-sky">Nueva Evaluacion</h4>
+                                <div class="row">
+                                    <input type="text" class="form-control col-8 ml-3" id="txtNombreTipoEvaluacion" placeholder="Agregar tipo de Evaluación" maxlength="45">
+                                    <button type="button" class="btn btn-info" onclick="RegistrarTipoEvaluacion()">Agregar</button>
+                                    <span class="errores" id="errorNombreTipoEvaluacionEsp">Debe llenar el campo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="color-pale-sky text-center">Tipos de Evaluaciones</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="tablaTiposEvaluacion">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenidoTablaTiposEvaluacion">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div id="containerAsignarTCE" class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="color-pale-sky">Tipo de curso seleccionado:</h5>
+                        <h4 class="color-pale-sky">Corporativo</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="color-pale-sky text-center">Evaluaciones Agregadas</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="tablaTiposEvaluacionAgregar">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenidoTablaTiposEvaluacionAgregar">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="color-pale-sky text-center">Evaluaciones No Agregadas</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="tablaTiposEvaluacionNoAgregado">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenidoTablaTiposEvaluacionNoAgregado">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 </div>
+
+

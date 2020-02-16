@@ -38,13 +38,13 @@ namespace Persistencia.ImplementacionDao
          *  Registrar Historial
          */
 
-        public HistorialEvaluacion RegistrarHistorialEvaluacion(HistorialEvaluacion historial)
+        public bool RegistrarHistorialEvaluacion(HistorialEvaluacion historial)
         {
             try
             {
                 _context.HistorialEvaluacion.Add(historial);
                 _context.SaveChanges();
-                return historial;
+                return true;
             }
             catch (Exception e)
             {

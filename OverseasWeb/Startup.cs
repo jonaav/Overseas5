@@ -52,7 +52,8 @@ namespace OverseasWeb
             });
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Login/Login");
 
-            services.AddDbContext<DB_OverseasContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            services.AddDbContext<DB_OverseasContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                                                                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -84,6 +85,8 @@ namespace OverseasWeb
             services.AddScoped<ITraduccionDao, TraduccionDao>();
 
             services.AddScoped<ITipoEvaluacionDao, TipoEvaluacionDao>();
+            services.AddScoped<IEvaluacionDao, EvaluacionDao>();
+            services.AddScoped<ITCursoTEvaluacionDao, TCursoTEvaluacionDao>();
             services.AddScoped<IHistorialEvaluacionDao, HistorialEvaluacionDao>();
 
 

@@ -9,6 +9,11 @@ namespace Services.InterfazService
     {
         List<TipoCurso> ListarTiposCurso();
         List<TipoEvaluacion> ListarTiposEvaluacion();
+        List<TipoCursoTipoEvaluacion> ListarTCursoTEvaluacion(int idCurso);
+        List<TipoEvaluacion> ListarTEvaluacionFaltantes(int idCurso);
         String RegistrarTipoEvaluacion(TipoEvaluacion tEvaluacion);
+        String EliminarTipoEvaluacion(int idTipoEvaluacion);
+        String RegistrarTCursoTEvaluacion(TipoCursoTipoEvaluacion tt);
+        String EliminarTCursoTEvaluacion(int idtt);
     }
 }

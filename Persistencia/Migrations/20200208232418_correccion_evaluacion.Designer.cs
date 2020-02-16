@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistencia;
 
 namespace Persistencia.Migrations
 {
     [DbContext(typeof(DB_OverseasContext))]
-    partial class DB_OverseasContextModelSnapshot : ModelSnapshot
+    [Migration("20200208232418_correccion_evaluacion")]
+    partial class correccion_evaluacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,7 +451,7 @@ namespace Persistencia.Migrations
 
                     b.HasIndex("IdTipoEvaluacion");
 
-                    b.ToTable("TCursoTEvaluacion");
+                    b.ToTable("TipoCursoTipoEvaluacion");
                 });
 
             modelBuilder.Entity("Entidades.TipoEvaluacion", b =>
@@ -479,7 +481,7 @@ namespace Persistencia.Migrations
 
                     b.Property<DateTime>("FechaTraduccion");
 
-                    b.Property<int?>("IdDocente");
+                    b.Property<int>("IdDocente");
 
                     b.Property<string>("IdiomaDestinoTraduccion");
 
@@ -681,7 +683,7 @@ namespace Persistencia.Migrations
             modelBuilder.Entity("Entidades.Horario", b =>
                 {
                     b.HasOne("Entidades.Ambiente", "Ambiente")
-                        .WithMany()
+                        .WithMany("Horarios")
                         .HasForeignKey("IdAmbiente")
                         .OnDelete(DeleteBehavior.Cascade);
 

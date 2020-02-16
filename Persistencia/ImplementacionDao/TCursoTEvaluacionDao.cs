@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Entidades;
+using Microsoft.EntityFrameworkCore;
 using Persistencia.InterfazDao;
 
 namespace Persistencia.ImplementacionDao
@@ -17,11 +18,18 @@ namespace Persistencia.ImplementacionDao
         }
 
 
+        public List<TipoCursoTipoEvaluacion> ListarTCursoTEvaluacion(int idCurso) => _context.TipoCursoTipoEvaluacion
+            .Where(tt => tt.TipoCurso.IdTipoCurso == idCurso)
+            .Include(tt => tt.TipoCurso)
+            .Include(tt => tt.TipoEvaluacion)
+            .ToList();
+        
+
         public bool RegistrarTCursoTEvaluacion(TipoCursoTipoEvaluacion tt)
         {
             try
             {
-                _context.TCursoTEvaluacion.Add(tt);
+                _context.TipoCursoTipoEvaluacion.Add(tt);
                 _context.SaveChanges();
                 return true;
             }catch (Exception e)
@@ -30,13 +38,12 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public bool EliminarTCursoTEvaluacion(int idTCurso, int idTEvaluacion)
+        public bool EliminarTCursoTEvaluacion(int idtt)
         {
-            TipoCursoTipoEvaluacion tt = _context.TCursoTEvaluacion
-                .Where(t => (t.IdTipoCurso == idTCurso && t.IdTipoEvaluacion == idTEvaluacion)).FirstOrDefault();
+            TipoCursoTipoEvaluacion tt = _context.TipoCursoTipoEvaluacion.Find(idtt);
             try
             {
-                _context.TCursoTEvaluacion.Remove(tt);
+                _context.TipoCursoTipoEvaluacion.Remove(tt);
                 _context.SaveChanges();
                 return true;
             }
