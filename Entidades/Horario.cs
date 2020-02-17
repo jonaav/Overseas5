@@ -20,6 +20,5 @@ namespace Entidades
         public Curso Curso { get; set; }
 
         public Ambiente Ambiente { get; set; }
-        //public ICollection<Sesion> Sesion { get; set; }
     }
 }

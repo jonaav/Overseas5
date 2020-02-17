@@ -15,9 +15,5 @@ namespace Entidades
         public int IdPersona { get; set; }
 
         public Persona Persona { get; set; }
-        //public ICollection<Asistencia> Asistencia { get; set; }
-        //public ICollection<DetalleApoderadoEstudiante> DetalleApoderadoEstudiante { get; set; }
-        //public ICollection<HistorialEvaluacion> HistorialEvaluacion { get; set; }
-        //public ICollection<Inscripcion> Inscripcion { get; set; }
     }
 }

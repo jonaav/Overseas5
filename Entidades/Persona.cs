@@ -16,10 +16,6 @@ namespace Entidades
         public string TelefonoPersona { get; set; }
         public string DireccionPersona { get; set; }
 
-        //public ICollection<Docente> Docente { get; set; }
-        //public ICollection<Estudiante> Estudiante { get; set; }
-        //public ICollection<AppUser> Usuario { get; set; }
-
 
         public String GenerarContraseñaDefault()
         {

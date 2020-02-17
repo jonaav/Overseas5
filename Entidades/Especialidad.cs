@@ -9,7 +9,5 @@ namespace Entidades
         [Key]
         public int IdEspecialidad { get; set; }
         public string DescripcionEspecialidad { get; set; }
-
-        //public ICollection<DetalleDocenteEspecialidad> DetalleDocenteEspecialidad { get; set; }
     }
 }

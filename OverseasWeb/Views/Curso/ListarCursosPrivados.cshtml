@@ -45,7 +45,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-row">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="MostrarFormCurso()" rel="tooltip" title="Agregar">Nuevo curso</button>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="MostrarFormCurso()" rel="tooltip" title="Agregar">Nuevo curso</button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button id="btnCursosHabilitados" onclick="MostrarCursosHabilitados()" type="button" class="btn btn-outline-success" rel="tooltip" title="Agregar">Habilitados</button>
+                                        <button id="btnCursosDeshabilitados" onclick="MostrarCursosDeshabilitados()" type="button" class="btn btn-outline-danger" rel="tooltip" title="Agregar">Deshabilitados</button>
+                                    </div>                                      
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-hover" id="tablaCursosPrivado">
@@ -56,8 +62,7 @@
                                                 <th>Ciclo</th>
                                                 <th id="cabeceraDetalleCursoPrivado"></th>
                                                 <th>Docente</th>
-                                                <th>Periodo</th>
-                                                <th>Estado</th>
+                                                <th>Periodo</th>                                                
                                                 <th></th>
                                             </tr>
                                         </thead>

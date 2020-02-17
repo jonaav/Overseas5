@@ -16,6 +16,5 @@ namespace Entidades
         public int IdHorario { get; set; }
 
         public Horario Horario { get; set; }
-        //public ICollection<Asistencia> Asistencia { get; set; }
     }
 }

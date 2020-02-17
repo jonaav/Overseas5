@@ -12,6 +12,5 @@ namespace Entidades
         public string Aula { get; set; }
         public string DescripcionAmbiente { get; set;}
         public string Direccion { get; set;}
-        //public ICollection<Horario> Horarios { get; set; }
     }
 }

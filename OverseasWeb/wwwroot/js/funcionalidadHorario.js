@@ -4,10 +4,13 @@
   * Datos Utilizar
   */
  let idCursoHorario;
+ let idHorarioSesionEdit = 0;
  let fechaInicioCursoHorario;
  let fechaFinCursoHorario;
  let idAmbienteSelecHorario = 0;
  let programaCursoHorario;
+ let horarioPermitido = '';
+
 
 /**
  * Elementos Horario
@@ -23,6 +26,7 @@
  let txtHoraFin = $('#txtHoraFin');
  let txtAmbienteHorario = $('#txtHorarioNombreAmbiente');
  let tituloCursoHorario = $('#tituloCursoHorario');
+ let txtDecisionHorario = $('#txtDecisionHorario');
  
  /**
   * Privado
@@ -80,7 +84,7 @@
   }
 
   function BuscarHorariosCurso(){ 
-    let accionHorario = "", numSesion = "", fechaSesion = "", horario;    
+    let accionHorario = "", numSesion = "", fechaSesion = "", horario, id = 0;    
     (programaCursoHorario == 'Regular') ? accionHorario = 'BuscarHorariosCurso' : accionHorario = 'BuscarSesionesCurso';    
     $.ajax({
         type: 'GET',
@@ -89,16 +93,20 @@
         data: {
             idCurso : idCursoHorario                
         },
-        success: function (res) {        
+        success: function (res) {      
+            console.log("horarios: ");
+            console.log(res);  
             if(programaCursoHorario == 'Privado')  ActualizarNumeroSesionHorario(res.length + 1) ;
             if(res!=""){                                       
                 ModificarBotonGuardar('Editar', btnGuardarHorario);                                                       
-                $.each(res, function (i, res){      
+                $.each(res, function (i, res){                          
                     (accionHorario == 'BuscarSesionesCurso') ? (horario = res.horario, numSesion = res.numeroSesion,
+                                                                                       id = res.idSesion,
                                                                                        fechaSesion = res.fechaSesion ) 
-                                                             : horario = res;
-                    cont++;                                                                                                                                                                                                                   
-                    AgregarFilaTablaHorario(numSesion, fechaSesion, horario.dia, horario.horaInicio, horario.horaFin, horario.ambiente.descripcionAmbiente + " "+
+                                                             : (horario = res, id = res.idHorario);
+                    cont++;
+                    console.log('el id es : ' + id);                                                                                                                                                                                                                       
+                    AgregarFilaTablaHorario(id ,numSesion, fechaSesion, horario.dia, horario.horaInicio, horario.horaFin, horario.ambiente.descripcionAmbiente + " "+
                     horario.ambiente.aula, horario.ambiente.idAmbiente,0);                                                                                                                                                                                                                                                                             
                 });                              
             }else{                
@@ -162,8 +170,10 @@ function AsignarAmbienteAlFormHorario( idAmbiente, descripcion){
 }  
 
 
-function EditarfilaHorario(fila){
+function EditarfilaHorario(fila, idHorario){
     let indice = 0;
+    console.log('El id es '+ idHorario);
+    idHorarioSesionEdit = idHorario;
     if(programaCursoHorario == 'Privado'){
         txtNumeroSesion.val($('#'+fila).find("td").eq(0).html());
         txtFechaSesion.val($('#'+fila).find("td").eq(1).html());
@@ -308,7 +318,7 @@ function ActualizarNumeroSesionHorario(numero){
     $('#txtNumeroActualSesion').val(numero);
 }
 
-function AgregarFilaTablaHorario(numSesion, fechaSesion, dia, hInicio, hFin, ambiente, idAmbiente, fila){    
+function AgregarFilaTablaHorario(idHorarioSesion, numSesion, fechaSesion, dia, hInicio, hFin, ambiente, idAmbiente, fila){    
     let campoSegunTipoHorario = "", id=0 ;
     var numeroSesionSiguiente = parseInt(numSesion,numeroSesionSiguiente) + 1;
     if(fila==0){      
@@ -321,7 +331,7 @@ function AgregarFilaTablaHorario(numSesion, fechaSesion, dia, hInicio, hFin, amb
                     '<td>' + hFin.substr(0,5) +'</td>' +                        
                     '<td>' + ambiente +'</td>' + 
                     '<td hidden>' + idAmbiente +'</td>' +                         
-                    '<td> <button onclick="EditarfilaHorario('+cont+')" rel="tooltip" title="Editar"'+
+                    '<td> <button onclick="EditarfilaHorario('+cont+', '+ idHorarioSesion+')" rel="tooltip" title="Editar"'+
                     '      type="" class="btn btn-warning btn-link btn-sm"><span class="fa fa-edit" style="color:black"></button>'+              
                     '     <button onclick="EliminarfilaHorario('+cont+')" rel="tooltip" title="Eliminar"'+
                     '      class="btn btn-danger btn-link btn-sm"><span class="fa fa-trash" style="color:black"></button></td>'+                       
@@ -356,16 +366,84 @@ function ValidarCamposHorario(){
         return "Correcto";
 }
 
-function AgregarHorario(){    
-    if(ValidarCamposHorario() == "Correcto"){
-        if(filaHorario==0)
-            cont++;            
-        AgregarFilaTablaHorario(txtNumeroSesion.val(), txtFechaSesion.val(), selectorDia.val(),
-                                txtHoraInicio.val(), txtHoraFin.val(), txtAmbienteHorario.val(), idAmbienteSelecHorario, filaHorario);        
-    }        
+
+function EsHorarioRegularPermitido(){         
+    $.ajax({
+        type: 'GET',
+        url: "/Horario/VerificarHorario",                                             
+        dataType: 'json',  
+        data : {
+            IdHorario : idHorarioSesionEdit,
+            Dia : selectorDia.val(), 
+            HoraFin : txtHoraFin.val(), 
+            HoraInicio : txtHoraInicio.val(), 
+            IdCurso : idCursoHorario, 
+            IdAmbiente : idAmbienteSelecHorario
+        },
+        success: function (decision) { 
+            if(decision == 'Correcto'){
+                console.log('50 papu');
+                AgregarHorario();
+            }else{
+                console.log('nel prro');
+                msgError('Horario no disponible :( ');
+            }
+        }
+    });
+    idHorarioSesionEdit = 0;
 }
 
+
+function EsSesionPermitida(){
+    let datosSesion = { Horario: {
+                            IdHorario : 0,
+                            HoraFin : txtHoraFin.val(), 
+                            HoraInicio : txtHoraInicio.val(), 
+                            IdCurso : idCursoHorario, 
+                            IdAmbiente : idAmbienteSelecHorario  
+                        },
+                        IdSesion : idHorarioSesionEdit,
+                        FechaSesion : txtFechaSesion.val()
+                    };
+    $.ajax({
+        type: 'post',
+        url: "/Horario/VerificarSesion",                                                  
+        dataType: 'json',  
+        data : datosSesion,
+        success: function (decision) { 
+            if(decision == 'Correcto'){
+                console.log('50 papu');
+                AgregarHorario();
+            }else{
+                console.log('nel prro');
+                msgError('Sesion no disponible :( ');
+            }
+        }
+    });
+    idHorarioSesionEdit = 0;
+}
+
+function VerificarHorario(){
+    if(ValidarCamposHorario() == "Correcto"){ 
+        if(programaCursoHorario == 'Regular'){
+            EsHorarioRegularPermitido();
+        }
+        else{
+            EsSesionPermitida();
+        }
+    }
+}
+
+function AgregarHorario(){                    
+    if(filaHorario==0)
+        cont++;            
+    AgregarFilaTablaHorario(0, txtNumeroSesion.val(), txtFechaSesion.val(), selectorDia.val(),
+                            txtHoraInicio.val(), txtHoraFin.val(), txtAmbienteHorario.val(), idAmbienteSelecHorario, filaHorario);        
+        
+}
+
+
 function AddTituloCursoAlFormHorario(titulo){  
-    tituloCursoHorario.html("")  
+    tituloCursoHorario.html("");  
     tituloCursoHorario.html(titulo);
 }

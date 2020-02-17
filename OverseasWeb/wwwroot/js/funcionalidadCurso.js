@@ -1,604 +1,571 @@
-/*    
-    ///////////////////////////////////////////////////////////////////////////
-    /////////////// CURSOS  ///////////////////////////////////////////////////
+﻿/*
+ * ELEMENTOS 
+ */
 
-    var cursoSeleccionado = "";
-    var programaSeleccionado = "";
-    var bandera = 0;
-    
-    //PARA INICIALIZAR LA VISTA EN EL CURSO INGLÉS PARA NIÑOS
+let btnRegresarRegular = $("#btnRegresarRegular");
+let btnRegresarPrivado = $("#btnRegresarPrivado");
 
-    if ($('#containerPrincipalCursoRegular').is(':visible')) {
-        SeleccionarCurso('Inglés Para Niños', 'Regular'); 
-        cambiarTitulo("CURSOS REGULARES");              
-    }
-
-    if ($('#containerPrincipalCursoPrivado').is(':visible')) {
-        SeleccionarCurso('Inglés Para Niños', 'Privado');
-        cambiarTitulo("CURSOS PRIVADOS");                      
-    }
+let containerListaCursos = $("#containerListadoCurso");
+let containerFormCurso = $("#containerFormCurso");
 
 
+let tablaCursos;
+let contenidoTablaCursos;
+let tablaDocenteCurso = $("#tablaDocenteCurso").DataTable(dataTableConfig);
+let contenidoTablaDocenteCurso = $("#contenidoTablaDocenteCurso");
+
+let programaCurso;
+let tipoCurso = {};
+let idDocenteSelec;
+let idCursoEdit = 0;
+let estadoCurso = 1;
+
+var cabeceraDetalleCurso;
+
+// FORM
+
+let cursoFormHeader = $("#cursoFormHeader");
+
+let txtProgramaCurso = $("#txtProgramaCurso"); 
+let txtIdiomaCurso = $("#txtIdiomaCurso"); 
+let txtNivelCurso = $("#txtNivelCurso"); 
+let txtCicloCurso = $("#txtCicloCurso"); 
+let txtDetalleCurso = $("#txtDetalleCurso"); 
+let txtFechaInicioCurso = $("#txtFechaInicioDeCurso"); 
+let txtFechaFinCurso = $("#txtFechaFinDeCurso");
+let txtModalidadCurso = $("#txtModalidadCurso"); 
+let txtDocenteCurso = $("#txtDocenteCurso");
+
+let labelIdiomaCurso = $("#labelIdiomaCurso");
+let labelDetalleCurso = $("#labelDetalleCurso");
 
 
-    //CARGA LA TABLA Y LISTA LOS CURSOS 
 
-    function SeleccionarCurso(curso, programa){        
-        $('#cabeceraTablaHorarios').html("");
-        $('#contenidoTablaHorarios').html("");        
-        filaHorario = 0;
-        CargarTablaListarCursos();
-        if(curso == "P. Exam. Internacional")
-            ListarTablaCursos(curso, programa, "ListarExamenesInternacionales");
-        else if(curso == "Corporativo")   
-                ListarTablaCursos(curso, programa, "ListarCursosCorporativo");
-             else
-                ListarTablaCursos(curso, programa, "ListarCursos");
-        
-    }
-
-    //CAMBIA EL COLOR DEL CARD DEPENDIENDO EL CURSO
-
-    function ActivarColorBoton(boton){
-        $('#'+boton).removeClass('btn-outline-primary');
-        $('#'+boton).addClass('btn-primary');                        
-    }
+function LimpiarCamposFormCurso(){
+    txtDetalleCurso.val("");
+    txtNivelCurso.val("");
+    txtCicloCurso.val("");
+    txtFechaInicioCurso.val("");
+    txtFechaFinCurso.val("");
+    txtDocenteCurso.val("");
+    idCursoEdit = 0;
+    idDocenteSelec = null;
+}
 
 
-    function DesactivarColorBoton(boton){
-        $('#'+boton).removeClass('btn-primary');
-        $('#'+boton).addClass('btn-outline-primary');
-        
-    }
+/*
+ * SELECCIONAR CURSOS
+ */
 
-    function CambiarColorCard(curso){
-        if(curso=="Inglés Para Niños"){
-            ActivarColorBoton('btnInglesNiños');
-            DesactivarColorBoton('btnInglesGeneral');
-            DesactivarColorBoton('btnPreExamInter');
-            DesactivarColorBoton('btnOtrosIdiomas');
-            DesactivarColorBoton('btnDomicilio');
-            DesactivarColorBoton('btnCorporativo');                         
-        }else if(curso=="Inglés General"){
-            DesactivarColorBoton('btnInglesNiños');
-            ActivarColorBoton('btnInglesGeneral');
-            DesactivarColorBoton('btnPreExamInter');
-            DesactivarColorBoton('btnOtrosIdiomas');   
-            DesactivarColorBoton('btnDomicilio');
-            DesactivarColorBoton('btnCorporativo');           
-        }else if(curso=="P. Exam. Internacional"){
-            DesactivarColorBoton('btnInglesNiños');
-            DesactivarColorBoton('btnInglesGeneral');
-            ActivarColorBoton('btnPreExamInter');
-            DesactivarColorBoton('btnOtrosIdiomas'); 
-            DesactivarColorBoton('btnDomicilio');
-            DesactivarColorBoton('btnCorporativo'); 
-        }else if(curso=="Otros Idiomas"){
-            DesactivarColorBoton('btnInglesNiños');
-            DesactivarColorBoton('btnInglesGeneral');
-            DesactivarColorBoton('btnPreExamInter');
-            ActivarColorBoton('btnOtrosIdiomas');
-            DesactivarColorBoton('btnDomicilio'); 
-            DesactivarColorBoton('btnCorporativo');
-        }else if(curso=="Domicilio"){
-            DesactivarColorBoton('btnInglesNiños');
-            DesactivarColorBoton('btnInglesGeneral');
-            DesactivarColorBoton('btnPreExamInter');
-            DesactivarColorBoton('btnOtrosIdiomas');
-            ActivarColorBoton('btnDomicilio');       
-            DesactivarColorBoton('btnCorporativo');
-        }else{
-            DesactivarColorBoton('btnInglesNiños');
-            DesactivarColorBoton('btnInglesGeneral');
-            DesactivarColorBoton('btnPreExamInter');
-            DesactivarColorBoton('btnOtrosIdiomas');
-            DesactivarColorBoton('btnDomicilio');       
-            ActivarColorBoton('btnCorporativo');
-        }  
-    }
-
-    function ListarTablaCursos(curso, programaCurso, accion){ 
-        var campoDocente = "";
-        var columnaIdioma = "";
-        var campoIdioma = "";
-        var columnaTipo = ""
-        var columnaEmpresa = "";
-        var campoEmpresa = "";
-        var campoTipo = "";
-        var columnaModalidadEstudiante = "";
-        var campoModalidadEstudiante = "";
-        var tablaPrograma = "";
-        var indice = 0;
-        var table;
-        if(programaCurso == "Privado")
-            tablaPrograma = "tablaCursosPrivado";
-        else
-            tablaPrograma = "tablaCursosRegular";  
-        table = $('#'+tablaPrograma).DataTable();       
-
-        if(curso == "Otros Idiomas" || curso == "Domicilio" || curso == "Corporativo")
-            columnaIdioma = '    <th>Idioma</th>';                       
-        if(curso == "P. Exam. Internacional")  
-            columnaTipo = '    <th>Tipo</th>';
-        if(curso == "Corporativo")
-            columnaEmpresa = '    <th>Empresa</th>';
-        if(programaCurso == "Privado")
-            columnaModalidadEstudiante = '    <th>Modalidad</th>';
-        CambiarColorCard(curso);
-        $.ajax({
-            type: 'GET',
-            url: "/Curso/"+ accion,     
-            data: {
-                nombreCurso: curso,
-                programa : programaCurso
-            },                                                    
-            dataType: 'json',  
-            success: function (data) {        
-                cursoSeleccionado = curso;    
-                table.clear().destroy();                       
-                $('#nombreCursoSeleccionado').html(curso);                    
-                $("#cabeceraTablaCursosRegular").html("");
-                $("#contenidoTablaCursosRegular").html(""); 
-                
-                $('#cabeceraTablaCursosRegular').append(                        
-                    '<tr>'+
-                    '    <th>N°</th>'+
-                    columnaEmpresa +
-                    columnaModalidadEstudiante +   
-                    columnaTipo +
-                    columnaIdioma +                 
-                    '    <th>Nivel</th>'+
-                    '    <th>Ciclo</th>'+
-                    '    <th>Fecha Inicio</th>'+
-                    '    <th>Fecha Fin</th>'+
-                    '    <th>Docente</th>'+
-                    '    <th></th>'+                                         
-                    '</tr>')                
-                
-                if(data!=""){                                                                                                                           
-                    $.each(data, function (i, data){
-                        infoCurso = data;                        
-                        if(curso == "P. Exam. Internacional"){
-                            infoCurso = data.curso;
-                            campoTipo = '    <td>'+ data.tipoExamenInternacional +'</td>';
-                        } 
-                        if(curso == "Corporativo"){
-                            infoCurso = data.curso;
-                            campoEmpresa = '    <td>'+ data.empresaCursoCorporativo +'</td>';                            
-                        }
-                        if(curso == "Otros Idiomas" || curso == "Domicilio" || curso == "Corporativo" )
-                            campoIdioma = '    <td>'+ infoCurso.idioma +'</td>';
-                            
-                        if(infoCurso.docente.persona.nombresPersona == "Prueba")
-                            campoDocente = '    <td style = "color:red"> - Sin Asignar - </td>';                            
-                        else
-                            campoDocente = '    <td>'+ infoCurso.docente.persona.nombresPersona+'</td>';
-                        
-                        if(programaCurso == "Privado")
-                            campoModalidadEstudiante = '    <td>'+ infoCurso.modalidadEstudiantes +'</td>';
-                        indice++;
-                        $('#contenidoTablaCursosRegular').append(                                                
-                        '<tr>'+
-                        '    <td>'+indice+'</td>'+ 
-                        campoEmpresa +  
-                        campoModalidadEstudiante +
-                        campoTipo +                     
-                        campoIdioma +                            
-                        '    <td>'+ infoCurso.nivel +'</td>'+
-                        '    <td>'+ infoCurso.ciclo +'</td>'+
-                        '    <td>'+ infoCurso.fechaInicio.substr(0, 10) +'</td>'+
-                        '    <td>'+ infoCurso.fechaFin.substr(0, 10) +'</td>'+
-                             campoDocente +          
-                        '    <td>   '+
-                        '           <button rel="tooltip" title="Editar"'+
-                        '               onclick="BuscarCurso('+infoCurso.idCurso+','+"'"+infoCurso.nombreCurso+ "'"+' , '+"'"+programaCurso+ "'"+')" class="btn btn-warning btn-link btn-sm"><span class="fa fa-edit" style="color:black"></span></button> '+              
-                        '           <button rel="tooltip" title="Eliminar"'+
-                        '               onclick="EliminarCurso('+infoCurso.idCurso+', '+"'"+programaCurso+ "'"+')" class="btn btn-danger btn-link btn-sm"><span class="fa fa-trash" style="color:black"></span></button> '+
-                        '           <button rel="tooltip" title="Horario"'+
-                        '               onclick="CargarFormHorario('+infoCurso.idCurso+', '+"'"+programaCurso+ "'"+', '+"'"+infoCurso.fechaInicio.substr(0, 10)+ "'"+
-                                                                    ', '+"'"+infoCurso.fechaFin.substr(0, 10)+ "'"+
-                                                                    ')" class="btn btn-secondary btn-link btn-sm"><span class="fa fa-calendar" style="color:black"></span></button></td>'+                        
-                        '</tr>');                                                
-                    });                                                                                                                                                                                            
-                }                              
-                table = CrearDatatable(tablaPrograma);                 
-            },
-            error: function () {
-            }
-        });           
-    }
-    
-    function InicializarFormCurso(nombreDelCurso, programaCurso){
-        $('#txtNombreCurso').val(nombreDelCurso);
-        $('#txtPrograma').val(programaCurso);
-        if(programaCurso == "Privado")
-            $('#divModalidadCurso').show();        
-        else
-            $('#divModalidadCurso').hide(); 
-        if(nombreDelCurso == "P. Exam. Internacional")
-            $('#divTipo').show();
-        else 
-            $('#divTipo').hide();
-        if(nombreDelCurso == "Otros Idiomas" || nombreDelCurso == "Domicilio" || nombreDelCurso == "Corporativo"){
-            $('#selectorIdioma').prop('disabled', false);
-            $('#selectorIdioma').val('0'); 
-            if($('#bandera').html() == "0"){
-                CargarIdiomas();           
-                $('#bandera').html("1");
-            }                  
-        }else{
-            $('#selectorIdioma').prop('disabled', true);            
-            $('#selectorIdioma').val('Inglés'); 
+function BuscarTipoCurso(nombreCurso) {
+    $.ajax({
+        type: "get",
+        url: "/Curso/BuscarTipoCurso",
+        datatype: 'json',
+        data: { nombreCurso },
+        success: function (res) {
+            console.log(res);
+            tipoCurso = res;            
+            MostrarCursosHabilitados();
+            cursoFormHeader.html(tipoCurso.nombreCurso);
         }
-        if(nombreDelCurso == "Corporativo")
-            $('#divEmpresa').show();       
-        else
-            $('#divEmpresa').hide();
-        LimpiarFormCurso();        
-    }    
+    });
+}
 
-    function CargarIdiomas(){
+
+/*
+ * SELECCIONAR PROGRAMA
+ */
+
+if ($("#ViewCursosRegulares").is(":visible")) {
+    programaCurso = 'Regular';
+    //form
+    containerFormCurso.hide();
+    btnRegresarPrivado.hide();
+    txtProgramaCurso.val(programaCurso);
+    txtDocenteCurso.prop('disabled', true);
+    txtModalidadCurso.prop('disabled', true);
+    txtModalidadCurso.val('Grupal');    
+    //tabla
+    cabeceraDetalleCurso = $("#cabeceraDetalleCursoRegular");
+    tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
+    contenidoTablaCursos = $("#contenidoTablaCursosRegular");
+    cambiarTitulo("CURSOS REGULARES");     
+    //Por defecto lista un tipo de curso
+    SelecInglesGeneral();
+}
+
+
+
+if ($("#ViewCursosPrivados").is(":visible")) {
+    programaCurso = 'Privado';
+    //form
+    containerFormCurso.hide();
+    btnRegresarRegular.hide();
+    txtProgramaCurso.val(programaCurso);
+    txtDocenteCurso.prop('disabled', true);
+    txtModalidadCurso.prop('disabled', false);    
+    //tabla
+    cabeceraDetalleCurso = $("#cabeceraDetalleCursoPrivado");
+    tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
+    contenidoTablaCursos = $("#contenidoTablaCursosPrivado");
+    cambiarTitulo("CURSOS PRIVADOS");          
+    //Por defecto lista un tipo de curso
+    SelecInglesGeneral();
+}
+
+
+/*
+ * SELECCIONAR CURSOS
+ */
+
+function SelecInglesGeneral() {
+    BuscarTipoCurso('Inglés General');
+    OcultarIdioma(true);
+    OcultarDetalle(true);
+    PintarBotonTipoCurso('InglesGeneral');        
+}
+
+
+function SelecInglesNiños() {
+    BuscarTipoCurso('Inglés Niños');
+    OcultarIdioma(true);
+    OcultarDetalle(true);
+    PintarBotonTipoCurso('InglesNiños');    
+}
+
+
+function SelecExamInter() {
+    BuscarTipoCurso('P. Exam. Internacional');
+    OcultarIdioma(false);
+    OcultarDetalle(false);
+    labelDetalleCurso.html('Tipo de Examen Internacional');
+    PintarBotonTipoCurso('ExamInter');    
+}
+
+
+function SelecOtrosIdiomas() {
+    BuscarTipoCurso('Otros Idiomas');
+    OcultarIdioma(false);
+    OcultarDetalle(true);
+    PintarBotonTipoCurso('OtrosIdiomas');
+        
+}
+
+
+//Solo privados
+function SelecDomicilio() {
+    BuscarTipoCurso('Domicilio');
+    OcultarIdioma(false);
+    OcultarDetalle(true);
+    PintarBotonTipoCurso('Domicilio');
+}
+
+
+function SelecCorporativo() {
+    BuscarTipoCurso('Corporativo');
+    OcultarIdioma(false);
+    OcultarDetalle(false);
+    labelDetalleCurso.html('Empresa');
+    PintarBotonTipoCurso('Corporativo');
+}
+
+/*
+ * OCULTAR O MOSTRAR DETALLE
+ */
+
+function OcultarDetalle(oculto) {
+    //Se muestra cuando el curso es Exm Internacional o Corporativo
+    if (oculto) {
+        labelDetalleCurso.hide();
+        txtDetalleCurso.hide();
+        txtDetalleCurso.prop('disabled', true);
+    } else {
+        labelDetalleCurso.show();
+        txtDetalleCurso.show();
+        txtDetalleCurso.prop('disabled', false);
+    }
+}
+
+
+/*
+ * OCULTAR O MOSTRAR IDIOMA
+ */
+
+function OcultarIdioma(oculto) {
+    //Se oculta cuando el nombre de curso es Ingles Niños o Ingles General
+    if (oculto) {
+        labelIdiomaCurso.hide();
+        txtIdiomaCurso.hide();
+        ListarIdiomasCurso();
+        txtIdiomaCurso.prop('disabled', true);
+    } else {
+        labelIdiomaCurso.show();
+        txtIdiomaCurso.show();
+        ListarIdiomasCurso();
+        txtIdiomaCurso.prop('disabled', false);
+    }
+}
+
+/*
+ * OCULTAR O MOSTRAR FORM CURSO
+ */
+
+function MostrarFormCurso() {    
+    containerFormCurso.show();
+    containerListaCursos.hide();        
+};
+
+function MostrarTablaListaCursos(){    
+    containerListaCursos.show();
+    containerFormCurso.hide();
+    containerFormHorario.hide();
+    LimpiarCamposFormCurso();                        
+}
+
+function ModificarCabeceraDetalle() {
+    cabeceraDetalleCurso.hide();
+    $('.contenidoDetalleCurso').hide();
+    if (tipoCurso.nombreCurso == "P. Exam. Internacional") {
+        cabeceraDetalleCurso.html('Tipo de Examen');
+        cabeceraDetalleCurso.show();
+        $('.contenidoDetalleCurso').show();
+    }
+    if (tipoCurso.nombreCurso == "Corporativo") {
+        cabeceraDetalleCurso.html('Empresa');
+        cabeceraDetalleCurso.show();
+        $('.contenidoDetalleCurso').show();
+    }
+}
+
+/*
+ * LISTAR CURSOS
+ */
+
+function MostrarCursosHabilitados(){
+    ActivarColorBotonCursosEstado('CursosHabilitados', 'success');
+    DesactivarColorBotonCursosEstado('CursosDeshabilitados', 'danger');
+    estadoCurso = 1;
+    ListarCursos();
+}
+
+function MostrarCursosDeshabilitados(){
+    ActivarColorBotonCursosEstado('CursosDeshabilitados', 'danger');
+    DesactivarColorBotonCursosEstado('CursosHabilitados', 'success');
+    estadoCurso = 2;
+    ListarCursos();
+}
+
+function ListarCursos() {    
+    let nombreCurso = tipoCurso.nombreCurso;    
+    let detalle = '-';    
+    let nombreDocente;
+    let tituloCurso;    
+    MostrarTablaListaCursos();
+    $.ajax({
+        type: "get",
+        url: "/Curso/ListarCursos",
+        datatype: 'json',
+        data: { nombreCurso: nombreCurso, programa: programaCurso, estado : estadoCurso },
+        success: function (res) {            
+            contenidoTablaCursos.html("");
+            if (res != "") {
+                tablaCursos.clear().destroy();
+                $.each(res, function (i, res) {
+                    tituloCurso = ''+ res.idioma + ' - ';                                    
+                    if (res.detalle != null) { detalle = res.detalle; tituloCurso += res.detalle + ' - '; }
+                    if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
+                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
+                    tituloCurso += res.nivel + ' - ' + res.ciclo;
+                    //Botones
+                    console.log('tituloCurso'+ tituloCurso);
+                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
+                                                                                                         ', '+"'"+ tituloCurso + "'"+
+                                 ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
+                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
+                    btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
+                    //Rellena datos
+                    contenidoTablaCursos.append(
+                        '<tr>' +   
+                        '<td>' + res.idioma + '</td>' +
+                        '<td>' + res.nivel + '</td>' +
+                        '<td>' + res.ciclo + '</td>' +
+                        '<td class="contenidoDetalleCurso">' + detalle + '</td>'+
+                        nombreDocente+
+                        '<td>' + res.fechaInicio.substr(0, 10) + ' / ' + res.fechaFin.substr(0, 10) + '</td>' +                        
+                        '<td> <div class="form-check-inline">' + btnHorario + btnEditar + btnEliminar + '</div> </td>' +
+                        '</tr>');
+                });
+                ModificarCabeceraDetalle();
+                if (programaCurso == 'Regular')
+                    tablaCursos = $("#tablaCursosRegular").DataTable(dataTableConfig);
+                else
+                    tablaCursos = $("#tablaCursosPrivado").DataTable(dataTableConfig);
+
+            } 
+        }
+    });
+}
+
+/*
+ * RELLENAR SELECT IDIOMAS
+ */
+
+function ListarIdiomasCurso() {
+    $.ajax({
+        type: "get",
+        url: "/Especialidad/ListarEspecialidad",
+        datatype: 'json',
+        success: function (res) {
+            console.log("IDIOMAS--");
+            console.log(res);
+            if (res != "") {
+                txtIdiomaCurso.html("");
+                $.each(res, function (i, res) {
+                    //Rellena datos
+                    if (res.descripcionEspecialidad == 'Inglés') {
+                        txtIdiomaCurso.append(
+                            '<option selected value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
+                    } else {
+                        txtIdiomaCurso.append(
+                            '<option value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
+                    }
+                    console.log(txtIdiomaCurso.val());
+                });
+            }
+        }
+    });
+}
+
+/*
+ * BUSCAR DOCENTES
+ */
+
+function ListarDocentesActivosCurso() {
+    let btnAgregar = "", nombres, apellidos;
+    $.ajax({
+        type: "get",
+        url: "/Curso/ListarDocentes",
+        datatype: 'json',
+        success: function (res) {
+            console.log(res);
+            contenidoTablaDocenteCurso.html("");
+            if (res != "") {
+                tablaDocenteCurso.clear().destroy();
+                $.each(res, function (i, res) {
+                    nombres = res.persona.nombresPersona;
+                    apellidos = res.persona.apellidosPersona;
+                    //Botones
+                    btnAgregar = '<button onclick = "AgregarDocenteCurso('+res.idDocente+','+"'"+nombres+
+                    " "+apellidos+ "'"+')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></button>';
+                    //Rellena datos
+                    contenidoTablaDocenteCurso.append(
+                        '<tr>' +
+                        '<td>' + res.persona.dniPersona + '</td>' +
+                        '<td>' + nombres + ' ' + apellidos  + '</td>' +
+                        '<td> <div class="form-check-inline">' + btnAgregar + '</div> </td>' +
+                        '</tr>');
+                });
+                tablaDocenteCurso = $("#tablaDocenteCurso").DataTable(dataTableConfig);
+            }
+        }
+    });
+}
+
+/*
+ * SELECCIONAR DOCENTE
+ */
+
+
+function AgregarDocenteCurso(id, docente){
+    txtDocenteCurso.val(docente);
+    idDocenteSelec = id;    
+}
+/*
+ * BUSCAR CURSO
+ */
+
+function BuscarCurso(id) {
+    $.ajax({
+        type: "get",
+        url: "/Curso/BuscarCursoPorID",
+        datatype: 'json',
+        data: { idCurso: idCursoEdit },
+        success: function (res) {
+            console.log(res);
+            if (res != "") {
+                txtProgramaCurso.val(res.programa);
+                txtIdiomaCurso.val(res.idioma);
+                txtNivelCurso.val(res.nivel);
+                txtCicloCurso.val(res.ciclo);
+                txtFechaInicioCurso.val(res.fechaInicio.substr(0,10));
+                txtFechaFinCurso.val(res.fechaFin.substr(0,10));
+                txtModalidadCurso.val(res.modalidadEstudiantes);
+                txtDetalleCurso.val(res.detalle);
+                txtDocenteCurso.val(res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona);
+                idDocenteSelec = res.idDocente;
+            }
+        }
+    });
+}
+
+
+
+/*
+ * GUARDAR CURSOS
+ */
+
+function DeshabilitarEdicionPeriodoCurso(decision){
+    txtFechaInicioCurso.prop('disabled', decision);
+    txtFechaFinCurso.prop('disabled', decision);
+}
+
+function EditarCurso(id) {
+    idCursoEdit = id;
+    BuscarCurso(id);
+    (programaCurso == 'Regular') ? DeshabilitarEdicionPeriodoCurso(true) : DeshabilitarEdicionPeriodoCurso(false);
+    MostrarFormCurso();
+}
+
+function GuardarCurso() {
+    let action;
+    //Seleccionar Action
+    (idCursoEdit == 0) ? action = "RegistrarCurso" : action = "EditarCurso";
+    let nuevoCurso = {
+        IdCurso: idCursoEdit,
+        Programa: programaCurso,
+        Idioma: txtIdiomaCurso.val(),
+        Nivel: txtNivelCurso.val(),
+        Ciclo: txtCicloCurso.val(),
+        FechaInicio: txtFechaInicioCurso.val(),
+        FechaFin: txtFechaFinCurso.val(),
+        ModalidadEstudiantes: txtModalidadCurso.val(),
+        Detalle: txtDetalleCurso.val(),
+        Estado: 1,
+        IdTipoCurso: tipoCurso.idTipoCurso,
+        IdDocente: idDocenteSelec
+    };
+    console.log('nuevoCurso');
+    console.log(nuevoCurso);
+
+    if (VerificarCamposVaciosCurso() == 0) {
         $.ajax({
-            type: "get",
-            url: "/Especialidad/ListarEspecialidad",
+            type: "post",
+            url: "/Curso/" + action,
             datatype: 'json',
-            success: function (idiomas) {                
-                if(idiomas!=""){
-                    console.log(idiomas);
-                    $.each(idiomas, function (i, idioma) {
-                        if(idioma.descripcionEspecialidad != "Inglés"){
-                            $('#selectorIdioma').append('<option value="'+idioma.descripcionEspecialidad+'">'+
-                            idioma.descripcionEspecialidad+' </option>  ');   
-                        }                                                 
-                    });
+            data: { curso: nuevoCurso },
+            success: function (res) {
+                switch (res) {
+                    case 'Registrado': {
+                        msgExitoCurso(res);                        
+                        break;
+                    }
+                    case 'Exito': {
+                        msgExitoCurso(res);                        
+                        break;
+                    }
+                    default: {
+                        msgError(res);
+                    }
                 }
+                console.log(res);
             }
         });
     }
     
-    function CargarFormCurso(curso, metodo, programaCurso){
-        $('#containerListadoCurso').hide();
-        $('#containerRegistroCurso').show();
-        $('#divBotones').html('');
-        if(metodo == "Guardar"){
-            $('#divBotones').append('<button onclick="CrearEditarCursos('+"'CrearCursoRegular',"+')" rel="tooltip" title="Guardar" type="button" class="btn btn-outline-success"><span class="fa fa-save" style="color:black"></button>');            
-        }else{
-            $('#divBotones').append('<button onclick="CrearEditarCursos('+"'EditarCursoRegular',"+')" rel="tooltip" title="Editar" type="button" class="btn btn-outline-warning"><span class="fa fa-edit" style="color:black"></button>');    
-        }
-        $('#divBotones').append('  <button onclick="SeleccionarCurso('+"'"+curso+ "'"+' , '+"'"+programaCurso+ "'"+')" rel="tooltip" title="Cancelar"  type="button" class="btn btn-outline-danger"><span class="fa fa-remove" style="color:black"></button>');               
-    }
+}
 
 
-    function CargarTablaListarCursos(){
-        $('#containerRegistroCurso').hide();
-        $('#containerRegistroHorario').hide();
-        $('#containerListadoCurso').show(); 
-    }
-
-    $('#btnAgregarCursoRegular').click(function(){        
-        var nombreCurso = $('#nombreCursoSeleccionado').html();
-        //SE CARGA EL FORM Y OCULTA LA LISTA
-        CargarFormCurso(nombreCurso, 'Guardar','Regular');
-        //SE ESTABLECE DATOS POR DEFECTO EN EL FORM        
-        InicializarFormCurso(nombreCurso, 'Regular');                                
-    });
-
-    
-    $('#btnAgregarCursoPrivado').click(function(){        
-        var nombreCurso = $('#nombreCursoSeleccionado').html();
-        CargarFormCurso(nombreCurso,'Guardar','Privado');       
-        InicializarFormCurso(nombreCurso, 'Privado');                                
-    });
 
 
-    function CargarModalDocentesParaCurso(){
-        $('#modalDocentesUnCurso').modal("show");
-        MostrarDocentesParaCurso();
-    }
+/*
+ * ELIMINAR CURSOS
+ */
 
-    function MostrarDocentesParaCurso(){
-        var indice = 0;
-        var table = $('#tablaDocenteUnCurso').DataTable(); 
-        $.ajax({
-            type: 'GET',
-            url: "/Docente/ListarDocentesParaCurso",                                             
-            dataType: 'json',  
-            success: function (data){
-                $("#contenidoTablaDocenteUnCurso").html("");
-                table.clear().destroy();
-                if(data!=""){
-                    obj = data;
-                    $.each(obj, function (i, obj){   
-                        indice++;                         
-                        $('#contenidoTablaDocenteUnCurso').append('<tr>' +
-                        '<td>'+indice+'</td>' +
-                        '<td>' + obj.persona.nombresPersona + " "+obj.persona.apellidosPersona+ '</td>' +                        
-                        '<td> <button type="button" onclick="AsignarDocenteAlFormCurso('+obj.idDocente+','+"'"+obj.persona.nombresPersona+
-                               " "+obj.persona.apellidosPersona+ "'"+')" class="btn btn-outline-info btn-sm">Asignar</button></td>'+
-                        '</tr>');    
-                    });
-                    
-                    table = CrearDatatable("tablaDocenteUnCurso");                         
-                }                                                                            
-            },
-            error: function () {
-            }
-        });                
-    }
 
-    function AsignarDocenteAlFormCurso( idDocente, nombresDocente){        
-        $('#modalDocentesUnCurso').modal("hide");
-        $('#txtIdDocente').val(idDocente);
-        $('#txtNombreDocente').val(nombresDocente);    
-    }   
+function EliminarCurso(id) {
+    swal({
+        title: "Advertencia",
+        text: "¿Desea eliminar este Curso?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+    }).then((eliminar) => {
 
-    //CHECKBOX PARA DOCENTE SIN ASIGNAR /////////////////////////////////////
-
-    function EstablecerCampoSinDocente(){
-        $('#txtNombreDocente').val("");
-        $('#txtIdDocente').val("");        
-    }
-
-    $('#checkBoxDocente').on('change',function(){
-        if($(this).is(':checked')){
-            EstablecerCampoSinDocente();
-            $('#btnBuscarDocenteCurso').prop('disabled',true);
-        }else{
-            $('#btnBuscarDocenteCurso').prop('disabled',false);
-        }
-    })
-
-    function LimpiarFormCurso(){
-        $('#txtIdCurso').val(""); 
-        $('#txtFechaFin').val("");
-        $('#txtFechaInicio').val("");
-        $('#txtNivel').val("");
-        $('#txtCiclo').val("");
-        $('#txtNombreEmpresaCurso').val("");
-        $('#checkBoxDocente').prop('checked',false);
-        $('#btnBuscarDocenteCurso').prop('disabled',false);
-        $('#selectorModalidadCurso').val(0);        
-        EstablecerCampoSinDocente();
-                      
-    }
-
-    function ValidarCamposCurso(nombreDeCurso, programaCurso){
-        var resultado = VerificarCampoVacio("Nivel") + VerificarCampoVacio("Ciclo") + VerificarCampoVacio("FechaInicio") + VerificarCampoVacio("FechaFin");
-        if(programaCurso == "Privado")
-            resultado += VerificarSelectorVacio("ModalidadCurso");
-        if(nombreDeCurso == "P. Exam. Internacional")
-            resultado += VerificarCampoVacio("TipoExamInter");
-        else if(nombreDeCurso == "Otros Idiomas" || nombreDeCurso == "Domicilio" || nombreDeCurso == "Corporativo"){
-            if(nombreDeCurso == "Corporativo")
-                resultado += VerificarCampoVacio("NombreEmpresaCurso");
-            resultado += VerificarSelectorVacio("Idioma");
-        }
-            
-        if(resultado > 0)                 
-            return "Incorrecto";
-        else
-            return "Correcto";
-        
-        
-    }
-
-    function CrearEditarCursos(accion){   
-        var idCurso = $('#txtIdCurso').val();           
-        var fechaFin = $('#txtFechaFin').val();
-        var fechaInicio = $('#txtFechaInicio').val();
-        var idioma = $('#selectorIdioma').val();
-        var nivel = $('#txtNivel').val();
-        var ciclo = $('#txtCiclo').val();
-        var nombreCurso = $('#txtNombreCurso').val();
-        var idDocente = $('#txtIdDocente').val();                  
-        var tipoExamenInter = $('#txtTipoExamInter').val();
-        var nombreEmpresaCurso = $('#txtNombreEmpresaCurso').val();
-        var programa = $('#txtPrograma').val();
-        var modalidadEstudiantes = "Grupal"; 
-        if(programa == "Privado")
-            modalidadEstudiantes = $('#selectorModalidadCurso').val();        
-        var estado = 1;        
-        var accionAjaxExamInter = "CrearExamenInternacional";
-        var accionAjaxCursoCorporativo = "CrearCursoCorporativo";
-        if(idDocente=="")
-            idDocente = 1;         
-        if(ValidarCamposCurso(nombreCurso, programa) == "Correcto"){
+        if (eliminar) {
             $.ajax({
-                type: 'POST',
-                url: "/Curso/"+accion,
-                data: {
-                    IdCurso : idCurso,
-                    FechaFin : fechaFin,
-                    FechaInicio : fechaInicio,
-                    Idioma : idioma,
-                    Nivel : nivel,
-                    Programa : programa,
-                    Estado : estado,                
-                    Ciclo : ciclo,
-                    ModalidadEstudiantes : modalidadEstudiantes,
-                    NombreCurso : nombreCurso,
-                    IdDocente : idDocente
-                },
+                type: "post",
+                url: "/Curso/EliminarCurso",
                 datatype: 'json',
-                success: function (data) {
-                    if(data!=""){                    
-                        if(nombreCurso == "P. Exam. Internacional"){ 
-                            if(idCurso!=""){
-                                accionAjaxExamInter = "EditarExamenInternacional";
-                            }                     
-                            $.ajax({
-                                type: 'POST',
-                                url: "/Curso/"+ accionAjaxExamInter,
-                                data: {
-                                    IdExamenInternacional : idCurso,
-                                    TipoExamenInternacional : tipoExamenInter
-                                },
-                                datatype: 'json',
-                                success: function (data) {                                
-                                }
-                            });                                                                                                                                           
-                        }   
-                        if(nombreCurso == "Corporativo"){ 
-                            if(idCurso!=""){
-                                accionAjaxCursoCorporativo = "EditarCursoCorporativo";
-                            }                     
-                            $.ajax({
-                                type: 'POST',
-                                url: "/Curso/"+ accionAjaxCursoCorporativo,
-                                data: {
-                                    IdCursoCorporativo : idCurso,
-                                    EmpresaCursoCorporativo : nombreEmpresaCurso
-                                },
-                                datatype: 'json',
-                                success: function (data) {                                
-                                }
-                            });                                                                                                                                           
-                        }          
-    
-                        swal({
-                            title: "Correcto!",
-                            text: "Realizado exitosamente.",
-                            icon: "success",                      
-                            button: "Aceptar",
-                            timer: 2000
-                        }).then(
-                            function () {
-                                if (true) {        
-                                    LimpiarFormCurso();                        
-                                    SeleccionarCurso(nombreCurso, programa);                                              
-                                }
-                            }
-                        )                                    
+                data: { idCurso: id },
+                success: function (res) {
+                    console.log(res);
+                    if (res == 'Eliminado') {
+                        msgExitoCurso(res);                        
+                    } else {
+                        msgError(res);
                     }
-                    else{
-                        alert("Campos vacios");
-                    }                
-                },
-                error: function () {
                 }
             });
-        }                                      
+        } else {
+            msgCancelado("No se eliminara el Curso");
+        }
+    });    
+}
+
+
+
+/* 
+ * VERIFICAR CAMPOS VACIOS 
+ */
+
+function VerificarCamposVaciosCurso() {
+    let valido = 
+        VerificarCampoVacio("IdiomaCurso") +
+        VerificarCampoVacio("NivelCurso") +
+        VerificarCampoVacio("CicloCurso") +
+        VerificarCampoVacio("FechaInicioDeCurso") +
+        VerificarCampoVacio("FechaFinDeCurso") +
+        VerificarCampoVacio("ModalidadCurso");
+    let detalleValido = 0;
+    if (tipoCurso.nombreCurso == 'P. Exam. Internacional' || tipoCurso.nombreCurso == 'Corporativo') {
+        detalleValido = VerificarCampoVacio("DetalleCurso");
     }
 
-
-    function BuscarCurso(id, curso, programaCurso){
-        var accion = "";        
-        CargarFormCurso(curso, 'Editar', programaCurso);        
-        if(curso == "P. Exam. Internacional")  
-            accion = "BuscarExamenInternacional";
-        else if(curso == "Corporativo")
-                accion = "BuscarCursoCorporativo";   
-             else
-                accion = "BuscarCursoRegular";           
-        $.ajax({
-            type: 'GET',
-            url: "/Curso/"+ accion,
-            data: {               
-                idCurso : id
-            },
-            datatype: 'json',
-            success: function (data) {
-                if(data!=""){                    
-                    InicializarFormCurso(infoCurso.nombreCurso, programaCurso);
-                    infoCurso = data;
-                    if(curso == "P. Exam. Internacional"){                        
-                        infoCurso = data.curso;
-                        $('#txtTipoExamInter').val(data.tipoExamenInternacional);
-                    }
-                    if(curso == "Corporativo"){
-                        infoCurso = data.curso;
-                        $('#txtNombreEmpresaCurso').val(data.empresaCursoCorporativo);
-                    }                                                                
-                    $('#txtIdCurso').val(infoCurso.idCurso);
-                    $('#txtFechaFin').val(infoCurso.fechaFin.substr(0, 10));
-                    $('#txtFechaInicio').val(infoCurso.fechaInicio.substr(0, 10));                    
-                    $('#txtNivel').val(infoCurso.nivel);
-                    $('#txtIdioma').val(infoCurso.idioma);
-                    $('#txtCiclo').val(infoCurso.ciclo);        
-                    $('#txtIdDocente').val(infoCurso.idDocente);
-                    if(programaCurso == "Privado")
-                        $('#selectorModalidadCurso').val(infoCurso.modalidadEstudiantes);
-                    if(infoCurso.docente.persona.nombresPersona == "Prueba"){
-                        $('#checkBoxDocente').prop('checked', true);
-                        $('#btnBuscarDocenteCurso').prop('disabled',true);
-                        EstablecerCampoSinDocente();
-                    }                        
-                    else{
-                        $('#txtNombreDocente').val(infoCurso.docente.persona.nombresPersona + " "+ infoCurso.docente.persona.apellidosPersona);
-                    }                        
-                }
-                else{
-                    alert("Campos vacios");
-                }                
-            },
-            error: function () {
-            }
-        });
-    }
-
-    function EliminarCurso(id, programaCurso){
-        swal({
-            title: "Mensaje de Confirmacion",
-            text: "¿Desea eliminar este Curso?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true
-            })
-            .then((willDelete) => {
-                if(willDelete){                        
-                    $.ajax({
-                        type: 'POST',
-                        url: "/Curso/EliminarCursoRegular",
-                        data: {
-                            idCurso: id,                                
-                        },
-                        datatype: 'json',
-                        success: function (response) {
-                            swal({
-                                title: "Correcto!",
-                                text: "Curso eliminado exitosamente.",
-                                icon: "success",
-                                button: "Aceptar",
-                                timer: 2000
-                            }).then(
-                                function () {
-                                    if (true) {
-                                        SeleccionarCurso(cursoSeleccionado, programaCurso); 
-                                    }
-                                }
-                            )
-                        },
-                        error: function () {
-                        }
-                    });
-                }
-                else
-                {
-                    swal({
-                        title: "Cancelado!",
-                        icon : "error",                                        
-                        button: "Aceptar",
-                        timer: 2000
-                    })
-                }
-                
-        });
-    }
-
-    function refrescarPagina(){
-        location.reload();
-    }    
-
-   
-
-    
-    
-
-    
-
-    
+    console.log("RETURN");
+    console.log(valido);
+    return valido + detalleValido;
+}
 
 
-   
-   
-   */
+function EstablecerCampoSinDocente(){
+    $('#txtNombreDocente').val("");
+    $('#txtIdDocente').val("");        
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

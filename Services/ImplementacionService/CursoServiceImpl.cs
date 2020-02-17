@@ -29,9 +29,9 @@ namespace Services.ImplementacionService
         /*
          *  Listar Cursos
          */
-        public List<Curso> ListarCursos(string nombreCurso, string programa)
+        public List<Curso> ListarCursos(string nombreCurso, string programa, int estado)
         {
-            List<Curso> curso = _cursoDao.ListarCursos (nombreCurso, programa);
+            List<Curso> curso = _cursoDao.ListarCursos (nombreCurso, programa, estado);
             return curso;
         }
 

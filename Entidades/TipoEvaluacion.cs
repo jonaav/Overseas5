@@ -11,6 +11,5 @@ namespace Entidades
         public int IdTipoEvaluacion { get; set; }
         public string NombreEvaluacion { get; set; }
 
-        //public ICollection<TipoCursoTipoEvaluacion> TipoCursoTipoEvaluacion { get; set; }
     }
 }

@@ -44,7 +44,7 @@ function msgExitoCurso(msg){
     }).then(
         function () {
             if (true) {                         
-                ListarCursos();                                                           
+                MostrarCursosHabilitados();                                                          
             }
         }
     )          

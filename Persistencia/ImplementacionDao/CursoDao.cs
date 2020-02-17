@@ -18,13 +18,14 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Listar Cursos
          */
-        public List<Curso> ListarCursos (string nombreCurso, string programa) => _context.Curso
+        public List<Curso> ListarCursos (string nombreCurso, string programa, int estado) => _context.Curso
                                                                                 .Where(c => (c.Programa == programa &&
-                                                                                            c.TipoCurso.NombreCurso == nombreCurso))
+                                                                                             c.TipoCurso.NombreCurso == nombreCurso &&
+                                                                                             c.Estado == estado))
                                                                                 .Include(c => c.TipoCurso)
                                                                                 .Include(c => c.Docente)
                                                                                     .ThenInclude(d => d.Persona)
-                                                                                .ToList();
+                                                                                .OrderByDescending(c => c.IdCurso).ToList();
 
 
         /*

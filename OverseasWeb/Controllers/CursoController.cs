@@ -35,9 +35,9 @@ namespace OverseasWeb.Controllers
         }
 
 
-        public IActionResult ListarCursos(string nombreCurso, string programa)
+        public IActionResult ListarCursos(string nombreCurso, string programa, int estado)
         {
-            List<Curso> cursos = _cursoService.ListarCursos(nombreCurso, programa);
+            List<Curso> cursos = _cursoService.ListarCursos(nombreCurso, programa, estado);
             return Json(cursos);
 
         }

@@ -25,18 +25,9 @@ namespace Entidades
         [ForeignKey("IdDocente")]
         public int? IdDocente { get; set;}
         public virtual Docente Docente { get; set; }
-        //public ICollection<HistorialEvaluacion> HistorialEvaluacion { get; set; }
-        //public ICollection<Horario> Horario { get; set; }
-        //public ICollection<Inscripcion> Inscripcion { get; set; }
 
 
         #region Metodos
-
-
-        //public string SoloFechaInicio()
-        //{
-        //    return this.FechaInicio.ToShortDateString();
-        //}
 
 
         /*

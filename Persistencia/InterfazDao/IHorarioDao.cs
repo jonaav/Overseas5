@@ -20,5 +20,9 @@ namespace Persistencia.InterfazDao
         void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales);
 
         bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso);
+
+        bool EsHorarioPermitido(Horario horarioEvaluar);
+
+        bool EsSesionPermitida(Sesion sesionEvaluar);
     }
 }

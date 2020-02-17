@@ -17,6 +17,5 @@ namespace Entidades
 
         public Curso Curso { get; set; }
         public Estudiante Estudiante { get; set; }
-        //public ICollection<Evaluacion> Evaluacion { get; set; }
     }
 }
