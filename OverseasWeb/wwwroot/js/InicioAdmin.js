@@ -21,6 +21,7 @@ if ($("#viewInicioAdmin").is(":visible")) {
     ContarCursosActivos();
     ContarTraduccionesPendientes();
     BuscarCumpleañosCercanos();
+    BuscarHorariosDelDia();
 }
 
 
@@ -95,11 +96,49 @@ function BuscarCumpleañosCercanos() {
                 $.each(res, function (i, res) {
                     dataCumpleaños.append(
                         '<tr>' +
-                        '<td>' + res.nombresPersona + ' ' + res.apellidosPersona + '</td>' +
-                        '<td>' + res.fechaNacimientoPersona.substr(8,2) + '</td>' +
+                        '<td>' + res.persona.nombresPersona + ' ' + res.persona.apellidosPersona + '</td>' +
+                        '<td>' + res.persona.fechaNacimientoPersona.substr(8, 2) + '</td>' +
                         '</tr>');
                 });
                 console.log(res);
+            }
+        }
+    });
+}
+
+
+
+
+/* TABLA HORARIOS DEL DIA */
+
+function BuscarHorariosDelDia() {
+    $.ajax({
+        type: "get",
+        url: "/Home/BuscarHorariosDelDia",
+        datatype: 'json',
+        success: function (response) {
+            console.log('HORARIOS');
+            console.log(response);
+            if (response != "") {
+                $.each(response, function (i, res) {
+                    let nombreDocente = '-Sin Asignar-';
+                    let aula = '-Sin Asignar-';
+                    console.log(res);
+                    if (res.horario.curso.docente != null) {
+                        nombreDocente = res.horario.curso.docente.persona.nombresPersona + ' ' + res.horario.curso.docente.persona.apellidosPersona;
+                    } 
+                    if (res.horario.ambiente != null) {
+                        aula = res.horario.ambiente.aula;
+                    }
+                    dataClasesDiarias.append(
+                        '<tr>' +
+                        '<td>' + res.horario.curso.tipoCurso.nombreCurso + ' - ' + res.horario.curso.programa + '</td>' +
+                        '<td>' + res.horario.curso.nivel + ' - ' + res.horario.curso.ciclo + '</td>' +
+                        '<td>' + nombreDocente + '</td>' +
+                        '<td>' + res.horario.horaInicio + ' - ' + res.horario.horaFin + '</td>' +
+                        '<td>' + aula + '</td>' +
+                        '</tr>');
+                });
             }
         }
     });

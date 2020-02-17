@@ -7,6 +7,6 @@ namespace Persistencia.InterfazDao
 {
     public interface IPersonaDao
     {
-        List<Persona> BuscarCumpleañosCercanos(DateTime inicio, DateTime fin);
+        //List<Persona> BuscarCumpleañosCercanos(DateTime inicio, DateTime fin);
     }
 }

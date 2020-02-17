@@ -449,7 +449,7 @@ namespace Persistencia.Migrations
 
                     b.HasIndex("IdTipoEvaluacion");
 
-                    b.ToTable("TCursoTEvaluacion");
+                    b.ToTable("TipoCursoTipoEvaluacion");
                 });
 
             modelBuilder.Entity("Entidades.TipoEvaluacion", b =>
@@ -729,8 +729,7 @@ namespace Persistencia.Migrations
                 {
                     b.HasOne("Entidades.Docente", "Docente")
                         .WithMany()
-                        .HasForeignKey("IdDocente")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdDocente");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

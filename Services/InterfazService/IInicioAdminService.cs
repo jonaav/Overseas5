@@ -11,6 +11,7 @@ namespace Services.InterfazService
         int ContarDocentesActivos();
         int ContarCursosActivos();
         int ContarTraduccionesPendientes();
-        List<Persona> BuscarCumpleañosCercanos();
+        List<Docente> BuscarCumpleañosCercanos();
+        List<Sesion> BuscarHorariosDelDia();
     }
 }

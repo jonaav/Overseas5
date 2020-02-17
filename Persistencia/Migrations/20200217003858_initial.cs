@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistencia.Migrations
 {
-    public partial class inicial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -345,7 +345,7 @@ namespace Persistencia.Migrations
                         column: x => x.IdDocente,
                         principalTable: "Docente",
                         principalColumn: "IdDocente",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Curso_TipoCurso_IdTipoCurso",
                         column: x => x.IdTipoCurso,
@@ -393,7 +393,7 @@ namespace Persistencia.Migrations
                     IdiomaDestinoTraduccion = table.Column<string>(nullable: true),
                     FechaTraduccion = table.Column<DateTime>(nullable: false),
                     EstadoTraduccion = table.Column<int>(nullable: false),
-                    IdDocente = table.Column<int>(nullable: false)
+                    IdDocente = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -403,7 +403,7 @@ namespace Persistencia.Migrations
                         column: x => x.IdDocente,
                         principalTable: "Docente",
                         principalColumn: "IdDocente",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -456,7 +456,7 @@ namespace Persistencia.Migrations
                         column: x => x.IdEstudiante,
                         principalTable: "Estudiante",
                         principalColumn: "IdEstudiante",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -513,7 +513,7 @@ namespace Persistencia.Migrations
                         column: x => x.IdEstudiante,
                         principalTable: "Estudiante",
                         principalColumn: "IdEstudiante",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -583,13 +583,13 @@ namespace Persistencia.Migrations
                         column: x => x.IdEstudiante,
                         principalTable: "Estudiante",
                         principalColumn: "IdEstudiante",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Asistencia_Sesion_IdSesion",
                         column: x => x.IdSesion,
                         principalTable: "Sesion",
                         principalColumn: "IdSesion",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

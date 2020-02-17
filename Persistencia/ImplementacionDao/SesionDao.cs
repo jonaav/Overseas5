@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Entidades;
 using Persistencia.InterfazDao;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia.ImplementacionDao
 {
@@ -14,6 +15,14 @@ namespace Persistencia.ImplementacionDao
         {
             _context = context;
         }
+
+
+        public List<Sesion> BuscarHorariosDelDia() => _context.Sesion
+            .Where(s => s.FechaSesion == DateTime.Today)
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
+            .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
+            .ToList();
 
         public Sesion BuscarSesion(int idHorario)
         {

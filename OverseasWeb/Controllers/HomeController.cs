@@ -94,8 +94,17 @@ namespace OverseasWeb.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult BuscarCumpleañosCercanos()
         {
-            List<Persona> personas = _inicioAdminService.BuscarCumpleañosCercanos();
-            return Json(personas);
+            List<Docente> docentes = _inicioAdminService.BuscarCumpleañosCercanos();
+            return Json(docentes);
+        }
+        
+
+        /*Horarios del dia*/
+        [Authorize(Roles = "Admin")]
+        public IActionResult BuscarHorariosDelDia()
+        {
+            List<Sesion> sesiones = _inicioAdminService.BuscarHorariosDelDia();
+            return Json(sesiones);
         }
 
 

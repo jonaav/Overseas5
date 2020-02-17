@@ -19,6 +19,6 @@ namespace Persistencia.InterfazDao
         bool EliminarEspecialidadesDelDocente(int id);
 
         int CantidadDeDocentesActivos();
-        //Docente BuscarDocentePorIdPersona(int idPersona);
+        List<Docente> BuscarCumpleañosCercanos(DateTime inicio, DateTime fin);
     }
 }

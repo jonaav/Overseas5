@@ -193,6 +193,22 @@ namespace Persistencia.ImplementacionDao
                                                     .Count();
 
 
+
+        /*
+         *  Buscar proximos Cumpleaños desde hoy hasta fecha limite
+         */
+
+        public List<Docente> BuscarCumpleañosCercanos(DateTime inicio, DateTime fin) => _context.Docente
+                                                        .Where(d => (d.Persona.FechaNacimientoPersona.DayOfYear >= inicio.DayOfYear
+                                                                    && d.Persona.FechaNacimientoPersona.DayOfYear < fin.DayOfYear))
+                                                        .Include(d => d.Persona)
+                                                        .ToList();
+
+
+
+
+
+
         #endregion public
 
 

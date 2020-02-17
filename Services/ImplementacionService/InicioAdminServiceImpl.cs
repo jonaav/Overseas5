@@ -16,13 +16,15 @@ namespace Services.ImplementacionService
         private readonly ITraduccionDao _traduccionDao;
         private readonly IDocenteDao _docenteDao;
         private readonly IPersonaDao _personaDao;
+        private readonly ISesionDao _sesionDao;
 
         public InicioAdminServiceImpl(
             ICursoDao cursoDao,
             IInscripcionDao inscripcionesDao,
             ITraduccionDao traduccionDao,
             IDocenteDao docenteDao,
-            IPersonaDao personaDao
+            IPersonaDao personaDao,
+            ISesionDao sesionDao
         )
         {
             _cursoDao = cursoDao;
@@ -30,6 +32,7 @@ namespace Services.ImplementacionService
             _traduccionDao = traduccionDao;
             _docenteDao = docenteDao;
             _personaDao = personaDao;
+            _sesionDao = sesionDao;
         }
 
 
@@ -59,12 +62,21 @@ namespace Services.ImplementacionService
 
         //Buscar cumpleaños cercanos
 
-        public List<Persona> BuscarCumpleañosCercanos()
+        public List<Docente> BuscarCumpleañosCercanos()
         {
             DateTime inicio = DateTime.Today;
             DateTime fin = inicio.AddDays(7);
-            List<Persona> personas = _personaDao.BuscarCumpleañosCercanos(inicio,fin);
-            return personas;
+            List<Docente> docentes = _docenteDao.BuscarCumpleañosCercanos(inicio,fin);
+            return docentes;
+        }
+        
+
+        //Buscar horarios del dia
+
+        public List<Sesion> BuscarHorariosDelDia()
+        {
+            List<Sesion> sesiones = _sesionDao.BuscarHorariosDelDia();
+            return sesiones;
         }
 
 

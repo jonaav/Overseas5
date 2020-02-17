@@ -10,8 +10,8 @@ using Persistencia;
 namespace Persistencia.Migrations
 {
     [DbContext(typeof(DB_OverseasContext))]
-    [Migration("20200206185719_modifiedTraduccion")]
-    partial class modifiedTraduccion
+    [Migration("20200217003858_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -451,7 +451,7 @@ namespace Persistencia.Migrations
 
                     b.HasIndex("IdTipoEvaluacion");
 
-                    b.ToTable("TCursoTEvaluacion");
+                    b.ToTable("TipoCursoTipoEvaluacion");
                 });
 
             modelBuilder.Entity("Entidades.TipoEvaluacion", b =>
