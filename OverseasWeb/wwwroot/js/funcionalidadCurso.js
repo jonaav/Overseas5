@@ -260,7 +260,7 @@ function ListarCursos() {
     let nombreCurso = tipoCurso.nombreCurso;    
     let detalle = '-';    
     let nombreDocente;
-    let tituloCurso = '';    
+    let tituloCurso;    
     MostrarTablaListaCursos();
     $.ajax({
         type: "get",
@@ -272,12 +272,13 @@ function ListarCursos() {
             if (res != "") {
                 tablaCursos.clear().destroy();
                 $.each(res, function (i, res) {
-                    tituloCurso += res.idioma + ' - ';                   
+                    tituloCurso = ''+ res.idioma + ' - ';                                    
                     if (res.detalle != null) { detalle = res.detalle; tituloCurso += res.detalle + ' - '; }
                     if (res.docente != null) { nombreDocente = '<td>' + res.docente.persona.nombresPersona + ' ' + res.docente.persona.apellidosPersona + '</td>' }
                     else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                     tituloCurso += res.nivel + ' - ' + res.ciclo;
                     //Botones
+                    console.log('tituloCurso'+ tituloCurso);
                     btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ tituloCurso + "'"+
