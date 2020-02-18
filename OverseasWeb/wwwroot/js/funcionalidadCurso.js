@@ -4,6 +4,7 @@
 
 let btnRegresarRegular = $("#btnRegresarRegular");
 let btnRegresarPrivado = $("#btnRegresarPrivado");
+let btnGuardarCurso = $("#btnGuardarCurso");
 
 let containerListaCursos = $("#containerListadoCurso");
 let containerFormCurso = $("#containerFormCurso");
@@ -279,7 +280,7 @@ function ListarCursos() {
                     tituloCurso += res.nivel + ' - ' + res.ciclo;
                     //Botones
                     console.log('tituloCurso'+ tituloCurso);
-                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
+                    btnHorario = '<button rel="tooltip" title="Ver Horario" onclick ="CargarFormHorario(' + res.idCurso+','+ estadoCurso +', '+"'"+ programaCurso + "'"+', '+"'"+ res.fechaInicio.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ tituloCurso + "'"+
                                  ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
@@ -421,9 +422,16 @@ function DeshabilitarEdicionPeriodoCurso(decision){
     txtFechaFinCurso.prop('disabled', decision);
 }
 
+function DeshabilitarEdicionCurso(decision){
+    btnGuardarCurso.prop('disabled', decision);
+}
+
+
+
 function EditarCurso(id) {
     idCursoEdit = id;
     BuscarCurso(id);
+    (estadoCurso == 1) ? DeshabilitarEdicionCurso(false) : DeshabilitarEdicionCurso(true); 
     (programaCurso == 'Regular') ? DeshabilitarEdicionPeriodoCurso(true) : DeshabilitarEdicionPeriodoCurso(false);
     MostrarFormCurso();
 }
