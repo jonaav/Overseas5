@@ -32,14 +32,14 @@ namespace Services.ImplementacionService
             return _traduccionDao.EditarTraduccion(traduccion);
         }
 
-        public bool EliminarTraduccion(int idTraduccion)
+        public bool ModificarEstadoTraduccion(int idTraduccion, int estado)
         {
-            return _traduccionDao.EliminarTraduccion(idTraduccion);
+            return _traduccionDao.ModificarEstadoTraduccion(idTraduccion, estado);
         }
 
-        public List<Traduccion> ListarTraducciones()
+        public List<Traduccion> ListarTraducciones(int estado)
         {
-            return _traduccionDao.ListarTraducciones();
+            return _traduccionDao.ListarTraducciones(estado);
         }
     }
 }

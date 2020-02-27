@@ -28,7 +28,7 @@ var cabeceraDetalleCurso;
 let cursoFormHeader = $("#cursoFormHeader");
 
 let txtProgramaCurso = $("#txtProgramaCurso"); 
-let txtIdiomaCurso = $("#txtIdiomaCurso"); 
+let selectorIdiomaCurso = $("#selectorIdiomaCurso"); 
 let txtNivelCurso = $("#txtNivelCurso"); 
 let txtCicloCurso = $("#txtCicloCurso"); 
 let txtDetalleCurso = $("#txtDetalleCurso"); 
@@ -197,14 +197,13 @@ function OcultarIdioma(oculto) {
     //Se oculta cuando el nombre de curso es Ingles Niños o Ingles General
     if (oculto) {
         labelIdiomaCurso.hide();
-        txtIdiomaCurso.hide();
-        ListarIdiomasCurso();
-        txtIdiomaCurso.prop('disabled', true);
+        selectorIdiomaCurso.hide();        
+        selectorIdiomaCurso.prop('disabled', true);
     } else {
         labelIdiomaCurso.show();
-        txtIdiomaCurso.show();
+        selectorIdiomaCurso.show();
         ListarIdiomasCurso();
-        txtIdiomaCurso.prop('disabled', false);
+        selectorIdiomaCurso.prop('disabled', false);
     }
 }
 
@@ -244,8 +243,8 @@ function ModificarCabeceraDetalle() {
  */
 
 function MostrarCursosHabilitados(){
-    ActivarColorBotonCursosEstado('CursosHabilitados', 'success');
-    DesactivarColorBotonCursosEstado('CursosDeshabilitados', 'danger');
+    ActivarColorBotonEstado('CursosHabilitados', 'success');
+    DesactivarColorBotonEstado('CursosDeshabilitados', 'danger');
     estadoCurso = 1;
     ListarCursos();
 }
@@ -284,8 +283,8 @@ function ListarCursos() {
                                                                                                          ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ tituloCurso + "'"+
                                  ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
-                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success btnFormCurso"><span class="fa fa-pencil"></button>';
-                    btnEliminar = '<button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger"><span class="fa fa-trash"></button>';
+                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success spaceButton"><span class="fa fa-pencil"></button>';
+                    btnEliminar = ' <button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger spaceButton"><span class="fa fa-trash"></button>';
                     //Rellena datos
                     contenidoTablaCursos.append(
                         '<tr>' +   
@@ -318,21 +317,12 @@ function ListarIdiomasCurso() {
         type: "get",
         url: "/Especialidad/ListarEspecialidad",
         datatype: 'json',
-        success: function (res) {
-            console.log("IDIOMAS--");
-            console.log(res);
+        success: function (res) {            
             if (res != "") {
-                txtIdiomaCurso.html("");
-                $.each(res, function (i, res) {
-                    //Rellena datos
-                    if (res.descripcionEspecialidad == 'Inglés') {
-                        txtIdiomaCurso.append(
-                            '<option selected value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
-                    } else {
-                        txtIdiomaCurso.append(
-                            '<option value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
-                    }
-                    console.log(txtIdiomaCurso.val());
+                selectorIdiomaCurso.html("");
+                selectorIdiomaCurso.append('<option selected value="0"> </option>');
+                $.each(res, function (i, res) {                    
+                    selectorIdiomaCurso.append('<option value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
                 });
             }
         }
@@ -397,7 +387,7 @@ function BuscarCurso(id) {
             console.log(res);
             if (res != "") {
                 txtProgramaCurso.val(res.programa);
-                txtIdiomaCurso.val(res.idioma);
+                selectorIdiomaCurso.val(res.idioma);
                 txtNivelCurso.val(res.nivel);
                 txtCicloCurso.val(res.ciclo);
                 txtFechaInicioCurso.val(res.fechaInicio.substr(0,10));
@@ -443,7 +433,7 @@ function GuardarCurso() {
     let nuevoCurso = {
         IdCurso: idCursoEdit,
         Programa: programaCurso,
-        Idioma: txtIdiomaCurso.val(),
+        Idioma: selectorIdiomaCurso.val(),
         Nivel: txtNivelCurso.val(),
         Ciclo: txtCicloCurso.val(),
         FechaInicio: txtFechaInicioCurso.val(),
@@ -530,7 +520,7 @@ function EliminarCurso(id) {
 
 function VerificarCamposVaciosCurso() {
     let valido = 
-        VerificarCampoVacio("IdiomaCurso") +
+        VerificarSelectorVacio("IdiomaCurso") +
         VerificarCampoVacio("NivelCurso") +
         VerificarCampoVacio("CicloCurso") +
         VerificarCampoVacio("FechaInicioDeCurso") +

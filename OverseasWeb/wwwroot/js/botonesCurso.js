@@ -14,12 +14,12 @@ function DesactivarColorBoton(boton){
     
 }
 
-function ActivarColorBotonCursosEstado(boton, color){
+function ActivarColorBotonEstado(boton, color){
     $('#btn'+boton).removeClass('btn-outline-'+ color);
     $('#btn'+boton).addClass('btn-'+ color);  
 }
 
-function DesactivarColorBotonCursosEstado(boton, color){
+function DesactivarColorBotonEstado(boton, color){
     $('#btn'+boton).removeClass('btn-'+ color);
     $('#btn'+boton).addClass('btn-outline-' + color);
 }

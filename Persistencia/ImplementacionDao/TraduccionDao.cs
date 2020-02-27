@@ -50,14 +50,14 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public bool EliminarTraduccion(int idTraduccion)
+        public bool ModificarEstadoTraduccion(int idTraduccion, int estado)
         {
             try
             {
                 Traduccion traduccion = BuscarTraduccion(idTraduccion);
                 if (traduccion != null)
                 {                    
-                    traduccion.EstadoTraduccion = 0;
+                    traduccion.EstadoTraduccion = estado;
                     _context.Traduccion.Attach(traduccion);
                     _context.Traduccion.Update(traduccion);
                     _context.SaveChanges();
@@ -74,8 +74,8 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public List<Traduccion> ListarTraducciones() => _context.Traduccion
-                                                        .Where(t => t.EstadoTraduccion == 1)
+        public List<Traduccion> ListarTraducciones(int estado) => _context.Traduccion
+                                                        .Where(t => t.EstadoTraduccion == estado)
                                                         .Include(t => t.Docente)
                                                             .ThenInclude(d => d.Persona)
                                                         .ToList();

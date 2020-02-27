@@ -25,9 +25,9 @@ namespace OverseasWeb.Controllers
             return View();
         }
 
-        public IActionResult Listar()
+        public IActionResult Listar( int estado)
         {
-            return Json(_traduccionService.ListarTraducciones());
+            return Json(_traduccionService.ListarTraducciones(estado));
         }
 
         public IActionResult BuscarTraduccion(int idTraduccion)
@@ -58,10 +58,10 @@ namespace OverseasWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult EliminarTraduccion(int idTraduccion)
+        public IActionResult ModificarEstadoTraduccion(int idTraduccion, int estado)
         {
-            if(_traduccionService.EliminarTraduccion(idTraduccion))
-                return Json("Eliminado");
+            if(_traduccionService.ModificarEstadoTraduccion(idTraduccion, estado))
+                return Json("Modificado");
             else
                 return Json("");
         }

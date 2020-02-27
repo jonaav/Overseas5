@@ -60,7 +60,7 @@ function msgExitoTraduccion(msg){
     }).then(
         function () {
             if (true) {                                                            
-                ListarTraducciones();                                                                              
+                MostrarTraduccionesPendientes();                                                                              
             }
         }
     )      

@@ -71,14 +71,7 @@
     let columnasHorario = "";
     cabeceraTablaHorarios.html("");
     (programaCursoHorario == "Privado") ? columnasHorario = '<th> N° Sesión </th> <th> Fecha Sesión </th>' : columnasHorario = '<th> Dia </th>';
-    cabeceraTablaHorarios.append('<tr>'+                 
-        columnasHorario +
-        '<th>Hora Inicio</th>'+
-        '<th>Hora Fin</th>'+
-        '<th>Ambiente</th>'+
-        '<th hidden></th>'+
-        '<th></th>'+            
-        '</tr>');
+    cabeceraTablaHorarios.append('<tr>'+ columnasHorario + '<th>Hora Inicio</th>'+'<th>Hora Fin</th>'+'<th>Ambiente</th>'+'<th hidden></th>'+'<th></th>'+'</tr>');
   }
 
   function ModificarBotonGuardar(accion, boton){
@@ -98,7 +91,7 @@
         url: "/Horario/" + accionHorario,            
         dataType:"json",            
         data: {
-            idCurso : idCursoHorario                
+            idCurso : idCursoHorario               
         },
         success: function (res) {      
             console.log("horarios: ");
