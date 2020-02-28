@@ -12,15 +12,16 @@
                 <div class="col-md-12">
                     <div class="containerListadoTraduccion">
                         <div class="card">
-                            <div class="card-body">
-                                <div class="card-title text-center">
-                                    <h3>Lista de Traducciones</h3>
-                                </div>
+                            <div class="card-body">                            
                                 <div class="form-row">
-                                        <div class="col-2">
+                                        <div class="col-md-2">
                                             <button type="button" id="btnAgregarTraduccion" class="btn btn-outline-secondary">Nueva Traduccion</button>
-                                        </div>                                                                                                                    
-                                    </div>
+                                        </div>       
+                                        <div class="col-md-4">
+                                            <button onclick="MostrarTraduccionesPendientes()" id="btnTraduccionesPendientes" type="button" class="btn btn-outline-warning">Pendientes</button>
+                                            <button onclick="MostrarTraduccionesEntregadas()" id="btnTraduccionesEntregadas" type="button" class="btn btn-outline-success">Entregadas</button>
+                                        </div>                                                                                                             
+                                </div>
                                 <div class="table-responsive ">
                                     <table class="table table-hover table-sm" style="width:100%" id="tablaTraduccion">
                                         <thead>
@@ -33,12 +34,11 @@
                                                 <th>Fecha Traduccion</th>
                                                 <th>Idioma Origen</th>
                                                 <th>Idioma Destino</th>
-                                                <th></th>
-                                                <th></th>
+                                                <th></th>                                                
                                             </tr>
                                         </thead>
                                         <tbody id="contenidoTablaTraduccion">
-
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -49,8 +49,8 @@
             </div>
         </div> 
         <div id="containerRegistroTraduccion">
-            <partial name="~/Views/Traduccion/CrearTraduccion.cshtml">  
-            <partial name="~/Views/Curso/_ModalBuscarDocente.cshtml"></partial>          
+            <partial name="~/Views/Traduccion/_FormTraduccion.cshtml">  
+            <partial name="~/Views/Curso/_ModalBuscarDocente.cshtml">        
         </div>       
     </div>
 

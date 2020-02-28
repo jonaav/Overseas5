@@ -7,7 +7,7 @@ namespace Persistencia.InterfazDao
 {
     public interface ITraduccionDao
     {
-        List<Traduccion> ListarTraducciones();
+        List<Traduccion> ListarTraducciones(int estado);
 
         Traduccion BuscarTraduccion(int idTraduccion);
 
@@ -15,7 +15,7 @@ namespace Persistencia.InterfazDao
 
         bool EditarTraduccion(Traduccion traduccion);
 
-        bool EliminarTraduccion(int idTraduccion);
+        bool ModificarEstadoTraduccion(int idTraduccion, int estado);
 
         int CantidadDeTraduccionesPendientes();
 

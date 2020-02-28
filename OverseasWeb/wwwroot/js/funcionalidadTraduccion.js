@@ -10,28 +10,29 @@
  let containerFormTraduccion = $('#containerRegistroTraduccion'); 
  let txtClienteTraduccion = $('#txtClienteTraduccion');
  let txtDetalleTraduccion = $('#txtDetalleTraduccion');
- let txtIdiomaOrigen = $('#txtIdiomaOrigen');
- let txtIdiomaDestino =  $('#txtIdiomaDestino');
+ let selectorIdiomaOrigen = $('#selectorIdiomaOrigen');
+ let selectorIdiomaDestino =  $('#selectorIdiomaDestino');
  let txtFechaTraduccion = $('#txtFechaTraduccion');
  let txtTipoTraduccion = $('#txtTipoTraduccion');
  let txtDocenteTraduccion = $('#txtDocenteTraduccion');
 
  let idTraduccionEdit = 0;
-
+ let estadoTraduccion = 1;
 
 
 if(tablaTraduccion.is(':visible')){    
     cambiarTitulo("TRADUCCIONES");
     datatableTraduccion = tablaTraduccion.DataTable(dataTableConfig); 
-    ListarTraducciones();
+    MostrarTraduccionesPendientes();
+    ListarIdiomasTraduccion();
 }
 
 
 function LimpiarFormTraduccion(){    
     txtClienteTraduccion.val("");
     txtDetalleTraduccion.val("");
-    txtIdiomaOrigen.val("");
-    txtIdiomaDestino.val(""); 
+    selectorIdiomaOrigen.val("");
+    selectorIdiomaDestino.val(""); 
     txtFechaTraduccion.val("");
     txtTipoTraduccion.val("");
     idTraduccionEdit = 0;
@@ -51,9 +52,6 @@ $('#checkBoxDocente').on('change',function(){
     }
 })
 
-
-
-
 function EditarTraduccion(id){
     idTraduccionEdit = id;
     BuscarTraduccion(id);
@@ -72,8 +70,8 @@ function BuscarTraduccion(idTrad){
             if(traduccion!=""){                                
                 txtClienteTraduccion.val(traduccion.clienteTraduccion);
                 txtDetalleTraduccion.val(traduccion.detalleTraduccion);
-                txtIdiomaOrigen.val(traduccion.idiomaOrigenTraduccion);
-                txtIdiomaDestino.val(traduccion.idiomaDestinoTraduccion);
+                selectorIdiomaOrigen.val(traduccion.idiomaOrigenTraduccion);
+                selectorIdiomaDestino.val(traduccion.idiomaDestinoTraduccion);
                 txtFechaTraduccion.val(traduccion.fechaTraduccion.substr(0, 10));  
                 txtTipoTraduccion.val(traduccion.tipoTraduccion); 
                 idDocenteTradSelec = traduccion.idDocente;
@@ -114,24 +112,70 @@ $('#btnAgregarTraduccion').click(function(){
     //SE ESTABLECE DATOS POR DEFECTO EN EL FORM                                            
 });
 
+function MostrarTraduccionesPendientes(){
+    ActivarColorBotonEstado('TraduccionesPendientes', 'warning');
+    DesactivarColorBotonEstado('TraduccionesEntregadas', 'success');
+    estadoTraduccion = 1;
+    ListarTraducciones();
+}
+
+function MostrarTraduccionesEntregadas(){
+    ActivarColorBotonEstado('TraduccionesEntregadas', 'success');
+    DesactivarColorBotonEstado('TraduccionesPendientes', 'warning');
+    estadoTraduccion = 2;
+    ListarTraducciones();
+}
+
+
+/*
+ * RELLENAR SELECT IDIOMAS
+ */
+
+function ListarIdiomasTraduccion() {
+    $.ajax({
+        type: "get",
+        url: "/Especialidad/ListarEspecialidad",
+        datatype: 'json',
+        success: function (res) {            
+            if (res != "") {
+                selectorIdiomaOrigen.html("");
+                selectorIdiomaDestino.html("");
+                selectorIdiomaOrigen.append('<option selected value="0"> </option>');
+                selectorIdiomaDestino.append('<option selected value="0"> </option>');
+                $.each(res, function (i, res) {                    
+                    selectorIdiomaOrigen.append('<option value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
+                    selectorIdiomaDestino.append('<option value="' + res.descripcionEspecialidad + '">' + res.descripcionEspecialidad + '</option>');
+                });
+            }
+        }
+    });
+}
+
+
 
 function ListarTraducciones(){
-    var nombreDocente = "";           
-    var id = 0;
+    let nombreDocente = "";           
+    let id = 0;
+    let btnEditarTrad, btnEliminarTrad, btnProcesarTrad = '';
     CargarTablaListadoTraduccion();
     $.ajax({
         type: 'GET',
         url: "/Traduccion/Listar",                                             
         dataType: 'json',  
+        data : { estado : estadoTraduccion},
         success: function (traducciones) {
             $("#contenidoTablaTraduccion").html("");                        
             if(traducciones!=""){ 
                 console.log(traducciones);                              
                 datatableTraduccion.clear().destroy(); 
                 $.each(traducciones, function (i, traduccion){ 
-                    id++;
-                    if (traduccion.docente != null) { nombreDocente = '<td>' + traduccion.docente.persona.nombresPersona + ' ' + traduccion.docente.persona.apellidosPersona + '</td>' }
-                    else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }                   
+                    id++;                    
+                    (traduccion.docente != null) ? nombreDocente = '<td>' + traduccion.docente.persona.nombresPersona + ' ' + traduccion.docente.persona.apellidosPersona + '</td>' 
+                    : nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; 
+                    if(estadoTraduccion == 1)
+                        btnProcesarTrad = '<button onclick="EntregarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-success spaceButton" rel="tooltip" title="Entregar"><span class="fa fa-check" style="color:black"></button>'; 
+                    btnEditarTrad = '<button onclick="EditarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-warning spaceButton" rel="tooltip" title="Editar"><span class="fa fa-edit" style="color:black"></button>';
+                    btnEliminarTrad = '<button onclick="EliminarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-danger spaceButton" rel="tooltip" title="Eliminar"><span class="fa fa-trash" style="color:black"></button>';
                     $('#contenidoTablaTraduccion').append('<tr>' +
                     '<td>' + id + '</td>' +
                     '<td>' + traduccion.tipoTraduccion + '</td>' +
@@ -141,13 +185,9 @@ function ListarTraducciones(){
                     '<td>' + traduccion.fechaTraduccion.substr(0,10) + '</td>' +
                     '<td>' + traduccion.idiomaOrigenTraduccion + '</td>' +
                     '<td>' + traduccion.idiomaDestinoTraduccion + '</td>' +                    
-                    '<td>  <button  onclick="EditarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-warning"><span class="fa fa-edit" style="color:black"></button> '+
-                    '</td>'+
-                    '<td>'+
-                          '<button  onclick="EliminarTraduccion('+traduccion.idTraduccion+')" class="btn btn-outline-danger"><span class="fa fa-trash" style="color:black"></button>'+ 
-                    '</td>'+
+                    '<td>  <div class="form-check-inline">' + btnProcesarTrad + btnEditarTrad + btnEliminarTrad + ' </div> </td>' +
                     '</tr>');
-                });                
+                });
                 datatableTraduccion = tablaTraduccion.DataTable(dataTableConfig);                                                                               
             }                        
         }      
@@ -155,8 +195,8 @@ function ListarTraducciones(){
 }
 
 function ValidarCamposTraduccion(){
-    let resultado = VerificarCampoVacio("ClienteTraduccion") + VerificarCampoVacio("DetalleTraduccion") + VerificarCampoVacio("IdiomaOrigen") +
-    VerificarCampoVacio("IdiomaDestino") + VerificarCampoVacio("FechaTraduccion") + VerificarCampoVacio("TipoTraduccion");    
+    let resultado = VerificarCampoVacio("ClienteTraduccion") + VerificarCampoVacio("DetalleTraduccion") + VerificarSelectorVacio("IdiomaOrigen") +
+    VerificarSelectorVacio("IdiomaDestino") + VerificarCampoVacio("FechaTraduccion") + VerificarCampoVacio("TipoTraduccion");    
 
     return (resultado > 0) ? 'Incorrecto' : 'Correcto';            
 }
@@ -175,8 +215,8 @@ function GuardarEditarTraduccion(metodo){
                 ClienteTraduccion : txtClienteTraduccion.val(),
                 TipoTraduccion : txtTipoTraduccion.val(),
                 DetalleTraduccion : txtDetalleTraduccion.val(),
-                IdiomaOrigenTraduccion : txtIdiomaOrigen.val(),
-                IdiomaDestinoTraduccion : txtIdiomaDestino.val(),
+                IdiomaOrigenTraduccion : selectorIdiomaOrigen.val(),
+                IdiomaDestinoTraduccion : selectorIdiomaDestino.val(),
                 FechaTraduccion : txtFechaTraduccion.val(),
                 EstadoTraduccion : 1,            
                 IdDocente : idDocenteTradSelec
@@ -192,6 +232,7 @@ function GuardarEditarTraduccion(metodo){
 }
 
 function EliminarTraduccion(id){
+    estadoTraduccion = 0;
     swal({
         title: "Mensaje de Confirmacion",
         text: "¿Desea eliminar esta traducción?",
@@ -203,9 +244,10 @@ function EliminarTraduccion(id){
             if(willDelete){                        
                 $.ajax({
                     type: 'POST',
-                    url: "/Traduccion/EliminarTraduccion",
+                    url: "/Traduccion/ModificarEstadoTraduccion",
                     data: {
-                        idTraduccion : id,                                
+                        idTraduccion : id,   
+                        estado : estadoTraduccion                             
                     },
                     datatype: 'json',
                     success: function (response) {
@@ -219,6 +261,27 @@ function EliminarTraduccion(id){
             }            
     });
 }
+
+function EntregarTraduccion(id){
+    estadoTraduccion = 2;
+    $.ajax({
+        type: 'POST',
+        url: "/Traduccion/ModificarEstadoTraduccion",
+        data: {
+            idTraduccion : id,   
+            estado : estadoTraduccion                             
+        },
+        datatype: 'json',
+        success: function (response) {
+            msgExitoTraduccion('Traduccion Entregada exitosamente.');                        
+        }
+    });
+
+}
+
+
+
+
 
 function ListarDocentesActivosTraduccion() {
     let btnAgregar = "", nombres, apellidos;

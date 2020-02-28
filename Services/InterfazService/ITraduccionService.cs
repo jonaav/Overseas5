@@ -7,7 +7,7 @@ namespace Services.InterfazService
 {
     public interface ITraduccionService
     {
-        List<Traduccion> ListarTraducciones();
+        List<Traduccion> ListarTraducciones( int estado);
 
         Traduccion BuscarTraduccion(int idTraduccion);
 
@@ -15,6 +15,6 @@ namespace Services.InterfazService
 
         bool EditarTraduccion(Traduccion traduccion);
 
-        bool EliminarTraduccion(int idTraduccion);
+        bool ModificarEstadoTraduccion(int idTraduccion, int estado);
     }
 }

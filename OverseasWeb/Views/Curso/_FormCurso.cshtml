@@ -20,21 +20,21 @@
                                     <option selected value="Grupal">Grupal</option>
                                     <option value="Personalizado">Personalizado</option>
                                 </select>
-                                <span class="errores" id="errorModalidadCurso">Seleccione una modalidad</span>
+                                <span class="errores" id="errorModalidadCurso">*Seleccione una modalidad</span>
                             </div>
                         </div>
 
                         <div class="form-group form-row">
-                            <div class="col-6">
+                            <div class="col-md-6">                                 
                                 <label class="control-label" id="labelIdiomaCurso">Idioma</label>
-                                <select class="custom-select form-control" id="txtIdiomaCurso">
+                                <select class="form-control" id="selectorIdiomaCurso">
                                 </select>
-                                <span class="errores" id="errorIdiomaCurso">Seleccione un idioma</span>
+                                <span class="errores" id="errorIdiomaCurso">*Seleccione un idioma</span>                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-6">
                                 <label id="labelDetalleCurso" class="control-label"></label>
                                 <input id="txtDetalleCurso" class="form-control" />
-                                <span class="errores" id="errorDetalleCurso">El campo esta vacio</span>
+                                <span class="errores" id="errorDetalleCurso">*El campo esta vacio</span>
                             </div>
                         </div>
 
@@ -42,12 +42,12 @@
                             <div class="col-6">
                                 <label class="control-label">Nivel</label>
                                 <input id="txtNivelCurso" class="form-control" />
-                                <span class="errores" id="errorNivelCurso">El campo esta vacio</span>
+                                <span class="errores" id="errorNivelCurso">*Ingrese un Nivel</span>
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Ciclo</label>
                                 <input id="txtCicloCurso" class="form-control" />
-                                <span class="errores" id="errorCicloCurso">El campo esta vacio</span>
+                                <span class="errores" id="errorCicloCurso">*Ingrese un ciclo</span>
                             </div>
                         </div>
 
@@ -58,7 +58,7 @@
                                     <input type="text"  class="form-control mdate" id="txtFechaInicioDeCurso" placeholder="yyyy-mm-dd">
                                     <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                 </div>                                 
-                                <span class="errores" id="errorFechaInicioDeCurso">Ingrese una fecha inicio</span>
+                                <span class="errores" id="errorFechaInicioDeCurso">*Ingrese una fecha inicio</span>
                             </div>
                             <div class="col-6">
                                 <label class="control-label">Fecha Fin</label>
@@ -66,7 +66,7 @@
                                     <input type="text"  class="form-control mdate" id="txtFechaFinDeCurso" placeholder="yyyy-mm-dd">
                                     <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                 </div>                                 
-                                <span class="errores" id="errorFechaFinDeCurso">Ingrese una fecha fin</span>
+                                <span class="errores" id="errorFechaFinDeCurso">*Ingrese una fecha fin</span>
                             </div>
                         </div>
 
@@ -74,13 +74,13 @@
                             <label class="control-label">Docente</label>
                             <div class="form-check-inline col-12">
                                 <input id="txtDocenteCurso" class="form-control"/>
-                                <button onclick='ListarDocentesActivosCurso()' type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#modalBuscarDocente" rel="tooltip" title="Buscar Docente">
+                                <button onclick='ListarDocentesActivosCurso()' type="button" class="btn btn-outline-info spaceButton" data-toggle="modal" data-target="#modalBuscarDocente" rel="tooltip" title="Buscar Docente">
                                     <span class="fa fa-search"></span>
                                 </button>
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <button type="button" class="btn btn-info" onclick="GuardarCurso()">Guardar</button>
+                            <button id = 'btnGuardarCurso' type="button" class="btn btn-info" onclick="GuardarCurso()">Guardar</button>
                             <button type="button" class="btn btn-danger" onclick="ListarCursos()" asp-action="ListarCursosRegulares">Cancelar</button>                            
                         </div>
                     </form>

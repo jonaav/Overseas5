@@ -21,6 +21,7 @@
  let contenidoTablaHorarios = $('#contenidoTablaHorarios');
  let containerFormHorario = $('#containerFormHorario');
  let btnGuardarHorario = $("#btnGuardarHorario");
+ let btnAgregarHorario = $('#btnAgregarHorario');
  let selectorDia = $('#selectorHorarioDia');
  let txtHoraInicio = $('#txtHoraInicio');
  let txtHoraFin = $('#txtHoraFin');
@@ -41,23 +42,28 @@
    * FALTA CAMBIAR, pero ya me dio pereza xd
    */
 
-  function CargarFormHorario(idCurso, programa, fechaInicio, fechaFin, tituloCurso){ 
+  function DeshabilitarEdicionHorarios(decision){
+      btnGuardarHorario.prop('disabled', decision);
+      btnAgregarHorario.prop('disabled', decision);
+  }
+
+  function MostrarFormHorario(){
+      containerListaCursos.hide();
+      containerFormHorario.show();
+      LimpiarFormHorario();
+  }
+
+  function CargarFormHorario(idCurso, estadoCursoHorario, programa, fechaInicio, fechaFin, tituloCurso){ 
     idCursoHorario = idCurso;
     programaCursoHorario = programa;
     fechaInicioCursoHorario = fechaInicio;
     fechaFinCursoHorario = fechaFin;    
-    containerListaCursos.hide();
-    containerFormHorario.show();
+    MostrarFormHorario();    
     AddTituloCursoAlFormHorario(tituloCurso);
-    if(programa == "Privado"){
-        divDatosHorarioPrivado.show();
-        divDiaHorario.hide();
-    }else{
-        divDiaHorario.show();
-        divDatosHorarioPrivado.hide();                           
-    }            
-    AgregarCabeceraTablaHorario();
-    contenidoTablaHorarios.html("");
+    (programa == "Privado") ? ( divDatosHorarioPrivado.show(), divDiaHorario.hide()) :     
+                              ( divDiaHorario.show(), divDatosHorarioPrivado.hide());   
+    (estadoCursoHorario == 1) ? DeshabilitarEdicionHorarios(false) : DeshabilitarEdicionHorarios(true);                                          
+    AgregarCabeceraTablaHorario();    
     BuscarHorariosCurso();
   }
   
@@ -65,14 +71,7 @@
     let columnasHorario = "";
     cabeceraTablaHorarios.html("");
     (programaCursoHorario == "Privado") ? columnasHorario = '<th> N° Sesión </th> <th> Fecha Sesión </th>' : columnasHorario = '<th> Dia </th>';
-    cabeceraTablaHorarios.append('<tr>'+                 
-        columnasHorario +
-        '<th>Hora Inicio</th>'+
-        '<th>Hora Fin</th>'+
-        '<th>Ambiente</th>'+
-        '<th hidden></th>'+
-        '<th></th>'+            
-        '</tr>');
+    cabeceraTablaHorarios.append('<tr>'+ columnasHorario + '<th>Hora Inicio</th>'+'<th>Hora Fin</th>'+'<th>Ambiente</th>'+'<th hidden></th>'+'<th></th>'+'</tr>');
   }
 
   function ModificarBotonGuardar(accion, boton){
@@ -86,12 +85,13 @@
   function BuscarHorariosCurso(){ 
     let accionHorario = "", numSesion = "", fechaSesion = "", horario, id = 0;    
     (programaCursoHorario == 'Regular') ? accionHorario = 'BuscarHorariosCurso' : accionHorario = 'BuscarSesionesCurso';    
+    contenidoTablaHorarios.html("");
     $.ajax({
         type: 'GET',
         url: "/Horario/" + accionHorario,            
         dataType:"json",            
         data: {
-            idCurso : idCursoHorario                
+            idCurso : idCursoHorario               
         },
         success: function (res) {      
             console.log("horarios: ");
@@ -115,7 +115,6 @@
         }
     });
 }
-
 
 function SalirFormHorario(){
     LimpiarFormHorario();
