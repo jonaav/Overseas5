@@ -111,10 +111,27 @@ namespace OverseasWeb.Controllers
         /*
          * DOCENTE 
          */
+
+
         [Authorize(Roles = "Docente")]
         public IActionResult InicioDocente()
         {
             return View();
         }
+
+        [Authorize(Roles = "Docente")]
+        public IActionResult BuscarHorariosDelDiaDocente()
+        {
+            var userInfo = HttpContext.User.Identity;
+            List<Sesion> sesiones = _inicioDocenteService.BuscarHorariosDelDiaDocente(userInfo.Name);
+            return Json(sesiones);
+        }
+
+
+
+
+
+
+
     }
 }

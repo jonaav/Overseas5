@@ -47,6 +47,18 @@ namespace Services.ImplementacionService
 
 
 
+
+        /*
+         *  Listar Cursos Habiles Del Docente - estado = 1
+         */
+        public List<Curso> ListarCursosHabilesDelDocente(string correo)
+        {
+            List<Curso> cursos = _cursoDao.ListarCursosHabilesDelDocente(correo);
+            return cursos;
+        }
+
+
+
         /*
          *  Listar Docentes Habiles - estado = 1
          */
@@ -145,13 +157,6 @@ namespace Services.ImplementacionService
             }
             return mensaje;
         }
-
-
-
-
-
-
-
 
     }
 }

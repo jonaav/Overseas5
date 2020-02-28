@@ -90,6 +90,7 @@ namespace OverseasWeb
             services.AddScoped<IHistorialEvaluacionDao, HistorialEvaluacionDao>();
 
 
+            services.AddScoped<IAsistenciaDao, AsistenciaDao>();
 
 
             //SERVICE
@@ -112,6 +113,7 @@ namespace OverseasWeb
 
 
             services.AddScoped<ICalificacionesService, CalificacionesServiceImpl>();
+            services.AddScoped<IAsistenciaService, AsistenciaServiceImpl>();
 
 
             

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Entidades;
 using Services.InterfazService;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace OverseasWeb.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class CursoEvaluacionController : Controller
     {
         private readonly ICursoEvaluacionService _cursoEvaluacionService;

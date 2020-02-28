@@ -16,7 +16,9 @@ namespace Persistencia.ImplementacionDao
             _context = context;
         }
 
-
+        /*
+         * BUSCAR HORARIOS DEL DIA ADMIN
+         */
         public List<Sesion> BuscarHorariosDelDia() => _context.Sesion
             .Where(s => s.FechaSesion == DateTime.Today)
             .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
@@ -24,6 +26,22 @@ namespace Persistencia.ImplementacionDao
             .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
             .ToList();
 
+
+
+        /*
+         * BUSCAR HORARIOS DEL DIA DE UN DOCENTE
+         */
+        public List<Sesion> BuscarHorariosDelDiaDocente(int idDocente) => _context.Sesion
+            .Where(s => (s.FechaSesion == DateTime.Today && s.Horario.Curso.Docente.IdDocente == idDocente))
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
+            .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
+            .ToList();
+
+
+        /*
+         * BUSCAR SESION
+         */
         public Sesion BuscarSesion(int idHorario)
         {
             Sesion sesion = new Sesion();

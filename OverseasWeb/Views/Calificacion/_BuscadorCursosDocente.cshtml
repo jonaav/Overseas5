@@ -1,0 +1,28 @@
+﻿
+<div>
+    <div class="form-check-inline p-2">
+        <div class="col">
+            <h4 class="color-pale-sky">CURSO</h4>
+        </div>
+        <div class="col">
+            <button class="btn btn-outline-info" onclick="ListarCursosDelDocente()" data-toggle="modal" data-target="#formCursosDocenteModal" rel="tooltip" title="Buscar curso">
+                <span class="fa fa-search"></span>
+            </button>
+        </div>
+    </div>
+
+    <div>
+        <table class="table table-hover table-bordered" id="tableCursoDocente">
+            <thead>
+                <tr>
+                    <th>PROGRAMA</th>
+                    <th>CURSO</th>
+                    <th>NIVEL</th>
+                    <th>PERIODO</th>
+                </tr>
+            </thead>
+            <tbody id="dataCursoDocenteSeleccionado">
+            </tbody>
+        </table>
+    </div>
+</div>

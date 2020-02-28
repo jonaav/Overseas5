@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "AsistenciaDocente";
+    Layout = "~/Views/Shared/_LayoutDocente.cshtml";
+}
+
+
+<div class="container mt-3" id="ViewAsistenciaDocente">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <partial name="~/Views/Calificacion/_BuscadorCursosDocente.cshtml">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="form-check-inline p-2">
+                            <div class="col">
+                                <h4 class="color-pale-sky">ESTUDIANTES</h4>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table class="table table-hover table-bordered" id="tableAsistenciasDocente">
+                                <thead>
+                                    <tr>
+                                        <th>APELLIDOS</th>
+                                        <th>NOMBRES</th>
+                                        <th>ASISTENCIA</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataAsistenciasDocente">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<partial name="~/Views/Calificacion/_ModalTablaCursosDocente.cshtml">

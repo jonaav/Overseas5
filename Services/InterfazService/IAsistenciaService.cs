@@ -5,8 +5,8 @@ using Entidades;
 
 namespace Services.InterfazService
 {
-    public interface IInicioDocenteService
+    public interface IAsistenciaService
     {
-        List<Sesion> BuscarHorariosDelDiaDocente(string username);
+        List<Asistencia> ListarAsistenciasPorSesion(int idCurso);
     }
 }

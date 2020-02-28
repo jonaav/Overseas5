@@ -9,7 +9,7 @@ namespace Persistencia.InterfazDao
     {
         bool RegistrarEvaluacion(Evaluacion evaluacion);
         bool EditarEvaluacion(Evaluacion evaluacion);
-        bool EliminarEvaluacion(int idEvaluacion);
+        Evaluacion BuscarEvaluacion(int idEvaluacion);
         List<Evaluacion> ListarEvaluacionesPorEstudianteYCurso(int idEstudiante, int idCurso);
     }
 }

@@ -11,7 +11,6 @@ using Services.InterfazService;
 
 namespace OverseasWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class InscripcionController : Controller
     {
         private readonly IInscripcionService _inscripcionService;
@@ -30,11 +29,13 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarInscripciones()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult ListarInscripcionesPorCurso(int idCurso)
         {
             List<Inscripcion> inscripciones = _inscripcionService.ListarInscripciones(idCurso);
@@ -45,6 +46,7 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarEstudiantesNoInscritos(int idCurso)
         {
             List<Estudiante> estudiantes = _inscripcionService.BuscarEstudiantesNoInscritos(idCurso);
@@ -54,6 +56,7 @@ namespace OverseasWeb.Controllers
                 return Json("");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarCursosHabiles()
         {
             List<Curso> cursos = _cursoService.ListarCursosHabiles();
@@ -63,6 +66,7 @@ namespace OverseasWeb.Controllers
                 return Json("");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult BuscarCurso(int idCurso)
         {
             Curso curso = _cursoService.BuscarCursoPorID(idCurso);
@@ -72,11 +76,13 @@ namespace OverseasWeb.Controllers
                 return Json("");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RegistrarInscripcion()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult RegistrarInscripcion(int idCurso, int idEstudiante)
         {
@@ -88,6 +94,7 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AnularInscripcion(int id)
         {

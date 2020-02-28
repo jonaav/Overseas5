@@ -30,6 +30,17 @@ namespace Persistencia.ImplementacionDao
 
 
         /*
+         *  Buscar Evaluacion
+         */
+
+        public Evaluacion BuscarEvaluacion(int idEvaluacion) => _context.Evaluacion
+            .Where(e => e.IdEvaluacion == idEvaluacion)
+            .Include(e => e.TipoEvaluacion)
+            .FirstOrDefault();
+
+        
+
+        /*
          *  Registrar Evaluacion
          */
 

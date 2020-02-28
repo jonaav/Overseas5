@@ -10,7 +10,6 @@ using Services.InterfazService;
 
 namespace OverseasWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class CursoController : Controller
     {
         private readonly ICursoService _cursoService;        
@@ -24,25 +23,29 @@ namespace OverseasWeb.Controllers
 
         #region Curso Regular
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarCursosPrivados()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarCursosRegular()
         {
             return View();
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarCursos(string nombreCurso, string programa, int estado)
         {
             List<Curso> cursos = _cursoService.ListarCursos(nombreCurso, programa, estado);
             return Json(cursos);
 
         }
-        
 
+
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarDocentes()
         {
             List<Docente> docentes = _cursoService.ListarDocentes();
@@ -51,18 +54,21 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult BuscarDocentePorID(int idDocente)
         {
             Docente docente = _cursoService.BuscarDocentePorID(idDocente);
             return Json(docente);
         }
 
+        [Authorize]
         public IActionResult BuscarCursoPorID(int idCurso)
         {
             Curso curso = _cursoService.BuscarCursoPorID(idCurso);
             return Json(curso);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult BuscarTipoCurso(string nombreCurso)
         {
             TipoCurso tipoCurso = _cursoService.BuscarTipoCursoPorNombre(nombreCurso);
@@ -70,11 +76,13 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult RegistrarCurso()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult RegistrarCurso(Curso curso)
         {
@@ -83,6 +91,7 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EditarCurso(Curso curso)
         {
@@ -91,6 +100,7 @@ namespace OverseasWeb.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EliminarCurso(int idCurso)
         {

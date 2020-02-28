@@ -9,6 +9,7 @@ namespace Persistencia.InterfazDao
     {
         List<Sesion> ListarSesionesCurso(int idCurso);
         List<Sesion> BuscarHorariosDelDia();
+        List<Sesion> BuscarHorariosDelDiaDocente(int idDocente);
         List<Sesion> BuscarSesionesCurso(int idCurso);
         bool CrearSesion(Sesion sesion);
 

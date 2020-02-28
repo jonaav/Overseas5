@@ -63,17 +63,31 @@ namespace Services.ImplementacionService
         }
 
 
-        public String EditarEvaluacion(Evaluacion evaluacion)
+        public Evaluacion BuscarEvaluacion(int idEvaluacion)
+        {
+            Evaluacion evaluacion = _evaluacionDao.BuscarEvaluacion(idEvaluacion);
+            return evaluacion;
+        }
+
+
+
+        public String EditarEvaluacion(int idEvaluacion, int nota )
         {
             String mensaje = "";
+            Evaluacion evaluacion = _evaluacionDao.BuscarEvaluacion(idEvaluacion);
+            evaluacion.CalificacionEvaluacion = nota;
+            if (_evaluacionDao.EditarEvaluacion(evaluacion))
+            {
+                mensaje = "Calificacion Actualizada";
+            }
             return mensaje;
         }
 
-        public String EliminarCalificaciones(int idHistorial)
-        {
-            String mensaje = "";
-            return mensaje;
-        }
+        //public String EliminarCalificaciones(int idHistorial)
+        //{
+        //    String mensaje = "";
+        //    return mensaje;
+        //}
 
 
         public List<Evaluacion> VerNotasDelEstudiantePorCurso(int idCurso, int idEstudiante)

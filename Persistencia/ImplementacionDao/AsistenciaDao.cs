@@ -8,7 +8,7 @@ using Persistencia.InterfazDao;
 
 namespace Persistencia.ImplementacionDao
 {
-    public class AsistenciaDao
+    public class AsistenciaDao: IAsistenciaDao
     {
 
         private readonly DB_OverseasContext _context;
@@ -22,28 +22,30 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Listar Asistencias de un Estudiante en un Curso
          */
-        public List<Asistencia> ListarAsistenciasPorEstudianteYCurso (int idEstudiante, int idCurso) => _context.Asistencia
+        public List<Asistencia> ListarAsistenciasPorEstudianteYCurso(int idEstudiante, int idCurso) => _context.Asistencia
             .Where(a => (a.IdEstudiante == idEstudiante && a.Sesion.Horario.Curso.IdCurso == idCurso))
             .Include(a => a.Sesion).ToList();
 
-        
-        
+
+
 
         /*
          *  Listar Asistencias de un Docente en un Curso
          */
-        public List<Asistencia> ListarAsistenciasPorDocenteYCurso (int idCurso) => _context.Asistencia
+        public List<Asistencia> ListarAsistenciasPorDocenteYCurso(int idCurso) => _context.Asistencia
             .Where(a => a.Sesion.Horario.Curso.IdCurso == idCurso)
             .Include(a => a.Sesion).ToList();
 
-        
+
 
         /*
          *  Listar Asistencias de una Sesion
          */
-        public List<Asistencia> ListarAsistenciasPorSesion (int idSesion) => _context.Asistencia
-            .Where(a => a.IdSesion == idSesion)
-            .Include(a => a.Sesion).ToList();
+        public List<Asistencia> ListarAsistenciasPorSesion(int idCurso, DateTime fechaActual) => _context.Asistencia
+            .Where(a => (a.Sesion.Horario.Curso.IdCurso == idCurso && a.Sesion.FechaSesion == fechaActual))
+            .Include(a => a.Sesion)
+            .Include(a => a.Estudiante).ThenInclude(e => e.Persona)
+            .ToList();
 
 
         /*
@@ -100,13 +102,6 @@ namespace Persistencia.ImplementacionDao
         public int ContarAsistenciasDeDocente(int idCurso) => _context.Asistencia
             .Where(a => (a.Sesion.Horario.Curso.IdCurso == idCurso && a.Sesion.AsistenciaDocente == 1))
             .Include(a => a.Sesion).Count();
-
-
-
-
-
-
-
 
     }
 }

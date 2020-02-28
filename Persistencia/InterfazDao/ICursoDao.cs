@@ -9,6 +9,7 @@ namespace Persistencia.InterfazDao
     {
         List<Curso> ListarCursos(string nombreCurso, string programa, int estado);
         List<Curso> ListarCursosHabiles();
+        List<Curso> ListarCursosHabilesDelDocente(string correo);
         Curso BuscarCursoPorID(int idCurso);
         bool RegistrarCurso(Curso curso);
         bool EditarCurso(Curso curso);

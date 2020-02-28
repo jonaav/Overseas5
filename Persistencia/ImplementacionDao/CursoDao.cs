@@ -38,6 +38,16 @@ namespace Persistencia.ImplementacionDao
                                                         .ThenInclude(d => d.Persona)
                                                     .ToList();
         
+
+        /*
+         *  Listar Cursos Habiles
+         */
+        public List<Curso> ListarCursosHabilesDelDocente (string correo) => _context.Curso
+                                                            .Where(c => (c.Estado == 1 && c.Docente.Persona.CorreoPersona == correo))
+                                                            .Include(c => c.TipoCurso)
+                                                            .ToList();
+        
+
         /*
          *  Buscar Curso
          */
@@ -113,10 +123,6 @@ namespace Persistencia.ImplementacionDao
         public int CantidadDeCursosActivos() => _context.Curso
                                                     .Where(c => c.Estado == 1)
                                                     .Count();
-
-
-
-
 
     }
 }
