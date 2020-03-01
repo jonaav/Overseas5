@@ -38,11 +38,8 @@ namespace OverseasWeb.Controllers
         [HttpPost]
         public IActionResult RegistrarTraduccion(Traduccion traduccion)
         {            
-            bool registrado = _traduccionService.CrearTraduccion(traduccion);
-            if (registrado)
-                return Json("Correcto");
-            else
-                return Json("Incorrecto");
+            var mensaje = _traduccionService.CrearTraduccion(traduccion);
+            return Json(mensaje);                            
         }
 
 
@@ -50,20 +47,15 @@ namespace OverseasWeb.Controllers
         [HttpPost]
         public IActionResult EditarTraduccion(Traduccion traduccion)
         {
-            bool editado = _traduccionService.EditarTraduccion(traduccion);
-            if (editado)
-                return Json("Correcto");
-            else
-                return Json("Incorrecto");
+            var mensaje = _traduccionService.EditarTraduccion(traduccion);
+            return Json(mensaje);
         }
 
         [HttpPost]
         public IActionResult ModificarEstadoTraduccion(int idTraduccion, int estado)
         {
-            if(_traduccionService.ModificarEstadoTraduccion(idTraduccion, estado))
-                return Json("Modificado");
-            else
-                return Json("");
+            var mensaje = _traduccionService.ModificarEstadoTraduccion(idTraduccion, estado);
+            return Json(mensaje);
         }
 
     }

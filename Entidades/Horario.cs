@@ -16,6 +16,7 @@ namespace Entidades
         public int IdCurso { get; set; }
         [ForeignKey("IdAmbiente")]
         public int IdAmbiente { get; set; }
+        public int EstadoHorario { get; set; }
 
         public Curso Curso { get; set; }
 

@@ -20,6 +20,7 @@ let tipoCurso = {};
 let idDocenteSelec;
 let idCursoEdit = 0;
 let estadoCurso = 1;
+let idiomaVisible;
 
 var cabeceraDetalleCurso;
 
@@ -122,8 +123,8 @@ if ($("#ViewCursosPrivados").is(":visible")) {
 
 function SelecInglesGeneral() {
     BuscarTipoCurso('Inglés General');
-    OcultarIdioma(true);
-    OcultarDetalle(true);
+    OcultarIdioma(true);         
+    OcultarDetalle(true);      
     PintarBotonTipoCurso('InglesGeneral');        
 }
 
@@ -196,14 +197,17 @@ function OcultarDetalle(oculto) {
 function OcultarIdioma(oculto) {
     //Se oculta cuando el nombre de curso es Ingles Niños o Ingles General
     if (oculto) {
+        idiomaVisible = 0;
         labelIdiomaCurso.hide();
-        selectorIdiomaCurso.hide();        
+        selectorIdiomaCurso.hide();              
+        ListarIdiomasCurso();     
         selectorIdiomaCurso.prop('disabled', true);
     } else {
+        idiomaVisible = 1;
         labelIdiomaCurso.show();
         selectorIdiomaCurso.show();
-        ListarIdiomasCurso();
-        selectorIdiomaCurso.prop('disabled', false);
+        ListarIdiomasCurso();                
+        selectorIdiomaCurso.prop('disabled', false);        
     }
 }
 
@@ -213,7 +217,10 @@ function OcultarIdioma(oculto) {
 
 function MostrarFormCurso() {    
     containerFormCurso.show();
-    containerListaCursos.hide();        
+    containerListaCursos.hide();   
+    if(idiomaVisible == 0)
+        selectorIdiomaCurso.val('Inglés');     
+    
 };
 
 function MostrarTablaListaCursos(){    
@@ -250,17 +257,16 @@ function MostrarCursosHabilitados(){
 }
 
 function MostrarCursosDeshabilitados(){
-    ActivarColorBotonCursosEstado('CursosDeshabilitados', 'danger');
-    DesactivarColorBotonCursosEstado('CursosHabilitados', 'success');
+    ActivarColorBotonEstado('CursosDeshabilitados', 'danger');
+    DesactivarColorBotonEstado('CursosHabilitados', 'success');
     estadoCurso = 2;
     ListarCursos();
 }
 
 function ListarCursos() {    
     let nombreCurso = tipoCurso.nombreCurso;    
-    let detalle = '-';    
-    let nombreDocente;
-    let tituloCurso;    
+    let detalle = '-', tituloCurso, nombreDocente;
+    let btnHorario, btnEditar = '', btnDeshabilitar = '', btnEliminar;    
     MostrarTablaListaCursos();
     $.ajax({
         type: "get",
@@ -283,7 +289,10 @@ function ListarCursos() {
                                                                                                          ', '+"'"+ res.fechaFin.substr(0, 10)+ "'"+
                                                                                                          ', '+"'"+ tituloCurso + "'"+
                                  ')" class="btn btn-outline-info"><span class="fa fa-calendar"></button>';
-                    btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success spaceButton"><span class="fa fa-pencil"></button>';
+                    if(estadoCurso == 1){
+                        btnEditar = '<button rel="tooltip" title="Editar" onclick = "EditarCurso(' + res.idCurso + ')" class="btn btn-outline-success spaceButton"><span class="fa fa-pencil"></button>';
+                        btnDeshabilitar = '<button rel="tooltip" title="Deshabilitar" onclick = "DeshabilitarCurso(' + res.idCurso + ')" class="btn btn-outline-warning spaceButton"><span class="fa fa-power-off"></button>';
+                    }                    
                     btnEliminar = ' <button rel="tooltip" title="Eliminar" onclick = "EliminarCurso(' + res.idCurso + ')" class="btn btn-outline-danger spaceButton"><span class="fa fa-trash"></button>';
                     //Rellena datos
                     contenidoTablaCursos.append(
@@ -294,7 +303,7 @@ function ListarCursos() {
                         '<td class="contenidoDetalleCurso">' + detalle + '</td>'+
                         nombreDocente+
                         '<td>' + res.fechaInicio.substr(0, 10) + ' / ' + res.fechaFin.substr(0, 10) + '</td>' +                        
-                        '<td> <div class="form-check-inline">' + btnHorario + btnEditar + btnEliminar + '</div> </td>' +
+                        '<td> <div class="form-check-inline">' + btnHorario + btnEditar + btnDeshabilitar + btnEliminar + '</div> </td>' +
                         '</tr>');
                 });
                 ModificarCabeceraDetalle();
@@ -412,23 +421,19 @@ function DeshabilitarEdicionPeriodoCurso(decision){
     txtFechaFinCurso.prop('disabled', decision);
 }
 
-function DeshabilitarEdicionCurso(decision){
-    btnGuardarCurso.prop('disabled', decision);
-}
 
 
 
 function EditarCurso(id) {
     idCursoEdit = id;
-    BuscarCurso(id);
-    (estadoCurso == 1) ? DeshabilitarEdicionCurso(false) : DeshabilitarEdicionCurso(true); 
+    BuscarCurso(id);    
     (programaCurso == 'Regular') ? DeshabilitarEdicionPeriodoCurso(true) : DeshabilitarEdicionPeriodoCurso(false);
     MostrarFormCurso();
 }
 
 function GuardarCurso() {
     let action;
-    //Seleccionar Action
+    //Seleccionar Action    
     (idCursoEdit == 0) ? action = "RegistrarCurso" : action = "EditarCurso";
     let nuevoCurso = {
         IdCurso: idCursoEdit,
@@ -483,6 +488,7 @@ function GuardarCurso() {
 
 
 function EliminarCurso(id) {
+    estadoCurso = 0;
     swal({
         title: "Advertencia",
         text: "¿Desea eliminar este Curso?",
@@ -490,19 +496,18 @@ function EliminarCurso(id) {
         buttons: true,
         dangerMode: true
     }).then((eliminar) => {
-
         if (eliminar) {
             $.ajax({
                 type: "post",
-                url: "/Curso/EliminarCurso",
+                url: "/Curso/ModificarEstadoCurso",
                 datatype: 'json',
-                data: { idCurso: id },
+                data: { idCurso: id, estado : estadoCurso },
                 success: function (res) {
                     console.log(res);
-                    if (res == 'Eliminado') {
-                        msgExitoCurso(res);                        
+                    if (res == 'Modificado') {                        
+                        msgExitoCurso('Eliminado');                        
                     } else {
-                        msgError(res);
+                        msgError('No se pudo eliminar el curso');
                     }
                 }
             });
@@ -512,6 +517,35 @@ function EliminarCurso(id) {
     });    
 }
 
+
+function DeshabilitarCurso(id){
+    estadoCurso = 2;
+    $.ajax({
+        type: "post",
+        url: "/Curso/ModificarEstadoCurso",
+        datatype: 'json',
+        data: { idCurso: id, estado : estadoCurso },
+        success: function (res) {
+            console.log(res);
+            if (res == 'Modificado') {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Horario/DeshabilitarHorariosCurso",
+                    data: {
+                        idCurso: id,                                
+                    },
+                    datatype: 'json',
+                    success: function (response) {
+                        if(response=="Correcto")
+                            msgExitoCurso('Deshabilitado');                                                        
+                    }
+                });                                   
+            } else {
+                msgError('No se pudo deshabilitar el curso');
+            }
+        }
+    });
+}
 
 
 /* 
@@ -525,7 +559,7 @@ function VerificarCamposVaciosCurso() {
         VerificarCampoVacio("CicloCurso") +
         VerificarCampoVacio("FechaInicioDeCurso") +
         VerificarCampoVacio("FechaFinDeCurso") +
-        VerificarCampoVacio("ModalidadCurso");
+        VerificarCampoVacio("ModalidadCurso");    
     let detalleValido = 0;
     if (tipoCurso.nombreCurso == 'P. Exam. Internacional' || tipoCurso.nombreCurso == 'Corporativo') {
         detalleValido = VerificarCampoVacio("DetalleCurso");

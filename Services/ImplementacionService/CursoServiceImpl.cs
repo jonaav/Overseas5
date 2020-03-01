@@ -148,12 +148,12 @@ namespace Services.ImplementacionService
         /*
          *  Eliminar Curso
          */
-        public String EliminarCurso(int idCurso)
+        public String ModificarEstadoCurso(int idCurso, int estado)
         {
-            String mensaje = "No se pudo eliminar el curso";
-            if (_cursoDao.EliminarCurso(idCurso))
+            String mensaje = "No se pudo modificar el estado del curso";
+            if (_cursoDao.ModificarEstadoCurso(idCurso, estado))
             {
-                mensaje = "Eliminado";
+                mensaje = "Modificado";
             }
             return mensaje;
         }

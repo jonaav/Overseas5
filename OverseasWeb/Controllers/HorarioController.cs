@@ -45,30 +45,16 @@ namespace OverseasWeb.Controllers
 
         public IActionResult VerificarHorario(Horario horario)
         {
-            if (_horarioService.EsHorarioPermitido(horario))
-                return Json("Correcto");
-            else
-                return Json("Incorrecto");
+            var mensaje = _horarioService.EsHorarioPermitido(horario);
+            return Json(mensaje);                
         }
 
         [HttpPost]
         public IActionResult VerificarSesion(Sesion sesion)
-        {            
-            if (_horarioService.EsSesionPermitida(sesion))
-                return Json("Correcto");
-            else
-                return Json("Incorrecto");
+        {
+            var mensaje = _horarioService.EsSesionPermitida(sesion);
+            return Json(mensaje);
         }
-
-
-        //[HttpPost]
-        //public IActionResult CrearHorarios([FromBody] DetalleHorarioSesion detalleHorariosSesiones)
-        //{
-        //    if (_horarioService.CrearHorarios(detalleHorariosSesiones.ListaHorarios, detalleHorariosSesiones.ListaSesiones))
-        //        return Json("Guardado");
-        //    else
-        //        return Json("");
-        //}
 
         [HttpPost]
         public IActionResult CrearSesion([FromBody] List<Sesion> listaDeSesiones)
@@ -80,9 +66,10 @@ namespace OverseasWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearHorariosRegular([FromBody] List<Horario> listaDeHorarios)
+        public IActionResult CrearHorarios([FromBody] List<Horario> listaDeHorarios)
         {
-            if (_horarioService.CrearHorariosRegular(listaDeHorarios))
+            var mensaje = _horarioService.CrearHorarios(listaDeHorarios);
+            if (mensaje == "Correcto")
                 return Json(listaDeHorarios);
             else
                 return Json("");
@@ -99,8 +86,6 @@ namespace OverseasWeb.Controllers
             return Json("Eliminado");                     
         }
 
-
-
         public IActionResult BuscarSesion(int idHorario)
         {
             Sesion sesion;
@@ -110,5 +95,14 @@ namespace OverseasWeb.Controllers
             else
                 return Json("");
         }
+
+        [HttpPost]
+        public IActionResult DeshabilitarHorariosCurso(int idCurso)
+        {
+            var mensaje = _horarioService.DeshabilitarHorariosCurso(idCurso);
+            return Json(mensaje);
+        }
+
+
     }
 }

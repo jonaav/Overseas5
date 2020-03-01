@@ -26,10 +26,10 @@ SET IDENTITY_INSERT [dbo].[Docente] OFF
 
 
 SET IDENTITY_INSERT [dbo].[Especialidad] ON 
-INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (1, N'Ingles')
-INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (2, N'Frances')
-INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (3, N'Portugues')
-INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (4, N'Aleman')
+INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (1, N'Inglés')
+INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (2, N'Francés')
+INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (3, N'Portugués')
+INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (4, N'Alemán')
 INSERT [dbo].[Especialidad] ([IdEspecialidad], [DescripcionEspecialidad]) VALUES (5, N'Italiano')
 SET IDENTITY_INSERT [dbo].[Especialidad] OFF
 

@@ -102,9 +102,9 @@ namespace OverseasWeb.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult EliminarCurso(int idCurso)
+        public IActionResult ModificarEstadoCurso(int idCurso, int estado)
         {
-            var mensaje = _cursoService.EliminarCurso(idCurso);
+            var mensaje = _cursoService.ModificarEstadoCurso(idCurso, estado);
             return Json(mensaje);
         }
 

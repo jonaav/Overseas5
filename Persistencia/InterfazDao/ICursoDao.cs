@@ -13,7 +13,7 @@ namespace Persistencia.InterfazDao
         Curso BuscarCursoPorID(int idCurso);
         bool RegistrarCurso(Curso curso);
         bool EditarCurso(Curso curso);
-        bool EliminarCurso(int idCurso);
+        bool ModificarEstadoCurso(int idCurso, int estado);
 
         int CantidadDeCursosActivos();
 

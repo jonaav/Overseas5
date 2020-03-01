@@ -17,7 +17,7 @@ namespace Services.InterfazService
         List<Docente> ListarDocentes();
         String RegistrarCurso(Curso curso);
         String EditarCurso(Curso curso);
-        String EliminarCurso(int idCurso);
+        String ModificarEstadoCurso(int idCurso, int estado);
 
     }
 }

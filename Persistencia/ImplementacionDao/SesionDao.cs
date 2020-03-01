@@ -20,7 +20,7 @@ namespace Persistencia.ImplementacionDao
          * BUSCAR HORARIOS DEL DIA ADMIN
          */
         public List<Sesion> BuscarHorariosDelDia() => _context.Sesion
-            .Where(s => s.FechaSesion == DateTime.Today)
+            .Where(s => s.FechaSesion == DateTime.Today && s.Horario.EstadoHorario == 1)
             .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
             .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
             .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
@@ -32,7 +32,7 @@ namespace Persistencia.ImplementacionDao
          * BUSCAR HORARIOS DEL DIA DE UN DOCENTE
          */
         public List<Sesion> BuscarHorariosDelDiaDocente(int idDocente) => _context.Sesion
-            .Where(s => (s.FechaSesion == DateTime.Today && s.Horario.Curso.Docente.IdDocente == idDocente))
+            .Where(s => (s.FechaSesion == DateTime.Today && s.Horario.Curso.Docente.IdDocente == idDocente && s.Horario.EstadoHorario == 1))
             .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
             .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
             .Include(s => s.Horario).ThenInclude(h => h.Ambiente)

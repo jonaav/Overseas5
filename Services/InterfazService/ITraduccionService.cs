@@ -11,10 +11,10 @@ namespace Services.InterfazService
 
         Traduccion BuscarTraduccion(int idTraduccion);
 
-        bool CrearTraduccion(Traduccion traduccion);
+        String CrearTraduccion(Traduccion traduccion);
 
-        bool EditarTraduccion(Traduccion traduccion);
+        String EditarTraduccion(Traduccion traduccion);
 
-        bool ModificarEstadoTraduccion(int idTraduccion, int estado);
+        String ModificarEstadoTraduccion(int idTraduccion, int estado);
     }
 }

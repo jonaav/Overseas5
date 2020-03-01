@@ -22,15 +22,22 @@ namespace Services.ImplementacionService
         {
             return _horarioDao.BuscarHorariosCurso(idCurso);
         }
+        
 
-        public bool CrearHorarios(List<Horario> listaHorarios, List<Sesion> listaSesiones)
+        public String CrearHorarios(List<Horario> listaHorarios)
         {
-            return _horarioDao.CrearHorarios(listaHorarios, listaSesiones);
+            String mensaje = "Incorrecto";
+            if( _horarioDao.CrearHorarios(listaHorarios))
+                mensaje = "Correcto";
+            return mensaje;
         }
 
-        public bool CrearHorariosRegular(List<Horario> listaHorarios)
+        public string DeshabilitarHorariosCurso(int idCurso)
         {
-            return _horarioDao.CrearHorariosRegular(listaHorarios);
+            String mensaje = "Incorrecto";
+            if(_horarioDao.DeshabilitarHorariosCurso(idCurso))
+                mensaje = "Correcto";
+            return mensaje;
         }
 
         public bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso)
@@ -50,14 +57,20 @@ namespace Services.ImplementacionService
             _horarioDao.EliminarSesionesHorarioCurso(listaSesionesActuales);
         }
 
-        public bool EsHorarioPermitido(Horario horarioEvaluar)
+        public String EsHorarioPermitido(Horario horarioEvaluar)
         {
-            return _horarioDao.EsHorarioPermitido(horarioEvaluar);
+            String mensaje = "Incorrecto";
+            if (_horarioDao.EsHorarioPermitido(horarioEvaluar))
+                mensaje = "Correcto";
+            return mensaje;
         }
 
-        public bool EsSesionPermitida(Sesion sesionEvaluar)
+        public String EsSesionPermitida(Sesion sesionEvaluar)
         {
-            return _horarioDao.EsSesionPermitida(sesionEvaluar);
+            String mensaje = "Incorrecto";
+            if( _horarioDao.EsSesionPermitida(sesionEvaluar))
+                mensaje = "Correcto";
+            return mensaje;
         }
 
         public int ObtenerIdUltimoHorario()
@@ -65,82 +78,6 @@ namespace Services.ImplementacionService
             return _horarioDao.ObtenerIdUltimoHorario();
         }
 
-        /*
-        private readonly DB_OverseasContext _context;
-
-        public HorarioServiceImpl(DB_OverseasContext context)
-        {
-            _context = context;
-        }
-
-        public List<HorarioC> BuscarHorariosCurso(int id)
-        {
-            List<HorarioC> horarios = new List<HorarioC>();
-            try
-            {
-                horarios = null;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return horarios;
-        }
-
-        public List<Horario> BuscarHorariosParaIngresarDetalle(int id)
-        {
-            List<Horario> horarios = new List<Horario>();
-            try
-            {
-                horarios       = (from h in _context.Horario
-                                  join c in _context.Curso on h.Curso.IdCurso equals c.IdCurso
-                                  where h.IdCurso == id
-
-                                  select new Horario
-                                  {
-                                      IdHorario = h.IdHorario,
-                                      Dia = h.Dia,
-                                      HoraInicio = h.HoraInicio,
-                                      HoraFin = h.HoraFin,
-                                      IdCurso = h.IdCurso,                                      
-                                  }).ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return horarios;
-        }
-
-        
-        public void EditarHorariosCurso(List<Horario> horarios, int idAula, int idCurso) 
-        {
-            try
-            {
-                EliminarHorariosCurso(idCurso, idAula);
-                RegistrarHorariosCurso(horarios, idAula, idCurso);                  
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public void EliminarHorariosCurso(int id, int idAula)
-        {
-            try
-            {
-                
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public void RegistrarHorariosCurso(List<Horario> horarios, int idAula, int idCurso)
-        {
-
-        }*/
+       
     }
 }

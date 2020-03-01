@@ -10,6 +10,7 @@
  let idAmbienteSelecHorario = 0;
  let programaCursoHorario;
  let horarioPermitido = '';
+ let estadoHorario = 1;
 
 
 /**
@@ -202,6 +203,7 @@ function CrearHorariosSesionesCurso(){
     let fecha, activo = true;             
     let dia = "", numSesion = "", sesion = 0, fechaSesion = "", horaInicio = "", horaFin = "", idAmbiente = "";         
     let indice = 0;      
+    estadoHorario = 1;
     
     $('#tablaHorarios tbody tr').each(function(){
         indice = 0;
@@ -220,7 +222,8 @@ function CrearHorariosSesionesCurso(){
         horaInicio = $(this).find('td').eq(indice+1).html();
         horaFin = $(this).find('td').eq(indice+2).html();
         idAmbiente = $(this).find('td').eq(indice+4).html();
-        objHorario = { Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCursoHorario, IdAmbiente : idAmbiente};
+        objHorario = { Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCursoHorario, 
+                       IdAmbiente : idAmbiente, EstadoHorario : estadoHorario};
         listaDeHorarios.push(objHorario); 
         cantidadHorarios++;                        
     });
@@ -232,7 +235,7 @@ function CrearHorariosSesionesCurso(){
     if(cantidadHorarios!=0){               
             $.ajax({
                 type: 'POST',
-                url: "/Horario/CrearHorariosRegular",
+                url: "/Horario/CrearHorarios",
                 contentType: 'application/json; charset=utf-8',
                 dataType:"json",            
                 data: JSON.stringify(listaDeHorarios),

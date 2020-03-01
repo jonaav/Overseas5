@@ -25,7 +25,8 @@ function ListarEspecialidad() {
             tablaEspecialidad.clear().destroy();
             if (res!= "") {
                 $.each(res, function (i, res){
-                    btnEliminar = '<button onclick = "EliminarEspecialidad(' + res.idEspecialidad + ')" class="btn btn-outline-danger"><span class="fa fa-remove"></button>';
+                    (res.descripcionEspecialidad == 'Inglés') ? btnEliminar = '<button disabled onclick class="btn btn-outline-danger"><span class="fa fa-remove"></button>'
+                        : btnEliminar = '<button onclick = "EliminarEspecialidad(' + res.idEspecialidad + ')" class="btn btn-outline-danger"><span class="fa fa-remove"></button>'
                     $('#contenidoTablaEspecialidad').append('<tr>' +
                         '<td>' + res.descripcionEspecialidad + '</td>' +
                         '<td>' + btnEliminar + ' </td>' +

@@ -22,36 +22,15 @@ namespace Persistencia.ImplementacionDao
        
         private List<Horario> BuscarHorariosAmbiente(int idHorario, int idAmbiente, string dia) => _context.Horario
                                                                         .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
-                                                                                     h.IdHorario != idHorario))
+                                                                                     h.IdHorario != idHorario && h.EstadoHorario == 1))
                                                                         .ToList();
         private List<Sesion> BuscarSesionesPorFecha(int idSesion, DateTime fecha, int idAmbiente) => _context.Sesion
                                                                         .Where(s => (s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente &&
-                                                                                     s.IdSesion != idSesion))
-                                                                        .Include(s => s.Horario)
-                                                                            .ThenInclude(h => h.Ambiente)
+                                                                                     s.IdSesion != idSesion && s.Horario.EstadoHorario == 1))
+                                                                        .Include(s => s.Horario)                                                                             
+                                                                            .ThenInclude(h => h.Ambiente)            
                                                                         .ToList();
-
-        public bool CrearHorarios(List<Horario> listaHorarios, List<Sesion> listaSesiones)
-        {
-            try
-            {                
-                int indice = 0;
-                foreach (Horario horario in listaHorarios)
-                {
-                    _context.Horario.Add(horario);
-                    _context.SaveChanges();                    
-                    listaSesiones[indice].IdHorario = horario.IdHorario;
-                    _context.Sesion.Add(listaSesiones[indice]);
-                    _context.SaveChanges();
-                    indice++;
-                }                                
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
+        
 
         public bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso)
         {
@@ -59,7 +38,7 @@ namespace Persistencia.ImplementacionDao
             {
                 EliminarSesionesHorarioCurso(listaSesionesActuales);
                 EliminarHorariosCurso(idCurso);
-                CrearHorariosRegular(listaHorarios);
+                CrearHorarios(listaHorarios);
                 return true;
             }
             catch (Exception e)
@@ -111,7 +90,7 @@ namespace Persistencia.ImplementacionDao
             return horario.IdHorario;
         }
 
-        public bool CrearHorariosRegular(List<Horario> listaHorarios)
+        public bool CrearHorarios(List<Horario> listaHorarios)
         {
             try
             {
@@ -164,6 +143,26 @@ namespace Persistencia.ImplementacionDao
                 }
             }
             return correcto;
+        }
+
+        public bool DeshabilitarHorariosCurso(int idCurso)
+        {
+            List<Horario> horarios = BuscarHorariosCurso(idCurso);
+            try
+            {
+                foreach (Horario horario in horarios)
+                {
+                    horario.EstadoHorario = 2;
+                    _context.Horario.Attach(horario);
+                    _context.Horario.Update(horario);
+                    _context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

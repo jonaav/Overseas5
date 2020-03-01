@@ -22,19 +22,29 @@ namespace Services.ImplementacionService
             return _traduccionDao.BuscarTraduccion(idTraduccion);
         }
 
-        public bool CrearTraduccion(Traduccion traduccion)
+        public String CrearTraduccion(Traduccion traduccion)
         {
-            return _traduccionDao.CrearTraduccion(traduccion);
+            String mensaje = "No se pudo registrar";
+            if (_traduccionDao.CrearTraduccion(traduccion))
+                mensaje = "Correcto";
+            return mensaje;
         }
 
-        public bool EditarTraduccion(Traduccion traduccion)
+        public String EditarTraduccion(Traduccion traduccion)
         {
-            return _traduccionDao.EditarTraduccion(traduccion);
+            String mensaje = "No se pudo editar";
+            if (_traduccionDao.EditarTraduccion(traduccion))
+                mensaje = "Exito";
+            return mensaje;
         }
 
-        public bool ModificarEstadoTraduccion(int idTraduccion, int estado)
+        public String ModificarEstadoTraduccion(int idTraduccion, int estado)
         {
-            return _traduccionDao.ModificarEstadoTraduccion(idTraduccion, estado);
+            String mensaje = "No se pudo modificar";
+            if (_traduccionDao.ModificarEstadoTraduccion(idTraduccion, estado))
+                mensaje = "Correcto";
+            return mensaje;
+
         }
 
         public List<Traduccion> ListarTraducciones(int estado)

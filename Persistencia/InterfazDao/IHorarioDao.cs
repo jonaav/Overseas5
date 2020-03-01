@@ -6,10 +6,11 @@ using Entidades;
 namespace Persistencia.InterfazDao
 {
     public interface IHorarioDao
-    {
-        bool CrearHorarios(List<Horario> listaHorarios, List<Sesion> listaSesiones);
+    {        
 
-        bool CrearHorariosRegular(List<Horario> listaHorarios);
+        bool CrearHorarios(List<Horario> listaHorarios);
+
+        bool DeshabilitarHorariosCurso(int idCurso);
 
         List<Horario> BuscarHorariosCurso(int idCurso);
 

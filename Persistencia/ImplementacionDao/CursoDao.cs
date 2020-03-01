@@ -96,14 +96,16 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Eliminar Curso
          */
-        public bool EliminarCurso(int idCurso)
+        public bool ModificarEstadoCurso(int idCurso, int estado)
         {
             Curso curso = BuscarCursoPorID(idCurso);
             try
             {
                 if( curso != null)
                 {
-                    _context.Curso.Remove(curso);
+                    curso.Estado = estado;
+                    _context.Curso.Attach(curso);
+                    _context.Curso.Update(curso);
                     _context.SaveChanges();
                     return true;
                 }

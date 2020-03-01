@@ -35,8 +35,11 @@
 
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
-                            <label for="txtFechaTraduccion">Fecha : </label>				        	
-                            <input type="date" class="form-control" id="txtFechaTraduccion">
+                            <label for="txtFechaTraduccion">Fecha : </label>	
+                            <div class="input-group">
+                                <input type="text"  class="form-control mdate" id="txtFechaTraduccion" placeholder="yyyy-mm-dd">
+                                <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>  			        	                            
                             <span class="errores" id="errorFechaTraduccion">*Debe llenar el campo Fecha</span>
                         </div>
                         <div class="col-md-6 mb-3">
