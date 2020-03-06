@@ -17,5 +17,19 @@ namespace Entidades
 
         public Curso Curso { get; set; }
         public Estudiante Estudiante { get; set; }
+
+
+        public int CalcularPromedio(List<Evaluacion> evaluaciones)
+        {
+            int suma = 0;
+            foreach (Evaluacion e in evaluaciones)
+            {
+                suma += e.CalificacionEvaluacion;
+            }
+            return suma / evaluaciones.Count;
+        }
+
+
+
     }
 }

@@ -96,6 +96,26 @@ namespace Services.ImplementacionService
             return evaluaciones;
         }
 
+        
+
+        public HistorialEvaluacion BuscarHistorial(int idCurso, int idEstudiante)
+        {
+            HistorialEvaluacion historial = _historialEvaluacionDao.BuscarHistorialPorEstudianteYCurso(idEstudiante, idCurso);
+            return historial;
+        }
+
+
+
+        public String EditarHistorial(HistorialEvaluacion historial)
+        {
+            string mensaje = "";
+            if (_historialEvaluacionDao.EditarHistorialEvaluacion(historial))
+            {
+                mensaje = "Datos Actualizados";
+            }
+            return mensaje;
+        }
+
 
     }
 }

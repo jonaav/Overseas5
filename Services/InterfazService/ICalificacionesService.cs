@@ -10,7 +10,10 @@ namespace Services.InterfazService
         void RegistrarHistorialEvaluacion(HistorialEvaluacion historial);
         String EditarEvaluacion(int idEvaluacion, int nota );
         Evaluacion BuscarEvaluacion(int idEvaluacion);
-        //String EliminarCalificaciones(int idHistorial);
+        String EditarHistorial( HistorialEvaluacion historial);
         List<Evaluacion> VerNotasDelEstudiantePorCurso(int idCurso, int idEstudiante);
+        HistorialEvaluacion BuscarHistorial(int idCurso, int idEstudiante);
+
+        //String EliminarCalificaciones(int idHistorial);
     }
 }

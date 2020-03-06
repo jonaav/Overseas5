@@ -27,7 +27,10 @@ let idEstudianteSelecCalif;
 
 let txtNombreExamen = $("#txtNombreExamen");
 let txtCalificacion = $("#txtCalificacion");
+let txtAlumnoFeedback = $("#txtAlumnoFeedback");
+let txtFeedback = $("#txtFeedback");
 let idEvaluacionSelecc;
+let idHistorialSelecc;
 
 
 
@@ -36,6 +39,7 @@ let idEvaluacionSelecc;
  */
 
 function ListarEstudiantesDeUnCurso() {
+    idCursoSelecCalif = idCursoSelec;
     $.ajax({
         type: "get",
         url: "/Inscripcion/ListarInscripcionesPorCurso",
@@ -53,6 +57,7 @@ function ListarEstudiantesDeUnCurso() {
                         '<td>' + res.estudiante.persona.nombresPersona + '</td>' +
                         '<td>' +
                         '<button onclick="VerNotasDelEstudiante(' + res.idEstudiante + ')" class="btn btn-outline-info"><span class="fa fa-clipboard "></button>' +
+                        '<button onclick="GenerarReporteDeNotas(' + res.idEstudiante + ')" class="btn btn-outline-danger"><span class="fa fa-file-pdf-o"></span></button>' +
                         '</td>' +
                         '</tr>');
                 });
@@ -85,9 +90,9 @@ function VerNotasDelEstudiante(idEstudiante) {
             dataNotasAdmin.html("");
             if (response != "") {
                 console.log(response);
-                //txtNotasEstudiante.append(response.historialEvaluacion.estudiante.persona.nombresPersona +
-                //    ' ' + response.historialEvaluacion.estudiante.persona.apellidosPersona);
                 $.each(response, function (i, res) {
+                    txtNotasEstudiante.html("");
+                    txtNotasEstudiante.append(res.historialEvaluacion.estudiante.persona.nombresPersona + " " + res.historialEvaluacion.estudiante.persona.apellidosPersona);
 
                     dataNotasAdmin.append(
                         '<tr>' +
@@ -196,6 +201,7 @@ function ListarEstudiantesDeUnCursoDocente(idCurso) {
                         '<td>' + res.estudiante.persona.nombresPersona + '</td>' +
                         '<td>' +
                         '<button onclick="VerNotasDelEstudianteDocente(' + res.idEstudiante +')" class="btn btn-outline-info"><span class="fa fa-clipboard "></button>' +
+                        '<button onclick="VerFeedback(' + res.idEstudiante +')" class="btn btn-outline-warning" data-toggle="modal" data-target="#formFeedbackModal" rel="tooltip" title="Feedback"><span class="fa fa-comment "></button>' +
                         '</td>' +
                         '</tr>');
                 });
@@ -220,17 +226,19 @@ function VerNotasDelEstudianteDocente(idEstudiante) {
         success: function (response) {
             console.log("NOTAS");
             console.log(response);
-            txtNotasDocenteEstudiante.html("");
             dataNotasDocente.html("");
             if (response != "") {
                 console.log(response);
                 $.each(response, function (i, res) {
+                    txtNotasDocenteEstudiante.html("");
+                    txtNotasDocenteEstudiante.append(res.historialEvaluacion.estudiante.persona.nombresPersona + " " + res.historialEvaluacion.estudiante.persona.apellidosPersona);
+
                     dataNotasDocente.append(
                         '<tr>' +
                         '<td>' + res.tipoEvaluacion.nombreEvaluacion + '</td>' +
                         '<td>' + res.calificacionEvaluacion + '</td>' +
                         '<td>' +
-                        '<button onclick="cargarModalCalificacion(' + res.idEvaluacion + ')" class="btn btn-outline-warning" data-toggle="modal" data-target="#formEditarCalificacionModal" rel="tooltip" title="Editar"><span class="fa fa-pencil "></button>' +
+                        '<button onclick="cargarModalCalificacion(' + res.idEvaluacion + ')" class="btn btn-outline-info" data-toggle="modal" data-target="#formEditarCalificacionModal" rel="tooltip" title="Editar"><span class="fa fa-pencil "></button>' +
                         '</td>' +
                         '</tr>');
                 });
@@ -286,6 +294,67 @@ function GuardarCalificacion() {
         success: function (response) {
             if (response == "Calificacion Actualizada") {
                 VerNotasDelEstudianteDocente(idEstudianteSelecCalif);
+                msgExito(response);
+            }
+        }
+    });
+}
+
+
+
+/*
+ *  GENERAR REPORTE
+ */
+
+function GenerarReporteDeNotas(idEstudiante) {
+    window.open( "ReporteDeNotas?idEstudiante=" + idEstudiante + "&idCurso=" + idCursoSelecCalif,'_blank');
+}
+
+
+
+
+
+/*
+ *  VER FEEDBACK
+ */
+
+function VerFeedback(idEstudiante) {
+    idEstudianteSelecCalif = idEstudiante;
+    $.ajax({
+        type: "get",
+        url: "/Calificacion/BuscarHistorial",
+        datatype: 'json',
+        data: { idEstudiante: idEstudiante, idCurso: idCursoSelecCalif },
+        success: function (response) {
+            console.log("FEEDBACK");
+            console.log(response);
+            if (response != "") {
+                txtAlumnoFeedback.html("");
+                txtAlumnoFeedback.append(response.estudiante.persona.nombresPersona + " " + response.estudiante.persona.apellidosPersona);
+                txtFeedback.val(response.feedbackHistorialEvaluacion);
+                idHistorialSelecc = response.idHistorialEvaluacion;
+            }
+        }
+    });
+}
+
+
+
+
+/*
+ *  GUARDAR FEEDBACK
+ */
+
+function GuardarFeedback() {
+
+    $.ajax({
+        type: "post",
+        url: "/Calificacion/EditarHistorial",
+        datatype: 'json',
+        data: { idCurso: idCursoSelecCalif, idEstudiante: idEstudianteSelecCalif, feedback: txtFeedback.val() },
+        success: function (response) {
+            if (response == "Datos Actualizados") {
+                VerFeedback(idEstudianteSelecCalif);
                 msgExito(response);
             }
         }
