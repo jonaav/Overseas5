@@ -15,13 +15,13 @@ function DesactivarColorBoton(boton){
 }
 
 function ActivarColorBotonEstado(boton, color){
-    $('#btn'+boton).removeClass('btn-outline-'+ color);
-    $('#btn'+boton).addClass('btn-'+ color);  
+    $('#btn'+boton).removeClass('btn btn-outline-'+ color);
+    $('#btn'+boton).addClass('btn btn-'+ color);  
 }
 
 function DesactivarColorBotonEstado(boton, color){
-    $('#btn'+boton).removeClass('btn-'+ color);
-    $('#btn'+boton).addClass('btn-outline-' + color);
+    $('#btn'+boton).removeClass('btn btn-'+ color);
+    $('#btn'+boton).addClass('btn btn-outline-' + color);
 }
 
 

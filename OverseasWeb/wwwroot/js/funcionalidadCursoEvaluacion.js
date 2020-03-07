@@ -11,6 +11,8 @@ var contenidoTablaTiposEvaluacionNoAgregado = $("#contenidoTablaTiposEvaluacionN
 var nombreEvaluacion = $("#txtNombreTipoEvaluacion");
 
 
+var txtTipoCursoSelecc = $("#txtTipoCursoSelecc");
+
 /* VARIABLES*/
 var listaTEvaluaciones = [];
 var idTipoCursoSelec;
@@ -42,7 +44,7 @@ function ListarTiposCurso() {
             tablaTiposCurso.clear().destroy();
             if (response != "") {
                 $.each(response, function (i, res) {
-                    let btnAgregarEvaluacion = '<button onclick = "MostrarEvaluacionesCurso(' + res.idTipoCurso + ')" class="btn btn-outline-info"><span class="fa fa-plus"></span></button>'; 
+                    let btnAgregarEvaluacion = '<button onclick = "MostrarEvaluacionesCurso(' + res.idTipoCurso + ','+"'" + res.nombreCurso +"'"+ ')" class="btn btn-outline-info"><span class="fa fa-plus"></span></button>'; 
                     contenidoTablaTiposCurso.append('<tr>' +
                         '<td>' + res.nombreCurso + '</td>' +
                         '<td>' + btnAgregarEvaluacion + ' </td>' +
@@ -89,8 +91,12 @@ function ListarTiposEvaluacion() {
  * MOSTRAR EVALUACIONES CURSOS
  */
 
-function MostrarEvaluacionesCurso(idTipoCurso) {
+function MostrarEvaluacionesCurso(idTipoCurso, nombreCurso) {
     console.log("CURSO: id- " + idTipoCurso)
+
+    txtTipoCursoSelecc.html("");
+    txtTipoCursoSelecc.append(nombreCurso);
+
     idTipoCursoSelec = idTipoCurso;
     ListarTiposEvaluacionNoSeleccionados();
     ListarTiposEvaluacionSeleccionados();

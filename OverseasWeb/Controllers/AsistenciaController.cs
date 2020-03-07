@@ -61,6 +61,14 @@ namespace OverseasWeb.Controllers
                 return Json("");
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Docente")]
+        public IActionResult EditarAsistencias(List<int> asistieron)
+        {
+            String mensaje = _asistenciaService.EditarAsistencias(asistieron);
+            return Json(mensaje);
+        }
+
 
     }
 }

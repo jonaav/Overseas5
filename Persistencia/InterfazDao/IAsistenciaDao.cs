@@ -8,5 +8,8 @@ namespace Persistencia.InterfazDao
     public interface IAsistenciaDao
     {
         List<Asistencia> ListarAsistenciasPorSesion(int idCurso, DateTime fechaActual);
+        void RegistrarAsistencia(Asistencia asistencia);
+        bool EditarAsistencia(Asistencia asistencia);
+        Asistencia BuscarAsistenciaPorID(int idAsistencia);
     }
 }

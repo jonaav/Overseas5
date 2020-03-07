@@ -62,13 +62,12 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Registrar Asistencia
          */
-        public bool RegistrarCurso(Asistencia asistencia)
+        public void RegistrarAsistencia(Asistencia asistencia)
         {
             try
             {
                 _context.Asistencia.Add(asistencia);
                 _context.SaveChanges();
-                return true;
             }
             catch (Exception e)
             {
@@ -102,6 +101,21 @@ namespace Persistencia.ImplementacionDao
         public int ContarAsistenciasDeDocente(int idCurso) => _context.Asistencia
             .Where(a => (a.Sesion.Horario.Curso.IdCurso == idCurso && a.Sesion.AsistenciaDocente == 1))
             .Include(a => a.Sesion).Count();
+
+
+
+        
+
+        /*
+         *  Buscar asistencia por ID
+         */
+        public Asistencia BuscarAsistenciaPorID(int idAsistencia) => _context.Asistencia.Find(idAsistencia);
+
+
+
+
+
+
 
     }
 }

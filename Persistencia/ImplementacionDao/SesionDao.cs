@@ -38,6 +38,18 @@ namespace Persistencia.ImplementacionDao
             .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
             .ToList();
 
+        
+
+        /*
+         * BUSCAR SESION POR FECHA Y CURSO
+         */
+        public Sesion BuscarSesionPorFechaYCurso(int idCurso, DateTime fecha) => _context.Sesion
+            .Where(s => (s.FechaSesion == fecha && s.Horario.Curso.IdCurso == idCurso && s.Horario.EstadoHorario == 1))
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
+            .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
+            .FirstOrDefault();
+
 
         /*
          * BUSCAR SESION
@@ -112,9 +124,19 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public bool EditarSesionesCurso(List<Sesion> sesiones)
+        public bool EditarSesion(Sesion sesion)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Sesion.Attach(sesion);
+                _context.Sesion.Update(sesion);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public List<Sesion> ListarSesionesCurso(int idCurso)

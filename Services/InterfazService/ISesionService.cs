@@ -11,7 +11,7 @@ namespace Services.InterfazService
         List<Sesion> BuscarSesionesCurso(int idCurso);
         bool CrearSesion(Sesion sesion);
 
-        bool EditarSesionesCurso(List<Sesion> sesiones);
+        //bool EditarSesionesCurso(List<Sesion> sesiones);
 
         Sesion BuscarSesion(int idHorario);
     }

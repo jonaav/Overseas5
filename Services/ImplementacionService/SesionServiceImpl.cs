@@ -32,10 +32,10 @@ namespace Services.ImplementacionService
             return _sesionDao.CrearSesion (sesion);
         }
 
-        public bool EditarSesionesCurso(List<Sesion> sesiones)
-        {
-            return _sesionDao.EditarSesionesCurso(sesiones);
-        }
+        //public bool EditarSesionesCurso(List<Sesion> sesiones)
+        //{
+        //    return _sesionDao.EditarSesionesCurso(sesiones);
+        //}
 
         public List<Sesion> ListarSesionesCurso(int idCurso)
         {

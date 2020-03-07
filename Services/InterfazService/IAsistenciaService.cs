@@ -8,5 +8,6 @@ namespace Services.InterfazService
     public interface IAsistenciaService
     {
         List<Asistencia> ListarAsistenciasPorSesion(int idCurso);
+        String EditarAsistencias(List<int> asistieron);
     }
 }
