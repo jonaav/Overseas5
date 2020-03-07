@@ -22,6 +22,11 @@ namespace Services.ImplementacionService
             return _sesionDao.BuscarSesion(idHorario);
         }
 
+        public Sesion BuscarSesionPorID(int idSesion)
+        {
+            return _sesionDao.BuscarSesionPorID(idSesion);
+        }
+
         public List<Sesion> BuscarSesionesCurso(int idCurso)
         {
             return _sesionDao.BuscarSesionesCurso(idCurso);

@@ -7,7 +7,8 @@ namespace Services.InterfazService
 {
     public interface IAsistenciaService
     {
-        List<Asistencia> ListarAsistenciasPorSesion(int idCurso);
+        List<Asistencia> ListarAsistenciasPorSesionCurso(int idCurso);
+        List<Asistencia> ListarAsistenciasPorSesion(int idSesion);
         String EditarAsistencias(List<int> asistieron);
     }
 }

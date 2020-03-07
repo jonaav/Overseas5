@@ -41,7 +41,7 @@ namespace Persistencia.ImplementacionDao
         /*
          *  Listar Asistencias de una Sesion
          */
-        public List<Asistencia> ListarAsistenciasPorSesion(int idCurso, DateTime fechaActual) => _context.Asistencia
+        public List<Asistencia> ListarAsistenciasPorSesionCurso(int idCurso, DateTime fechaActual) => _context.Asistencia
             .Where(a => (a.Sesion.Horario.Curso.IdCurso == idCurso && a.Sesion.FechaSesion == fechaActual))
             .Include(a => a.Sesion)
             .Include(a => a.Estudiante).ThenInclude(e => e.Persona)
@@ -111,11 +111,10 @@ namespace Persistencia.ImplementacionDao
          */
         public Asistencia BuscarAsistenciaPorID(int idAsistencia) => _context.Asistencia.Find(idAsistencia);
 
-
-
-
-
-
-
+        public List<Asistencia> ListarAsistenciasPorSesion(int idSesion) => _context.Asistencia
+            .Where(a => a.IdSesion == idSesion)
+            .Include(a => a.Sesion)
+            .Include(a => a.Estudiante).ThenInclude(e => e.Persona)
+            .ToList();
     }
 }

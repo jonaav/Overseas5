@@ -4,7 +4,68 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container" id="ViewAsistenciaAdmin">
+<div class="container mt-3" id="ViewAsistenciaAdmin">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <partial name="~/Views/Inscripcion/_BuscadorCursoInscripcion.cshtml">
+                        <div class="form-check-inline p-2">
+                            <div class="col">
+                                <h4 class="color-pale-sky">Sesion</h4>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-outline-info" onclick="ListarSesionesDeUnCurso()" data-toggle="modal" data-target="#formSesionesModal" rel="tooltip" title="Buscar sesion">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </div>
+                            <div>
+                                <h5 id="txtFechaDeSesion"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
+    <div class="row">
+        <div class="col-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div class="form-check-inline p-2">
+                            <div class="col">
+                                <h4 class="color-pale-sky">ESTUDIANTES</h4>
+                            </div>
+                        </div>
+
+                        <div>
+                            <table class="table table-hover table-bordered" id="tableAsistenciasAdmin">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>NOMBRES Y APELLIDOS</th>
+                                        <th>ASISTENCIA</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataAsistenciasAdmin">
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<partial name="~/Views/Inscripcion/_ModalTablaCursosInscripcion.cshtml">
+<partial name="~/Views/Asistencia/_ModalSesiones.cshtml">
+
 

@@ -25,15 +25,15 @@ namespace Services.ImplementacionService
         }
 
 
-        public List<Asistencia> ListarAsistenciasPorSesion(int idCurso)
+        public List<Asistencia> ListarAsistenciasPorSesionCurso(int idCurso)
         {
             DateTime fechaActual = DateTime.Today;
-            List<Asistencia> asistencias = _asistenciaDao.ListarAsistenciasPorSesion(idCurso, fechaActual);
+            List<Asistencia> asistencias = _asistenciaDao.ListarAsistenciasPorSesionCurso(idCurso, fechaActual);
             //Verifica si ya estan creadas las asistencias
             if (asistencias.Count == 0)
             {
                 if(RegistrarAsistencias(idCurso, fechaActual))
-                    asistencias = _asistenciaDao.ListarAsistenciasPorSesion(idCurso, fechaActual);
+                    asistencias = _asistenciaDao.ListarAsistenciasPorSesionCurso(idCurso, fechaActual);
             }
             return asistencias;
 
@@ -84,5 +84,10 @@ namespace Services.ImplementacionService
             return mensaje;
         }
 
+        public List<Asistencia> ListarAsistenciasPorSesion(int idSesion)
+        {
+            List<Asistencia> asistencias = _asistenciaDao.ListarAsistenciasPorSesion(idSesion);
+            return asistencias;
+        }
     }
 }

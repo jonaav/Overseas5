@@ -9,6 +9,9 @@
 
 
 let dataAsistenciasDocente = $("#dataAsistenciasDocente");
+let dataAsistenciasAdmin = $("#dataAsistenciasAdmin");
+let dataSesiones = $("#dataSesiones");
+let txtFechaDeSesion = $("#txtFechaDeSesion");
 
 let asistieron = [];
 
@@ -24,10 +27,9 @@ let asistieron = [];
  */
 
 function ListarAsistenciasPorSesion(idCurso) {
-    idCursoSelecCalif = idCurso;
     $.ajax({
         type: "get",
-        url: "/Asistencia/ListarAsistenciasPorSesion",
+        url: "/Asistencia/ListarAsistenciasPorSesionCurso",
         datatype: 'json',
         data: { idCurso: idCurso },
         success: function (response) {
@@ -139,5 +141,91 @@ function pintarFalta(idAsistencia) {
     $(btnF).addClass("btn-danger");
     $(btnF).removeClass("btn-outline-danger");
 }
+
+
+
+
+/*
+ * LISTAR ASISTENCIAS ADMIN 
+ */
+function ListarSesionesDeUnCurso() {
+    $.ajax({
+        type: "get",
+        url: "/Asistencia/ListarSesionesPorCurso",
+        datatype: 'json',
+        data: { idCurso: idCursoSelec },
+        success: function (response) {
+            console.log(response);
+            dataSesiones.html("");
+            if (response != "") {
+                $.each(response, function (i, res) {
+                    let asis;
+                    if (res.asistenciaDocente == 1) asis = "Asistió"; else asis = "Faltó"; 
+
+                    dataSesiones.append(
+                        '<tr>' +
+                        '<td>' + res.fechaSesion.substr(0, 10) + '</td>' +
+                        '<td>' + asis + '</td>' +
+                        '<td>' +
+                        '<button onclick="SeleccionarSesion(' + res.idSesion +')" class="btn btn-outline-info" data-dismiss="modal"><span class="fa fa-plus"></span></button>'+
+                        '</td>' +
+                        '</tr>');
+                });
+            }
+        }
+    });
+}
+
+
+function SeleccionarSesion(idSesion) {
+    $.ajax({
+        type: "get",
+        url: "/Asistencia/BuscarSesionPorID",
+        datatype: 'json',
+        data: { idSesion: idSesion },
+        success: function (response) {
+            console.log(response);
+            txtFechaDeSesion.html("");
+            if (response != "") {
+                txtFechaDeSesion.append(response.fechaSesion.substr(0,10));
+                VerAsistenciasSesion(idSesion);
+            }
+        }
+    });
+}
+
+
+
+function VerAsistenciasSesion(idSesion) {
+    $.ajax({
+        type: "get",
+        url: "/Asistencia/ListarAsistenciasPorSesion",
+        datatype: 'json',
+        data: { idSesion: idSesion },
+        success: function (response) {
+            console.log("ASISTENCIAS--");
+            console.log(response);
+            dataAsistenciasAdmin.html("");
+            if (response != "") {
+                $.each(response, function (i, res) {
+                    let asis;
+                    if(res.asistenciaEstudiante == 1) asis = "Asistió"; else asis = "Faltó"; 
+
+                    dataAsistenciasAdmin.append(
+                        '<tr>' +
+                        '<td>' + (i+1) + '</td>' +
+                        '<td>' + res.estudiante.persona.nombresPersona + " " + res.estudiante.persona.apellidosPersona + '</td>' +
+                        '<td>' + asis + '</td>' +
+                        '</tr>');
+                });
+            }
+        }
+    });
+}
+
+
+
+
+
 
 

@@ -39,12 +39,12 @@ let idHistorialSelecc;
  */
 
 function ListarEstudiantesDeUnCurso() {
-    idCursoSelecCalif = idCursoSelec;
+    idCursoSelecCalif = idCursoSelec;  //variable en inscripcion
     $.ajax({
         type: "get",
         url: "/Inscripcion/ListarInscripcionesPorCurso",
         datatype: 'json',
-        data: { idCurso: idCursoSelec }, //variable en inscripcion
+        data: { idCurso: idCursoSelecCalif }, 
         success: function (response) {
             dataCalificacionesAdmin.html("");
             if (response != "") {

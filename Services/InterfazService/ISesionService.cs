@@ -14,5 +14,6 @@ namespace Services.InterfazService
         //bool EditarSesionesCurso(List<Sesion> sesiones);
 
         Sesion BuscarSesion(int idHorario);
+        Sesion BuscarSesionPorID(int idSesion);
     }
 }

@@ -17,6 +17,7 @@ namespace Persistencia.InterfazDao
         bool EditarSesion(Sesion sesion);
 
         Sesion BuscarSesion(int idHorario);
+        Sesion BuscarSesionPorID(int idSesion);
         Sesion BuscarSesionPorFechaYCurso(int idCurso, DateTime fecha);
         
 

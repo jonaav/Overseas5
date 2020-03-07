@@ -13,12 +13,15 @@ namespace OverseasWeb.Controllers
     public class AsistenciaController : Controller
     {
         private IAsistenciaService _asistenciaService;
+        private ISesionService _sesionService;
 
         public AsistenciaController(
-            IAsistenciaService asistenciaService
+            IAsistenciaService asistenciaService,
+            ISesionService sesionService
         )
         {
             _asistenciaService = asistenciaService;
+            _sesionService = sesionService;
         }
 
 
@@ -34,9 +37,30 @@ namespace OverseasWeb.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Details(int id)
+        public IActionResult ListarSesionesPorCurso(int idCurso)
         {
-            return View();
+            List<Sesion> sesiones = _sesionService.ListarSesionesCurso(idCurso);
+            return Json(sesiones);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult BuscarSesionPorID(int idSesion)
+        {
+            Sesion sesion = _sesionService.BuscarSesionPorID(idSesion);
+            return Json(sesion);
+        }
+
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ListarAsistenciasPorSesion(int idSesion)
+        {
+            List<Asistencia> asistencias = _asistenciaService.ListarAsistenciasPorSesion(idSesion);
+            if (asistencias != null)
+                return Json(asistencias);
+            else
+                return Json("");
         }
 
 
@@ -52,9 +76,9 @@ namespace OverseasWeb.Controllers
 
 
         [Authorize(Roles = "Docente")]
-        public IActionResult ListarAsistenciasPorSesion(int idCurso)
+        public IActionResult ListarAsistenciasPorSesionCurso(int idCurso)
         {
-            List<Asistencia> asistencias = _asistenciaService.ListarAsistenciasPorSesion(idCurso);
+            List<Asistencia> asistencias = _asistenciaService.ListarAsistenciasPorSesionCurso(idCurso);
             if(asistencias != null)
                 return Json(asistencias);
             else

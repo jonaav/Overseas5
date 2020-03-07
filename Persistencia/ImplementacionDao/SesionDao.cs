@@ -54,6 +54,15 @@ namespace Persistencia.ImplementacionDao
         /*
          * BUSCAR SESION
          */
+        public Sesion BuscarSesionPorID(int idSesion) => _context.Sesion.Find(idSesion);
+
+
+
+
+
+        /*
+         * BUSCAR SESION
+         */
         public Sesion BuscarSesion(int idHorario)
         {
             Sesion sesion = new Sesion();
