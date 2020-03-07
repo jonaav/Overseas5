@@ -12,18 +12,21 @@ namespace Services.ImplementacionService
     {
         private readonly IDocenteDao _docenteDao;
         private readonly IPersonaDao _personaDao;
-        private readonly IUsuarioService _usuarioService;
+        private readonly IUsuarioDao _usuarioDao;
+        private readonly ISesionDao _sesionDao;
         private readonly IDetalleDocenteEspecialidadDao _detalleDocenteEspecialidadDao;
         public DocenteServiceImpl(
             IDocenteDao docenteDao,
             IPersonaDao personaDao,
-            IUsuarioService usuarioService,
+            IUsuarioDao usuarioDao,
+            ISesionDao sesionDao,
             IDetalleDocenteEspecialidadDao detalleDocenteEspecialidadDao
         )
         {
             _docenteDao = docenteDao;
             _personaDao = personaDao;
-            _usuarioService = usuarioService;
+            _usuarioDao = usuarioDao;
+            _sesionDao = sesionDao;
             _detalleDocenteEspecialidadDao = detalleDocenteEspecialidadDao;
         }
 
@@ -49,6 +52,13 @@ namespace Services.ImplementacionService
         public Docente BuscarDocenteDNI(string dni)
         {
             Docente docente = _docenteDao.BuscarDocenteDNI(dni);
+            return docente;
+        }
+        
+        /**/
+        public Docente BuscarDocentePorCorreo(string correo)
+        {
+            Docente docente = _docenteDao.BuscarDocenteCorreo(correo);
             return docente;
         }
 
@@ -112,6 +122,7 @@ namespace Services.ImplementacionService
             {
                 if (_docenteDao.EditarDocente(docente))
                 {
+                    ActualizarCorreoUsuario(docente);
                     if (_docenteDao.EliminarEspecialidadesDelDocente(docente.IdDocente))
                     {
                         if (AgregarEspecialidadesDelDocente(docente.IdDocente, especialidades))
@@ -124,6 +135,22 @@ namespace Services.ImplementacionService
         }
 
 
+        //Contar horas acumuladas de un docente en el mes
+        public double ContarHorasAcumuladasDelMes( int mes, int año, int idDocente)
+        {
+            double totalHoras = 0;
+            List<Sesion> sesiones = _sesionDao.BuscarSesionesDelDocentePorMes(mes, año, idDocente);
+            foreach (Sesion s in sesiones)
+            {
+                if (s.AsistenciaDocente == 1)
+                {
+                    totalHoras += s.CalcularHorasDeLaSesion();
+                }
+            }
+
+
+            return totalHoras;
+        }
 
         #endregion metodos
 
@@ -197,6 +224,19 @@ namespace Services.ImplementacionService
                 return true;
             }
             return false;
+        }
+
+        
+        /**/
+        private void ActualizarCorreoUsuario(Docente docente)
+        {
+            AppUser usuario = _usuarioDao.BuscarUsuarioPorPersona(docente.IdPersona);
+            usuario.UserName = docente.Persona.CorreoPersona;
+            usuario.Email = docente.Persona.CorreoPersona;
+            usuario.NormalizedEmail = docente.Persona.CorreoPersona.ToUpper();
+            usuario.NormalizedUserName = docente.Persona.CorreoPersona.ToUpper();
+
+            _usuarioDao.EditarUsuario(usuario);
         }
 
 

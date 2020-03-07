@@ -40,6 +40,19 @@ namespace Persistencia.ImplementacionDao
 
         
 
+
+        /*
+         * BUSCAR SESIONES DEL DOCENTE EN EL MES
+         */
+        public List<Sesion> BuscarSesionesDelDocentePorMes(int mes, int año, int idDocente) => _context.Sesion
+            .Where(s => (s.FechaSesion.Month == mes && s.FechaSesion.Year == año && s.Horario.Curso.Docente.IdDocente == idDocente && s.Horario.EstadoHorario == 1))
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
+            .Include(s => s.Horario).ThenInclude(h => h.Curso).ThenInclude(c => c.TipoCurso)
+            .Include(s => s.Horario).ThenInclude(h => h.Ambiente)
+            .ToList();
+
+        
+
         /*
          * BUSCAR SESION POR FECHA Y CURSO
          */

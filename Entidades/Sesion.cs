@@ -16,5 +16,13 @@ namespace Entidades
         public int IdHorario { get; set; }
 
         public Horario Horario { get; set; }
+
+
+        public double CalcularHorasDeLaSesion()
+        {
+            //double horas = Horario.HoraFin.TotalMinutes - Horario.HoraInicio.TotalMinutes;
+            double horas = Horario.HoraFin.TotalHours - Horario.HoraInicio.TotalHours;
+            return horas;
+        }
     }
 }

@@ -16,14 +16,17 @@ namespace OverseasWeb.Controllers
     {
         private IInicioAdminService _inicioAdminService;
         private IInicioDocenteService _inicioDocenteService;
+        private IDocenteService _docenteService;
 
         public HomeController(
             IInicioAdminService inicioAdminService,
-            IInicioDocenteService inicioDocenteService
+            IInicioDocenteService inicioDocenteService,
+            IDocenteService docenteService
         )
         {
             _inicioAdminService = inicioAdminService;
             _inicioDocenteService = inicioDocenteService;
+            _docenteService = docenteService;
         }
 
 
@@ -125,6 +128,16 @@ namespace OverseasWeb.Controllers
             var userInfo = HttpContext.User.Identity;
             List<Sesion> sesiones = _inicioDocenteService.BuscarHorariosDelDiaDocente(userInfo.Name);
             return Json(sesiones);
+        }
+        
+
+        [Authorize(Roles = "Docente")]
+        public IActionResult HorasAcumuladasDelMesDocente()
+        {
+            var userInfo = HttpContext.User.Identity;
+            Docente docente = _docenteService.BuscarDocentePorCorreo(userInfo.Name);
+            double totalHoras = _docenteService.ContarHorasAcumuladasDelMes(DateTime.Today.Month,DateTime.Today.Year,docente.IdDocente);
+            return Json(totalHoras);
         }
 
 

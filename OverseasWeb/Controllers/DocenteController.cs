@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Entidades;
 using Services.InterfazService;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OverseasWeb.Controllers
 {
@@ -35,6 +36,7 @@ namespace OverseasWeb.Controllers
         #region IActionResult
 
         /**/
+        [Authorize(Roles = "Admin")]
         public IActionResult ListarDocentes()
         {
             List<Docente> docentes = _docenteService.ListarDocentes();
@@ -42,6 +44,7 @@ namespace OverseasWeb.Controllers
         }
 
         /**/
+        [Authorize(Roles = "Admin")]
         public IActionResult BuscarDocente(int id)
         {
             Docente docente = _docenteService.BuscarDocenteID(id);
@@ -49,6 +52,7 @@ namespace OverseasWeb.Controllers
         }
 
         /**/
+        [Authorize(Roles = "Admin")]
         public IActionResult BuscarEspecialidadesDelDocente(int id)
         {
             List<Especialidad> especialidades = _docenteService.BuscarEspecialidadesDelDocente(id);
@@ -56,6 +60,7 @@ namespace OverseasWeb.Controllers
         }
 
         /**/
+        [Authorize(Roles = "Admin")]
         public IActionResult RegistrarDocente()
         {
             return View();
@@ -63,6 +68,7 @@ namespace OverseasWeb.Controllers
 
         /**/
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegistrarDocente(Docente docente, List<Especialidad> especialidades)
         {
             var mensaje = _docenteService.RegistrarDocente(docente, especialidades);
@@ -95,6 +101,7 @@ namespace OverseasWeb.Controllers
         }
 
         /**/
+        [Authorize(Roles = "Admin")]
         public IActionResult EditarDocente(int id)
         {
             Docente docente = _docenteService.BuscarDocenteID(id);
@@ -103,11 +110,26 @@ namespace OverseasWeb.Controllers
 
         /**/
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditarDocente(Docente docente, List<Especialidad> especialidades)
         {
             var mensaje = _docenteService.EditarDocente(docente, especialidades);
             return Json(mensaje);
         }
+
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult HorasAcumuladasDelMesDocente(int mes,int año, int idDocente)
+        {
+            double totalHoras = _docenteService.ContarHorasAcumuladasDelMes(mes, año, idDocente);
+            return Json(totalHoras);
+        }
+
+
+
+
+
         #endregion IActionResult
     }
 }

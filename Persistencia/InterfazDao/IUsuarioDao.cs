@@ -13,5 +13,6 @@ namespace Persistencia.InterfazDao
         AppUser BuscarUsuarioCorreo(string correo);
         bool EditarUsuario(AppUser usuario);
         AppRole BuscarUserRole(int idUser);
+        AppUser BuscarUsuarioPorPersona(int idPersona);
     }
 }

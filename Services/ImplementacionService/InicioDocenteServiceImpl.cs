@@ -7,7 +7,7 @@ using Services.InterfazService;
 
 namespace Services.ImplementacionService
 {
-    public class InicioDocenteServiceImpl: IInicioDocenteService
+    public class InicioDocenteServiceImpl : IInicioDocenteService
     {
 
         private readonly ICursoDao _cursoDao;
@@ -50,5 +50,24 @@ namespace Services.ImplementacionService
             List<Sesion> sesiones = _sesionDao.BuscarHorariosDelDiaDocente(docente.IdDocente);
             return sesiones;
         }
+
+    
+        //Contar horas acumuladas de un docente en el mes actual
+        //public double ContarHorasAcumuladasDelMes(string username)
+        //{
+        //    double totalHoras = 0;
+        //    Docente docente = _docenteDao.BuscarDocenteCorreo(username);
+        //    List<Sesion> sesiones = _sesionDao.BuscarSesionesDelDocentePorMes(DateTime.Today.Month, docente.IdDocente);
+        //    foreach (Sesion s in sesiones)
+        //    {
+        //        if(s.AsistenciaDocente == 1)
+        //        {
+        //            totalHoras += s.CalcularHorasDeLaSesion();
+        //        }
+        //    }
+
+
+        //    return totalHoras;
+        //}
     }
 }

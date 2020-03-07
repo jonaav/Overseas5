@@ -6,12 +6,14 @@
  */
 
 let dataHorarioDocente = $("#dataHorarioDocente");
+let txtHorasAcumuladasDocente = $("#txtHorasAcumuladasDocente");
 
 
 
 if ($("#viewInicioDocente").is(":visible")) {
     console.log("VIEW DOCENTE");
     MostrarHorariosDocente();
+    HorasAcumuladasDelMesDocente();
 }
 
 
@@ -45,6 +47,23 @@ function MostrarHorariosDocente() {
 }
 
 
+/*
+ * CONTAR HORAS DEL DOCENTE DEL MES
+ * */
+
+function HorasAcumuladasDelMesDocente() {
+    $.ajax({
+        type: "get",
+        url: "/Home/HorasAcumuladasDelMesDocente",
+        datatype: 'json',
+        success: function (response) {
+            if (response != "") {
+                txtHorasAcumuladasDocente.html("");
+                txtHorasAcumuladasDocente.append(response);
+            }
+        }
+    });
+}
 
 
 

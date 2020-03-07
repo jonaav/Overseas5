@@ -19,9 +19,11 @@ namespace Persistencia.InterfazDao
         Sesion BuscarSesion(int idHorario);
         Sesion BuscarSesionPorID(int idSesion);
         Sesion BuscarSesionPorFechaYCurso(int idCurso, DateTime fecha);
-        
+        List<Sesion> BuscarSesionesDelDocentePorMes(int mes, int año, int idDocente);
 
 
-        
+
+
+
     }
 }

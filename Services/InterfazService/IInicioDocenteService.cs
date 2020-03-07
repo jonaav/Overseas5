@@ -8,5 +8,6 @@ namespace Services.InterfazService
     public interface IInicioDocenteService
     {
         List<Sesion> BuscarHorariosDelDiaDocente(string username);
+        //double ContarHorasAcumuladasDelMes(string username);
     }
 }

@@ -45,6 +45,16 @@ namespace Persistencia.ImplementacionDao
                                                             .Where(u => u.UserName == correo)
                                                             .Include(u => u.Persona)
                                                             .FirstOrDefault();
+        
+
+        /*
+         *  Buscar Usuario por persona 
+         */
+
+        public AppUser BuscarUsuarioPorPersona(int idPersona) => _context.Usuario
+                                                            .Where(u => u.IdPersona == idPersona)
+                                                            .Include(u => u.Persona)
+                                                            .FirstOrDefault();
 
         /*
          *  Editar Usuario 

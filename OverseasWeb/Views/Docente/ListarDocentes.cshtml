@@ -34,7 +34,10 @@
                                         <td>@Html.DisplayFor(modelItem => item.Persona.NombresPersona)</td>
 
                                         <td>
-                                            <div class="form-check-inline"><a class="btn btn-outline-info" asp-action="EditarDocente" asp-route-id="@item.IdDocente" rel="tooltip" title="Datos"><span class="fa fa-user"></span></a></div>
+                                            <div class="form-check-inline">
+                                                <a class="btn btn-outline-info" asp-action="EditarDocente" asp-route-id="@item.IdDocente" rel="tooltip" title="Datos"><span class="fa fa-user"></span></a>
+                                                <a class="btn btn-outline-primary" onclick="SeleccionarDocente(@item.IdDocente)" data-toggle="modal" data-target="#horasDocenteModal" rel="tooltip" title="Horas Acumuladas"><span class="fa fa-clock-o"></span></a>
+                                            </div>
                                         </td>
                                     </tr>
                                 }
@@ -50,3 +53,4 @@
 
 </div>
 
+<partial name="~/Views/Docente/_ModalHorasDocente.cshtml">

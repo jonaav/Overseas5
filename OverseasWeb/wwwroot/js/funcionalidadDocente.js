@@ -18,6 +18,14 @@ var direccionDoc = $('#txtDireccionDoc');
 
 
 
+var txtMesAño = $('#txtMesAño');
+var txtHorasDocentePorMes = $('#txtHorasDocentePorMes');
+var idDocenteHoras;
+
+
+
+
+
 
 if ($("#viewListarDocentes").is(':visible')) {
     cambiarTitulo("Docentes");
@@ -258,6 +266,30 @@ function EditarDocente() {
     }
 
 }
+
+/*
+ *CONTAR HORAS DOCENTE POR MES 
+ */
+
+function ContarHorasDocentePorMes() {
+    let mes = txtMesAño.val().substr(5,2);
+    let año = txtMesAño.val().substr(0,4);
+    $.ajax({
+        type: "get",
+        url: "/Docente/HorasAcumuladasDelMesDocente",
+        datatype: 'json',
+        data: { mes: mes, año: año, idDocente: idDocenteHoras },
+        success: function (response) {
+            txtHorasDocentePorMes.html("");
+            txtHorasDocentePorMes.append(response);
+        }
+    });
+}
+
+function SeleccionarDocente(idDocente) {
+    idDocenteHoras = idDocente;
+}
+
 
 
 
