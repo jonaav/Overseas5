@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace OverseasWeb.Controllers
 {
@@ -18,16 +19,19 @@ namespace OverseasWeb.Controllers
         private readonly IEstudianteService _estudianteService;
         private readonly ICursoService _cursoService;
         private readonly ICalificacionesService _calificacionService;
+        private readonly IHostingEnvironment _env;
 
         public CalificacionController(
             IEstudianteService estudianteService,
             ICursoService cursoService,
-            ICalificacionesService calificacionService
+            ICalificacionesService calificacionService,
+            IHostingEnvironment env
         )
         {
             _estudianteService = estudianteService;
             _cursoService = cursoService;
             _calificacionService = calificacionService;
+            _env = env;
         }
 
 
@@ -61,39 +65,34 @@ namespace OverseasWeb.Controllers
             MemoryStream ms = new MemoryStream();
             PdfWriter writer = PdfWriter.GetInstance(doc, ms);
             doc.Open();
-            doc.AddAuthor("Overseas");
-            doc.AddTitle("Reporte de notas");
 
             //salto de linea
             var saltaLinea = new Paragraph("\n");
 
+            //Imagen Cabecera
+
+            Image header = Image.GetInstance(Path.Combine(_env.WebRootPath, "assets/images", "cabecera.png"));
+            header.SetAbsolutePosition(0, 770);
+            header.ScaleAbsoluteWidth(595);
+            header.ScaleAbsoluteHeight(70);
+
+
+            //titulo
 
             BaseFont fuente = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, true);
-            Font fuenteTitulo = new Font(fuente, 24f, Font.BOLD, new BaseColor(53, 120, 180));
+            Font fuenteTitulo = new Font(fuente, 28f, Font.BOLD, new BaseColor(53, 120, 180));
             var titulo = new Paragraph("REPORTE DE NOTAS", fuenteTitulo);
             titulo.Alignment = Element.ALIGN_CENTER;
-            doc.Add(titulo);
-
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
             var saludo = new Paragraph("Estimado Alumno(a):");
             saludo.Alignment = Element.ALIGN_LEFT;
-            doc.Add(saludo);
 
             //NOMBRE
-            doc.Add(saltaLinea);
             string nombre = historial.Estudiante.Persona.NombresPersona + " " + historial.Estudiante.Persona.ApellidosPersona;
-            var alumno = new Paragraph(nombre.ToUpper());
+            Font fuenteAlumno = new Font(fuente, 20f, Font.BOLD, new BaseColor(0, 0, 0));
+            var alumno = new Paragraph(nombre.ToUpper(),fuenteAlumno);
             alumno.Alignment = Element.ALIGN_CENTER;
-            doc.Add(alumno);
-
-            doc.Add(saltaLinea);
-            var parrafo = new Paragraph("El presente es para saludarlo y a la vez hacer de su conocimiento su puntaje obtenido en su ciclo académico:");
+            var parrafo = new Paragraph("El presente es para saludarle y a la vez hacer de su conocimiento su puntaje obtenido en su ciclo académico:");
             parrafo.Alignment = Element.ALIGN_JUSTIFIED;
-            doc.Add(parrafo);
-
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
             //IDIOMA Y PERIODO
             string curso = historial.Curso.Idioma + " - " + historial.Curso.Nivel + " " + historial.Curso.Ciclo;
             string periodo = historial.Curso.FechaInicio.ToString("MMMM") + " " + historial.Curso.FechaInicio.Year;
@@ -101,15 +100,13 @@ namespace OverseasWeb.Controllers
 
             tIdiomaPeriodo.AddCell(new PdfPCell(new Phrase("Idioma: " + curso)) { Border = 0, HorizontalAlignment =  Element.ALIGN_LEFT});
             tIdiomaPeriodo.AddCell(new PdfPCell(new Phrase("Periodo: " + periodo)) { Border = 0, HorizontalAlignment = Element.ALIGN_LEFT });
-            doc.Add(tIdiomaPeriodo);
+
             //Fin
 
 
 
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
             //Calculo de celdas - NOTAS
-            int nExam = 3;
+            int nExam = evaluaciones.Count;
             int nCeldas = nExam + 1;
             float medida = 100 / (nExam + 1);
             var cabecera = new float[nCeldas];
@@ -133,54 +130,79 @@ namespace OverseasWeb.Controllers
             }
             // Agrega promedio
             tabla.AddCell(new Phrase(historial.CalcularPromedio(evaluaciones).ToString()));
-            doc.Add(tabla);
             //Fin
 
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
 
             // FEEDBACK
             string feedback = "Feedback: \n\n" + historial.FeedbackHistorialEvaluacion;
             var tablaFeedback = (new PdfPTable(new float[] { 100f }) { WidthPercentage = 100});
             tablaFeedback.AddCell(new Paragraph(feedback));
-            doc.Add(tablaFeedback);
 
             //Fin
 
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
             Font fuenteRecordatorio = new Font(fuente, 10f, Font.NORMAL, BaseColor.Black);
-            var recordatorio = new Paragraph("Nota: Recuerda que, para ingresar al siguiente ciclo debes de haber alcanzado el puntaje mínimo de 75 puntos a 100 puntos en tu promedio final.",fuenteRecordatorio);
+            var recordatorio = new Paragraph("Nota: Recuerda que para ingresar al siguiente ciclo debes haber alcanzado el puntaje mínimo de 65 puntos sobre 100 puntos en tu promedio final.",fuenteRecordatorio);
             recordatorio.Alignment = Element.ALIGN_JUSTIFIED;
-            doc.Add(recordatorio);
-
-            doc.Add(saltaLinea);
             var despedida = new Paragraph("Sin otro en particular, quedo de usted");
             despedida.Alignment = Element.ALIGN_JUSTIFIED;
-            doc.Add(despedida);
-
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
             //Fecha
             string dia = Convert.ToString(DateTime.Today.Day);
             string mes = Convert.ToString(DateTime.Today.ToString("MMMM"));
             string año = Convert.ToString(DateTime.Today.Year);
             var fecha = new Paragraph("Trujillo, "+dia+" de "+mes+" de "+año);
             fecha.Alignment = Element.ALIGN_RIGHT;
-            doc.Add(fecha);
             //Fin
 
-            doc.Add(saltaLinea);
-            doc.Add(saltaLinea);
 
             //Firma
             Chunk linea = new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(1f, 30f, BaseColor.Black, Element.ALIGN_CENTER, 0f));
-            doc.Add(linea);
+
             var firma = new Paragraph("FIRMA Y SELLO");
             firma.Alignment = Element.ALIGN_CENTER;
+
+            //Pie de pagina
+            Image footer = Image.GetInstance(Path.Combine(_env.WebRootPath, "assets/images", "piepag.png"));
+            footer.SetAbsolutePosition(0, 0);
+            footer.ScaleAbsoluteWidth(595);
+            footer.ScaleAbsoluteHeight(70);
+
+
+            doc.Add(header);
+            doc.Add(titulo);
+
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(saludo);
+            doc.Add(saltaLinea);
+            doc.Add(alumno);
+
+            doc.Add(saltaLinea);
+            doc.Add(parrafo);
+
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(tIdiomaPeriodo);
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(tabla);
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(tablaFeedback);
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(recordatorio);
+
+            doc.Add(saltaLinea);
+            doc.Add(despedida);
+
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(fecha);
+            doc.Add(saltaLinea);
+            doc.Add(saltaLinea);
+            doc.Add(linea);
             doc.Add(firma);
-
-
+            doc.Add(footer);
 
             writer.Close();
             doc.Close();
