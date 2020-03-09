@@ -19,13 +19,24 @@ namespace Persistencia.ImplementacionDao
          *  Listar Cursos
          */
         public List<Curso> ListarCursos (string nombreCurso, string programa, int estado) => _context.Curso
-                                                                                .Where(c => (c.Programa == programa &&
-                                                                                             c.TipoCurso.NombreCurso == nombreCurso &&
-                                                                                             c.Estado == estado))
-                                                                                .Include(c => c.TipoCurso)
-                                                                                .Include(c => c.Docente)
-                                                                                    .ThenInclude(d => d.Persona)
-                                                                                .OrderByDescending(c => c.IdCurso).ToList();
+            .Where(c => (c.Programa == programa &&
+                            c.TipoCurso.NombreCurso == nombreCurso &&
+                            c.Estado == estado))
+            .Include(c => c.TipoCurso)
+            .Include(c => c.Docente)
+                .ThenInclude(d => d.Persona)
+            .OrderByDescending(c => c.IdCurso).ToList();
+        
+
+        /*
+         *  Listar Cursos Activos(1) Por Tipo de Curso
+         */
+        public List<Curso> BuscarCursosActivosPorTipo(int idTCurso) => _context.Curso
+            .Where(c => (c.IdTipoCurso == idTCurso && c.Estado == 1 ))
+            .Include(c => c.TipoCurso)
+            .Include(c => c.Docente)
+                .ThenInclude(d => d.Persona)
+            .OrderByDescending(c => c.IdCurso).ToList();
 
 
         /*

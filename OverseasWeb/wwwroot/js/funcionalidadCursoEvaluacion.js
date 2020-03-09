@@ -74,7 +74,7 @@ function ListarTiposEvaluacion() {
                 console.log("LISTA TEVALUACIONES");
                 console.log(listaTEvaluaciones);
                 $.each(response, function (i, res) {
-                    let btnEliminarEvaluacion = '<button onclick = "EliminarEvaluacion(' + res.idTipoEvaluacion + ')" class="btn btn-outline-danger"><span class="fa fa-remove"></span></button>';
+                    let btnEliminarEvaluacion = '<button onclick = "EliminarTipoEvaluacion(' + res.idTipoEvaluacion + ')" class="btn btn-outline-danger"><span class="fa fa-remove"></span></button>';
                     contenidoTablaTiposEvaluacion.append('<tr>' +
                         '<td>' + res.nombreEvaluacion + '</td>' +
                         '<td>' + btnEliminarEvaluacion + ' </td>' +
@@ -242,7 +242,7 @@ function AgregarTCursoTEvaluacion(idTEvaluacion) {
 
 
 /*
- * ELIMINAR TIPO EVALUACION
+ * ELIMINAR TIPO CURSO TIPO EVALUACION
  */
 
 function EliminarTCursoTEvaluacion(idtt) {

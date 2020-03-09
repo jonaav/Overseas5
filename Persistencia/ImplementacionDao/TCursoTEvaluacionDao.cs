@@ -53,5 +53,10 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
+        public TipoCursoTipoEvaluacion BuscarTipoCursoTipoEvaluacion(int idtt) => _context.TipoCursoTipoEvaluacion.Find(idtt);
+
+        public List<TipoCursoTipoEvaluacion> ListarTCursoTEvaluacionPorTEvaluacion(int idTEvaluacion) => _context.TipoCursoTipoEvaluacion
+            .Where(tt => (tt.IdTipoEvaluacion == idTEvaluacion))
+            .ToList();
     }
 }

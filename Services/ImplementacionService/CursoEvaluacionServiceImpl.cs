@@ -9,18 +9,30 @@ namespace Services.ImplementacionService
 {
     public class CursoEvaluacionServiceImpl: ICursoEvaluacionService 
     {
+        private readonly ICursoDao _cursoDao;
         private readonly ITipoCursoDao _tipoCursoDao;
+        private readonly IInscripcionDao _inscripcionDao;
         private readonly ITipoEvaluacionDao _tipoEvaluacionDao;
+        private readonly IEvaluacionDao _EvaluacionDao;
+        private readonly IHistorialEvaluacionDao _historialEvaluacion;
         private readonly ITCursoTEvaluacionDao _tCursotEvaluacionDao;
 
         public CursoEvaluacionServiceImpl(
             ITipoCursoDao tipoCursoDao,
+            ICursoDao cursoDao,
+            IInscripcionDao inscripcionDao,
             ITipoEvaluacionDao tipoEvaluacionDao,
+            IEvaluacionDao EvaluacionDao,
+            IHistorialEvaluacionDao historialEvaluacion,
             ITCursoTEvaluacionDao tCursotEvaluacionDao
         )
         {
+            _cursoDao = cursoDao;
             _tipoCursoDao = tipoCursoDao;
+            _inscripcionDao = inscripcionDao;
             _tipoEvaluacionDao = tipoEvaluacionDao;
+            _EvaluacionDao = EvaluacionDao;
+            _historialEvaluacion = historialEvaluacion;
             _tCursotEvaluacionDao = tCursotEvaluacionDao;
         }
 
@@ -83,10 +95,14 @@ namespace Services.ImplementacionService
 
         public String EliminarTipoEvaluacion(int idTipoEvaluacion)
         {
-            String mensaje = "No pudo ser eliminado";
-            if (_tipoEvaluacionDao.EliminarTipoEvaluacion(idTipoEvaluacion))
+            String mensaje = "No puede ser eliminado, probablemente se encuentra incluido en algun tipo de curso";
+            List<TipoCursoTipoEvaluacion> tts = _tCursotEvaluacionDao.ListarTCursoTEvaluacionPorTEvaluacion(idTipoEvaluacion);
+            if (tts.Count == 0)
             {
-                mensaje = "Eliminado";
+                if (_tipoEvaluacionDao.EliminarTipoEvaluacion(idTipoEvaluacion))
+                {
+                    mensaje = "Eliminado";
+                }
             }
             return mensaje;
         }
@@ -98,6 +114,22 @@ namespace Services.ImplementacionService
             String mensaje = "No pudo ser registrado";
             if (_tCursotEvaluacionDao.RegistrarTCursoTEvaluacion(tt))
             {
+                List<Curso> cursos = _cursoDao.BuscarCursosActivosPorTipo(tt.IdTipoCurso);
+                foreach (Curso c in cursos)
+                {
+                    List<Inscripcion> inscripciones = _inscripcionDao.ListarInscripciones(c.IdCurso);
+                    foreach(Inscripcion i in inscripciones)
+                    {
+                        HistorialEvaluacion historial = _historialEvaluacion.BuscarHistorialPorEstudianteYCurso(i.IdEstudiante, i.IdCurso);
+                        Evaluacion evaluacion = new Evaluacion
+                        {
+                            CalificacionEvaluacion = 0,
+                            IdTipoEvaluacion = tt.IdTipoEvaluacion,
+                            IdHistorialEvaluacion = historial.IdHistorialEvaluacion,
+                        };
+                        _EvaluacionDao.RegistrarEvaluacion(evaluacion);
+                    }
+                }
                 mensaje = "Registrado";
             }
             return mensaje;
@@ -108,8 +140,21 @@ namespace Services.ImplementacionService
         public String EliminarTCursoTEvaluacion(int idtt)
         {
             String mensaje = "No pudo ser eliminado";
+            TipoCursoTipoEvaluacion tt = _tCursotEvaluacionDao.BuscarTipoCursoTipoEvaluacion(idtt);
             if (_tCursotEvaluacionDao.EliminarTCursoTEvaluacion(idtt))
             {
+                List<Curso> cursos = _cursoDao.BuscarCursosActivosPorTipo(idtt);
+                foreach (Curso c in cursos)
+                {
+                    List<Inscripcion> inscripciones = _inscripcionDao.ListarInscripciones(c.IdCurso);
+                    foreach (Inscripcion i in inscripciones)
+                    {
+                        HistorialEvaluacion historial = _historialEvaluacion.BuscarHistorialPorEstudianteYCurso(i.IdEstudiante, i.IdCurso);
+                        
+                        Evaluacion ev =  _EvaluacionDao.BuscarEvaluacionPorHistorialTipo(historial.IdHistorialEvaluacion, tt.IdTipoEvaluacion);
+                        _EvaluacionDao.EliminarEvaluacion(ev.IdEvaluacion);
+                    }
+                }
                 mensaje = "Eliminado";
             }
             return mensaje;

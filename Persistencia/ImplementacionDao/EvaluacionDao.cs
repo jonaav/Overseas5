@@ -102,5 +102,14 @@ namespace Persistencia.ImplementacionDao
                 throw e;
             }
         }
+
+
+        /*
+         *  Buscar evaluacion por historial y tipo de evaluacion
+         */
+
+        public Evaluacion BuscarEvaluacionPorHistorialTipo(int idHistorial, int idTEvaluacion) => _context.Evaluacion
+            .Where(e => (e.IdHistorialEvaluacion == idHistorial && e.IdTipoEvaluacion == idTEvaluacion))
+            .FirstOrDefault();
     }
 }
