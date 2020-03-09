@@ -219,7 +219,8 @@ function MostrarFormCurso() {
     containerFormCurso.show();
     containerListaCursos.hide();   
     if(idiomaVisible == 0)
-        selectorIdiomaCurso.val('Inglés');     
+        selectorIdiomaCurso.val('Inglés');            
+    console.log("El idioma es" + selectorIdiomaCurso.val());
     
 };
 

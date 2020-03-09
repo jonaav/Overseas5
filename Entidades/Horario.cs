@@ -21,5 +21,25 @@ namespace Entidades
         public Curso Curso { get; set; }
 
         public Ambiente Ambiente { get; set; }
+
+        #region Metodos
+
+
+        /*
+         * Validar hora Fin > hora inicio
+         */
+
+        public bool EsHoraFinCorrecta()
+        {
+            return (HoraFin > HoraInicio) ? true : false;
+        }
+
+        public bool EsHoraInicioCorrecta()
+        {
+            TimeSpan now = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            return (HoraInicio > now) ? true : false;
+        }
+
+        #endregion Metodos
     }
 }

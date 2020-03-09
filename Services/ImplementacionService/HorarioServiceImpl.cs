@@ -59,17 +59,46 @@ namespace Services.ImplementacionService
 
         public String EsHorarioPermitido(Horario horarioEvaluar)
         {
-            String mensaje = "Incorrecto";
-            if (_horarioDao.EsHorarioPermitido(horarioEvaluar))
-                mensaje = "Correcto";
+            String mensaje = "Horario no disponible :( ";
+            if (horarioEvaluar.EsHoraFinCorrecta())
+            {
+                if (_horarioDao.EsHorarioPermitido(horarioEvaluar))
+                    mensaje = "Correcto";
+            }
+            else
+            {
+                mensaje = "La Hora Fin debe ser mayor que la Hora Inicio";
+            }
+            
             return mensaje;
         }
 
         public String EsSesionPermitida(Sesion sesionEvaluar)
         {
-            String mensaje = "Incorrecto";
-            if( _horarioDao.EsSesionPermitida(sesionEvaluar))
-                mensaje = "Correcto";
+            String mensaje = "Sesión no disponible :( ";
+            if (sesionEvaluar.EsFechaSesionValida())
+            {
+                if (sesionEvaluar.Horario.EsHoraFinCorrecta())
+                {
+                    if (sesionEvaluar.EsHoraInicioSesionValida())
+                    {
+                        if (_horarioDao.EsSesionPermitida(sesionEvaluar))
+                            mensaje = "Correcto";
+                    }
+                    else
+                    {
+                        mensaje = "Sesión programada para Hoy. La Hora Inicio debe ser mayor a la actual";
+                    }                    
+                }
+                else
+                {
+                    mensaje = "La Hora Fin debe ser mayor que la Hora Inicio";
+                }
+            }
+            else
+            {
+                mensaje = "La Fecha de Sesión debe ser mayor o igual a la Fecha Actual";
+            }            
             return mensaje;
         }
 

@@ -54,6 +54,17 @@
       LimpiarFormHorario();
   }
 
+  function VerificarFecha(fecha){
+    let fechaICurso = new Date(fecha);
+    let fechaHoy = new Date();
+    fechaICurso.setDate(fechaICurso.getDate()+1); 
+    if(fechaICurso >= fechaHoy ){
+        msgError("EL curso se inició no puede modificar los horarios");
+        DeshabilitarEdicionHorarios(true);
+    }                    
+    
+  }
+
   function CargarFormHorario(idCurso, estadoCursoHorario, programa, fechaInicio, fechaFin, tituloCurso){ 
     idCursoHorario = idCurso;
     programaCursoHorario = programa;
@@ -61,11 +72,13 @@
     fechaFinCursoHorario = fechaFin;    
     MostrarFormHorario();    
     AddTituloCursoAlFormHorario(tituloCurso);
+    (estadoCursoHorario == 1) ? DeshabilitarEdicionHorarios(false) : DeshabilitarEdicionHorarios(true);  
     (programa == "Privado") ? ( divDatosHorarioPrivado.show(), divDiaHorario.hide()) :     
-                              ( divDiaHorario.show(), divDatosHorarioPrivado.hide());   
-    (estadoCursoHorario == 1) ? DeshabilitarEdicionHorarios(false) : DeshabilitarEdicionHorarios(true);                                          
+                              ( divDiaHorario.show(), divDatosHorarioPrivado.hide(), VerificarFecha(fechaInicio));       
     AgregarCabeceraTablaHorario();    
     BuscarHorariosCurso();
+    
+                            
   }
   
   function AgregarCabeceraTablaHorario(){
@@ -358,81 +371,51 @@ function AgregarFilaTablaHorario(idHorarioSesion, numSesion, fechaSesion, dia, h
 
 function ValidarCamposHorario(){
     var resultado = VerificarCampoVacio("HoraInicio") + VerificarCampoVacio("HoraFin") + VerificarCampoVacio("HorarioNombreAmbiente");
-    if(programaCursoHorario == "Privado")
-        resultado += VerificarCampoVacio("FechaSesion");
+    (programaCursoHorario == "Privado") ? resultado += VerificarCampoVacio("FechaSesion") : resultado += VerificarSelectorVacio("HorarioDia");      
+    if(resultado > 0)
+        return "Incorrecto" 
     else
-        resultado += VerificarSelectorVacio("HorarioDia");      
-    if(resultado > 0)                 
-        return "Incorrecto";
-    else
-        return "Correcto";
+        return "Correcto";        
 }
 
 
-function EsHorarioRegularPermitido(){         
-    $.ajax({
-        type: 'GET',
-        url: "/Horario/VerificarHorario",                                             
-        dataType: 'json',  
-        data : {
-            IdHorario : idHorarioSesionEdit,
-            Dia : selectorDia.val(), 
-            HoraFin : txtHoraFin.val(), 
-            HoraInicio : txtHoraInicio.val(), 
-            IdCurso : idCursoHorario, 
-            IdAmbiente : idAmbienteSelecHorario
-        },
-        success: function (decision) { 
-            if(decision == 'Correcto'){
-                console.log('50 papu');
-                AgregarHorario();
-            }else{
-                console.log('nel prro');
-                msgError('Horario no disponible :( ');
-            }
-        }
-    });
-    idHorarioSesionEdit = 0;
-}
 
-
-function EsSesionPermitida(){
-    let datosSesion = { Horario: {
-                            IdHorario : 0,
-                            HoraFin : txtHoraFin.val(), 
-                            HoraInicio : txtHoraInicio.val(), 
-                            IdCurso : idCursoHorario, 
-                            IdAmbiente : idAmbienteSelecHorario  
-                        },
-                        IdSesion : idHorarioSesionEdit,
-                        FechaSesion : txtFechaSesion.val()
-                    };
-    $.ajax({
-        type: 'post',
-        url: "/Horario/VerificarSesion",                                                  
-        dataType: 'json',  
-        data : datosSesion,
-        success: function (decision) { 
-            if(decision == 'Correcto'){
-                console.log('50 papu');
-                AgregarHorario();
-            }else{
-                console.log('nel prro');
-                msgError('Sesion no disponible :( ');
-            }
-        }
-    });
-    idHorarioSesionEdit = 0;
-}
-
-function VerificarHorario(){
-    if(ValidarCamposHorario() == "Correcto"){ 
+function VerificarHorario(){    
+    let dataVerificar, accion = 'VerificarHorario';
+    if(ValidarCamposHorario() == "Correcto"){             
         if(programaCursoHorario == 'Regular'){
-            EsHorarioRegularPermitido();
+            dataVerificar = { IdHorario : idHorarioSesionEdit, Dia : selectorDia.val(), HoraFin : txtHoraFin.val(), HoraInicio : txtHoraInicio.val(), 
+                              IdCurso : idCursoHorario, IdAmbiente : idAmbienteSelecHorario };
         }
         else{
-            EsSesionPermitida();
+            accion = 'VerificarSesion';
+            dataVerificar = { Horario: { IdHorario : 0, HoraFin : txtHoraFin.val(), HoraInicio : txtHoraInicio.val(), IdCurso : idCursoHorario, 
+                                         IdAmbiente : idAmbienteSelecHorario  
+                                        },
+                              IdSesion : idHorarioSesionEdit, FechaSesion : txtFechaSesion.val() };
         }
+        $.ajax({
+            type: 'post',
+            url: "/Horario/" + accion,                                                  
+            dataType: 'json',  
+            data : dataVerificar,
+            success: function (decision) { 
+                switch (decision) {
+                    case 'Correcto' : {
+                        AgregarHorario();
+                        break;
+                    }
+                    case 'Incorrecto' : {
+                        msgError(decision);
+                        break;
+                    }
+                    default: {
+                        msgError(decision);
+                    }
+                }         
+            }
+        });
+        idHorarioSesionEdit = 0;
     }
 }
 
