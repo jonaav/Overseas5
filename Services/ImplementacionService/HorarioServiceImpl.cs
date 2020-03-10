@@ -11,11 +11,13 @@ namespace Services.ImplementacionService
     public class HorarioServiceImpl : IHorarioService
     {
 
-        private readonly IHorarioDao _horarioDao;        
+        private readonly IHorarioDao _horarioDao;
+        private readonly ISesionDao _sesionDao;
 
-        public HorarioServiceImpl(IHorarioDao horarioDao)
+        public HorarioServiceImpl(IHorarioDao horarioDao, ISesionDao sesionDao)
         {
-            _horarioDao = horarioDao;            
+            _horarioDao = horarioDao;
+            _sesionDao = sesionDao;
         }
 
         public List<Horario> BuscarHorariosCurso(int idCurso)
@@ -31,30 +33,38 @@ namespace Services.ImplementacionService
                 mensaje = "Correcto";
             return mensaje;
         }
+        
 
-        public string DeshabilitarHorariosCurso(int idCurso)
+        public String DeshabilitarHorariosCurso(int idCurso)
         {
             String mensaje = "Incorrecto";
             if(_horarioDao.DeshabilitarHorariosCurso(idCurso))
                 mensaje = "Correcto";
             return mensaje;
-        }
-
-        public bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso)
-        {
-            return _horarioDao.EditarHorariosCurso(listaHorarios, listaSesionesActuales, idCurso);
-        }
-
+        }      
 
 
         public void EliminarHorariosCurso( int idCurso)
         {
-            _horarioDao.EliminarHorariosCurso(idCurso);
+            List<Horario> listaHorarios = _horarioDao.BuscarHorariosCurso(idCurso);
+            _horarioDao.EliminarHorariosCurso(listaHorarios);
         }
 
-        public void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales)
+        public void EliminarSesionesHorarioCurso(int idCurso)
         {
+            List<Sesion> listaSesionesActuales = _sesionDao.BuscarSesionesCurso(idCurso);
             _horarioDao.EliminarSesionesHorarioCurso(listaSesionesActuales);
+        }
+
+        public void EliminarSesionesHorarioCursoPrivado(int idCurso)
+        {
+            List<Sesion> listaSesionesActuales = _sesionDao.BuscarSesionesCursoNoRegistradas(idCurso);
+            List<Horario> listaHorarios = new List<Horario>();
+            foreach (Sesion sesion in listaSesionesActuales)
+                listaHorarios.Add(sesion.Horario);
+            _horarioDao.EliminarSesionesHorarioCurso(listaSesionesActuales);
+            _horarioDao.EliminarHorariosCurso(listaHorarios);
+            
         }
 
         public String EsHorarioPermitido(Horario horarioEvaluar)

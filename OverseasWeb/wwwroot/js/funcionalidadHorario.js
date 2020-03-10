@@ -92,8 +92,8 @@ let divDiaHorario = $('#divDiaHorario');
  function AgregarCabeceraTablaHorario(){
    let columnasHorario = "";
    cabeceraTablaHorarios.html("");
-   (programaCursoHorario == "Privado") ? columnasHorario = '<th> N° Sesión </th> <th> Fecha Sesión </th>' : columnasHorario = '<th> Dia </th>';
-   cabeceraTablaHorarios.append('<tr>'+ columnasHorario + '<th>Hora Inicio</th>'+'<th>Hora Fin</th>'+'<th>Ambiente</th>'+'<th hidden></th>'+'<th></th>'+'</tr>');
+   (programaCursoHorario == "Privado") ? columnasHorario = ' <th> N° Sesión </th> <th> Fecha Sesión </th>' : columnasHorario = '<th> Dia </th>';
+   cabeceraTablaHorarios.append('<tr> <th hidden></th>'+ columnasHorario + '<th>Hora Inicio</th>'+'<th>Hora Fin</th>'+'<th>Ambiente</th>'+'<th hidden></th>'+'<th></th>'+'</tr>');
  }
 
  function ModificarBotonGuardar(accion, boton){
@@ -123,7 +123,7 @@ let divDiaHorario = $('#divDiaHorario');
                ModificarBotonGuardar('Editar', btnGuardarHorario);                                                       
                $.each(res, function (i, res){                          
                    (accionHorario == 'BuscarSesionesCurso') ? (horario = res.horario, numSesion = res.numeroSesion,
-                                                                                      id = res.idSesion,
+                                                                                      id = res.horario.idHorario,
                                                                                       fechaSesion = res.fechaSesion ) 
                                                             : (horario = res, id = res.idHorario);
                    cont++;
@@ -196,12 +196,12 @@ function EditarfilaHorario(fila, idHorario){
    console.log('El id es '+ idHorario);
    idHorarioSesionEdit = idHorario;
    if(programaCursoHorario == 'Privado'){
-       txtNumeroSesion.val($('#'+fila).find("td").eq(0).html());
-       txtFechaSesion.val($('#'+fila).find("td").eq(1).html());
-       indice+=2;
+       txtNumeroSesion.val($('#'+fila).find("td").eq(1).html());
+       txtFechaSesion.val($('#'+fila).find("td").eq(2).html());
+       indice+=3;
    }else{
        selectorDia.val($('#'+fila).find("td").eq(indice).html());  
-       indice+=1;
+       indice+=2;
    }                                    
    txtHoraInicio.val($('#'+fila).find("td").eq(indice).html());    
    txtHoraFin.val($('#'+fila).find("td").eq(indice+1).html());   
@@ -217,17 +217,18 @@ function EliminarfilaHorario(fila){
 }
 
 function CrearHorariosSesionesCurso(){
-   let cantidadHorarios = 0;
+   let cantidadHorarios = 0, accionSesion = 'CrearSesiones';
    let listaDeHorarios = [], listaDeSesiones = [];                   
    let fechaInicioCurso = new Date(fechaInicioCursoHorario);
    let fechaFinCurso = new Date(fechaFinCursoHorario); 
    let fecha, activo = true;             
-   let dia = "", numSesion = "", sesion = 0, fechaSesion = "", horaInicio = "", horaFin = "", idAmbiente = "";         
-   let indice = 0;      
+   let idHo = 0, dia = "", numSesion = "", sesion = 0, fechaSesion = "", horaInicio = "", horaFin = "", idAmbiente = "";         
+   let indice = 1;      
    estadoHorario = 1;
    
    $('#tablaHorarios tbody tr').each(function(){
-       indice = 0;
+       idHo =  $(this).find('td').eq(0).html();
+       indice = 1;       
        if(programaCursoHorario == 'Privado'){            
            numSesion = $(this).find('td').eq(indice).html(); 
            fechaSesion = $(this).find('td').eq(indice+1).html();                 
@@ -243,7 +244,7 @@ function CrearHorariosSesionesCurso(){
        horaInicio = $(this).find('td').eq(indice+1).html();
        horaFin = $(this).find('td').eq(indice+2).html();
        idAmbiente = $(this).find('td').eq(indice+4).html();
-       objHorario = { Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCursoHorario, 
+       objHorario = { IdHorario: idHo ,Dia : dia, HoraFin : horaFin, HoraInicio : horaInicio, IdCurso : idCursoHorario, 
                       IdAmbiente : idAmbiente, EstadoHorario : estadoHorario};
        listaDeHorarios.push(objHorario); 
        cantidadHorarios++;                        
@@ -263,7 +264,8 @@ function CrearHorariosSesionesCurso(){
                success: function (horarios) {
                    if(horarios!=""){                            
                        indice = 0;                        
-                       if(programaCursoHorario == "Privado"){                                
+                       if(programaCursoHorario == "Privado"){    
+                           accionSesion = 'CrearSesionesCursoPrivado';                         
                            $.each(horarios, function (i, horario){                                    
                                listaDeSesiones[indice].IdHorario = horario.idHorario;
                                indice++;                                                                        
@@ -287,12 +289,12 @@ function CrearHorariosSesionesCurso(){
                        }                                                                         
                        $.ajax({
                            type: 'POST',
-                           url: "/Horario/CrearSesion",
+                           url: "/Horario/"+accionSesion,
                            contentType: 'application/json; charset=utf-8',
                            dataType:"json",            
                            data: JSON.stringify(listaDeSesiones),
                            success: function (respuesta) {
-                               if(respuesta == "Guardado"){
+                               if(respuesta == "Correcto"){
                                    swal({
                                        title: "Correcto!",
                                        text: "Horario creado exitosamente.",
@@ -318,10 +320,13 @@ function CrearHorariosSesionesCurso(){
 }
 
 function GuardarHorarios(){    
-   if(btnGuardarHorario.html() == "Editar"){
+   let accion = 'EliminarHorariosCurso';
+   if(btnGuardarHorario.html() == 'Editar'){
+        if(programaCursoHorario == 'Privado')
+            accion = 'EliminarHorariosCursoPrivado';
        $.ajax({
            type: 'POST',
-           url: "/Horario/EliminarHorariosCurso",
+           url: "/Horario/"+accion,
            data: {
                idCurso: idCursoHorario,                                
            },
@@ -342,11 +347,11 @@ function ActualizarNumeroSesionHorario(numero){
 }
 
 function AgregarFilaTablaHorario(idHorarioSesion, numSesion, fechaSesion, dia, hInicio, hFin, ambiente, idAmbiente, fila){    
-   let campoSegunTipoHorario = "", id=0, disableEditar = '', disableEliminar = '' ;
+   let campoSegunTipoHorario = "", id=1, disableEditar = '', disableEliminar = '' ;
    var numeroSesionSiguiente = parseInt(numSesion,numeroSesionSiguiente) + 1;
    if(fila==0){              
        if(programaCursoHorario == 'Privado'){
-           campoSegunTipoHorario = '</td> <td>'+numSesion+'</td> <td>'+fechaSesion.substr(0,10)+'</td>';
+           campoSegunTipoHorario = '<td>'+numSesion+'</td> <td>'+fechaSesion.substr(0,10)+'</td>';
            ActualizarNumeroSesionHorario(numeroSesionSiguiente); 
            if(CompararFecha(fechaSesion) == 'Menor'){
                disableEditar = 'disabled';
@@ -356,7 +361,8 @@ function AgregarFilaTablaHorario(idHorarioSesion, numSesion, fechaSesion, dia, h
            campoSegunTipoHorario = '<td>'+dia+'</td>';                            
        }
 
-       contenidoTablaHorarios.append('<tr id="'+cont+'">' +                       
+       contenidoTablaHorarios.append('<tr id="'+cont+'">' + 
+                   '<td hidden>'+ idHorarioSesion +'</td>'+                                          
                    campoSegunTipoHorario +                                              
                    '<td>' + hInicio.substr(0,5) +'</td>' +                        
                    '<td>' + hFin.substr(0,5) +'</td>' +                        
@@ -405,10 +411,10 @@ function VerificarHorario(){
        }
        else{
            accion = 'VerificarSesion';
-           dataVerificar = { Horario: { IdHorario : 0, HoraFin : txtHoraFin.val(), HoraInicio : txtHoraInicio.val(), IdCurso : idCursoHorario, 
+           dataVerificar = { Horario: { IdHorario : idHorarioSesionEdit, HoraFin : txtHoraFin.val(), HoraInicio : txtHoraInicio.val(), IdCurso : idCursoHorario, 
                                         IdAmbiente : idAmbienteSelecHorario  
                                        },
-                             IdSesion : idHorarioSesionEdit, FechaSesion : txtFechaSesion.val() };
+                             IdSesion : 0, FechaSesion : txtFechaSesion.val() };
        }
        $.ajax({
            type: 'post',

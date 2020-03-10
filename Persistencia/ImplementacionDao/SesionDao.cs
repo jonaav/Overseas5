@@ -70,6 +70,15 @@ namespace Persistencia.ImplementacionDao
         public Sesion BuscarSesionPorID(int idSesion) => _context.Sesion.Find(idSesion);
 
 
+        /*
+         * BUSCAR SESION AUN NO REGISTRADAS
+         */
+
+        public List<Sesion> BuscarSesionesCursoNoRegistradas(int idCurso) => _context.Sesion
+                                                                        .Where(s => s.Horario.IdCurso == idCurso && s.AsistenciaDocente == 0)
+                                                                        .Include(s => s.Horario)
+                                                                        .ToList();
+
 
 
 

@@ -10,17 +10,19 @@ namespace Persistencia.InterfazDao
 
         bool CrearHorarios(List<Horario> listaHorarios);
 
+        bool CrearHorario(Horario horario);
+
         bool DeshabilitarHorariosCurso(int idCurso);
 
         List<Horario> BuscarHorariosCurso(int idCurso);
 
+        Horario BuscarHorario(int idHorario);
+
         int ObtenerIdUltimoHorario();
 
-        void EliminarHorariosCurso(int idCurso);
+        void EliminarHorariosCurso(List<Horario> listaHorarios);
 
         void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales);
-
-        bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso);
 
         bool EsHorarioPermitido(Horario horarioEvaluar);
 

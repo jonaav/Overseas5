@@ -24,29 +24,15 @@ namespace Persistencia.ImplementacionDao
                                                                         .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
                                                                                      h.IdHorario != idHorario && h.EstadoHorario == 1))
                                                                         .ToList();
-        private List<Sesion> BuscarSesionesPorFecha(int idSesion, DateTime fecha, int idAmbiente) => _context.Sesion
+        private List<Sesion> BuscarSesionesPorFecha(int idHorario, DateTime fecha, int idAmbiente) => _context.Sesion
                                                                         .Where(s => (s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente &&
-                                                                                     s.IdSesion != idSesion && s.Horario.EstadoHorario == 1))
+                                                                                     s.Horario.IdHorario != idHorario && s.Horario.EstadoHorario == 1))
                                                                         .Include(s => s.Horario)                                                                             
                                                                             .ThenInclude(h => h.Ambiente)            
                                                                         .ToList();
         
 
-        public bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso)
-        {
-            try
-            {
-                EliminarSesionesHorarioCurso(listaSesionesActuales);
-                EliminarHorariosCurso(idCurso);
-                CrearHorarios(listaHorarios);
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
+        
         public void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales)
         {
             try
@@ -64,13 +50,11 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
-        public void EliminarHorariosCurso(int idCurso)
-        {
-                
-            List<Horario> horarios = BuscarHorariosCurso(idCurso);
+        public void EliminarHorariosCurso(List<Horario> listaHorarios)
+        {                             
             try
             {                
-                foreach (Horario horario in horarios)
+                foreach (Horario horario in listaHorarios)
                 {
                     _context.Horario.Attach(horario);
                     _context.Horario.Remove(horario);
@@ -96,8 +80,12 @@ namespace Persistencia.ImplementacionDao
             {
                 foreach (Horario horario in listaHorarios)
                 {
-                    _context.Horario.Add(horario);
-                    _context.SaveChanges();
+                    if(BuscarHorario(horario.IdHorario) == null)
+                    {
+                        horario.IdHorario = 0;
+                        _context.Horario.Add(horario);
+                        _context.SaveChanges();
+                    }                    
                 }
                 return true;
             }
@@ -128,7 +116,7 @@ namespace Persistencia.ImplementacionDao
 
         public bool EsSesionPermitida(Sesion sesionEvaluar)
         {
-            List<Sesion> sesiones = BuscarSesionesPorFecha(sesionEvaluar.IdSesion, sesionEvaluar.FechaSesion, sesionEvaluar.Horario.IdAmbiente);
+            List<Sesion> sesiones = BuscarSesionesPorFecha(sesionEvaluar.Horario.IdHorario, sesionEvaluar.FechaSesion, sesionEvaluar.Horario.IdAmbiente);
             bool correcto = true;
             foreach (Sesion s in sesiones)
             {
@@ -164,5 +152,25 @@ namespace Persistencia.ImplementacionDao
                 throw e;
             }
         }
+
+        public bool CrearHorario(Horario horario)
+        {
+            try
+            {               
+                _context.Horario.Add(horario);
+                _context.SaveChanges();               
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public Horario BuscarHorario(int idHorario) => _context.Horario
+                                                       .Where(h => h.IdHorario == idHorario)
+                                                       .FirstOrDefault();
+
+
     }
 }

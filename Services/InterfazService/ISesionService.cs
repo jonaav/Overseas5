@@ -9,7 +9,9 @@ namespace Services.InterfazService
     {
         List<Sesion> ListarSesionesCurso(int idCurso);
         List<Sesion> BuscarSesionesCurso(int idCurso);
-        bool CrearSesion(Sesion sesion);
+        String CrearSesiones(List<Sesion> listaSesiones);
+
+        String CrearSesionesCursoPrivado(List<Sesion> listaSesiones);
 
         //bool EditarSesionesCurso(List<Sesion> sesiones);
 

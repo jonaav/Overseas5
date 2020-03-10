@@ -8,7 +8,7 @@ namespace Services.InterfazService
     public interface IHorarioService
     {        
 
-        String CrearHorarios(List<Horario> listaHorarios);
+        String CrearHorarios(List<Horario> listaHorarios);        
 
         List<Horario> BuscarHorariosCurso(int idCurso);
 
@@ -18,9 +18,9 @@ namespace Services.InterfazService
 
         void EliminarHorariosCurso(int idCurso);
 
-        void EliminarSesionesHorarioCurso(List<Sesion> listaSesionesActuales);
+        void EliminarSesionesHorarioCurso(int idCurso);
 
-        bool EditarHorariosCurso(List<Horario> listaHorarios, List<Sesion> listaSesionesActuales, int idCurso);
+        void EliminarSesionesHorarioCursoPrivado(int idCurso);        
 
         String EsHorarioPermitido(Horario horarioEvaluar);
 

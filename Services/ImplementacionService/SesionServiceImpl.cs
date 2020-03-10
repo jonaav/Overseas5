@@ -32,19 +32,26 @@ namespace Services.ImplementacionService
             return _sesionDao.BuscarSesionesCurso(idCurso);
         }
 
-        public bool CrearSesion(Sesion sesion)
+        public String CrearSesiones(List<Sesion> listaSesiones)
         {
-            return _sesionDao.CrearSesion (sesion);
+            foreach (Sesion sesion in listaSesiones)                           
+                _sesionDao.CrearSesion(sesion);            
+            return "Correcto";
         }
-
-        //public bool EditarSesionesCurso(List<Sesion> sesiones)
-        //{
-        //    return _sesionDao.EditarSesionesCurso(sesiones);
-        //}
 
         public List<Sesion> ListarSesionesCurso(int idCurso)
         {
             return _sesionDao.ListarSesionesCurso(idCurso);
+        }
+
+        public String CrearSesionesCursoPrivado(List<Sesion> listaSesiones)
+        {
+            foreach (Sesion sesion in listaSesiones)
+            {
+                if (BuscarSesion(sesion.IdHorario) == null)
+                    _sesionDao.CrearSesion(sesion);                
+            }
+            return "Correcto";            
         }
     }
 }

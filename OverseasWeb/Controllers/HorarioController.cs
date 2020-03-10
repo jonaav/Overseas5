@@ -15,22 +15,22 @@ namespace OverseasWeb.Controllers
     {
         private readonly IHorarioService _horarioService;
         private readonly ISesionService _sesionService;
-        
+
         public HorarioController(IHorarioService horarioService, ISesionService sesionService)
         {
             _horarioService = horarioService;
             _sesionService = sesionService;
         }
 
-        
+
         public IActionResult BuscarHorariosCurso(int idCurso)
-        {            
+        {
             List<Horario> listaHorarios;
             listaHorarios = _horarioService.BuscarHorariosCurso(idCurso);
             if (listaHorarios != null)
                 return Json(listaHorarios);
             else
-                return Json("");                                               
+                return Json("");
         }
 
         public IActionResult BuscarSesionesCurso(int idCurso)
@@ -46,7 +46,7 @@ namespace OverseasWeb.Controllers
         public IActionResult VerificarHorario(Horario horario)
         {
             var mensaje = _horarioService.EsHorarioPermitido(horario);
-            return Json(mensaje);                
+            return Json(mensaje);
         }
 
         [HttpPost]
@@ -57,12 +57,19 @@ namespace OverseasWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearSesion([FromBody] List<Sesion> listaDeSesiones)
+        public IActionResult CrearSesiones([FromBody] List<Sesion> listaDeSesiones)
         {
-            foreach (Sesion sesion in listaDeSesiones)
-                _sesionService.CrearSesion(sesion);
-            return Json("Guardado");
-                            
+            var mensaje = _sesionService.CrearSesiones(listaDeSesiones);
+            return Json(mensaje);            
+        }
+
+
+        [HttpPost]
+        public IActionResult CrearSesionesCursoPrivado([FromBody] List<Sesion> listaDeSesiones)
+        {
+            var mensaje = _sesionService.CrearSesionesCursoPrivado(listaDeSesiones);
+            return Json(mensaje);
+
         }
 
         [HttpPost]
@@ -74,16 +81,21 @@ namespace OverseasWeb.Controllers
             else
                 return Json("");
         }
-
-
+      
 
         [HttpPost]
         public IActionResult EliminarHorariosCurso(int idCurso)
-        {
-            List<Sesion> listaSesionesActuales = _sesionService.BuscarSesionesCurso(idCurso);
-            _horarioService.EliminarSesionesHorarioCurso(listaSesionesActuales);
+        {            
+            _horarioService.EliminarSesionesHorarioCurso(idCurso);
             _horarioService.EliminarHorariosCurso(idCurso);
             return Json("Eliminado");                     
+        }
+
+        [HttpPost]
+        public IActionResult EliminarHorariosCursoPrivado(int idCurso)
+        {
+            _horarioService.EliminarSesionesHorarioCursoPrivado(idCurso);            
+            return Json("Eliminado");
         }
 
         public IActionResult BuscarSesion(int idHorario)
