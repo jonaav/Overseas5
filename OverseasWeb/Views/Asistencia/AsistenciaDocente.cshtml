@@ -19,8 +19,8 @@
     </div>
 
     <div class="row">
-        <div class="col-7">
-            <div class="card">
+        <div class="col-lg-7">
+            <div class="card" id="asistEstudiantesCard">
                 <div class="card-body">
                     <div class="table-responsive">
                         <div class="form-check-inline p-2">
@@ -44,6 +44,21 @@
 
                             <button onclick="GuardarAsistencias()" class="btn btn-info">Guardar</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card" id="ActivarSesionCard">
+                <div class="card-body">
+                    <div class="justify-content-center">
+                        <div class="form-check-inline p-2">
+                            <div class="col">
+                                <h4 class="color-pale-sky">Activar sesión</h4>
+                            </div>
+                        </div>
+                        <button onclick="MarcarAsistenciaDocente()" class="btn btn-outline-success"><span class="fa fa-power-off"></span></button>
                     </div>
                 </div>
             </div>

@@ -163,6 +163,7 @@ function agregarCursoDocenteSelec(idCurso) {
             console.log(response);
             dataCursoDocenteSeleccionado.html("");
             if (response != "") {
+                idCursoSelec = response.idCurso;
                 dataCursoDocenteSeleccionado.append(
                     '<tr>' +
                     '<td>' + response.programa + '</td>' +
@@ -174,7 +175,8 @@ function agregarCursoDocenteSelec(idCurso) {
         }
     });
     ListarEstudiantesDeUnCursoDocente(idCurso); 
-    ListarAsistenciasPorSesion(idCurso); 
+    //ASISTENCIAS
+    VerificarSesionActiva(idCurso);
 }
 
 

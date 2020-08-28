@@ -27,5 +27,13 @@ namespace Persistencia.InterfazDao
         bool EsHorarioPermitido(Horario horarioEvaluar);
 
         bool EsSesionPermitida(Sesion sesionEvaluar);
+
+
+        //remake
+
+        List<Horario> BuscarHorariosPorAmbienteDia(Horario nuevo);
+        bool EditarHorario(Horario horario);
+
+
     }
 }

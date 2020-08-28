@@ -15,21 +15,23 @@ namespace Persistencia.ImplementacionDao
 
 
         public List<Horario> BuscarHorariosCurso(int idCurso) => _context.Horario
-                                                                 .Where(h => h.IdCurso == idCurso)                                                                 
-                                                                 .Include(h => h.Ambiente)
-                                                                 .ToList();
+            .Where(h => h.IdCurso == idCurso && h.EstadoHorario == 1)                                                                 
+            .Include(h => h.Ambiente)
+            .Include(h => h.Curso).ThenInclude(c => c.TipoCurso)
+            .Include(h => h.Curso).ThenInclude(c => c.Docente).ThenInclude(d => d.Persona)
+            .ToList();
 
        
         private List<Horario> BuscarHorariosAmbiente(int idHorario, int idAmbiente, string dia) => _context.Horario
-                                                                        .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
-                                                                                     h.IdHorario != idHorario && h.EstadoHorario == 1))
-                                                                        .ToList();
+            .Where(h => (h.IdAmbiente == idAmbiente && h.Dia == dia && 
+                            h.IdHorario != idHorario && h.EstadoHorario == 1))
+            .ToList();
         private List<Sesion> BuscarSesionesPorFecha(int idHorario, DateTime fecha, int idAmbiente) => _context.Sesion
-                                                                        .Where(s => (s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente &&
-                                                                                     s.Horario.IdHorario != idHorario && s.Horario.EstadoHorario == 1))
-                                                                        .Include(s => s.Horario)                                                                             
-                                                                            .ThenInclude(h => h.Ambiente)            
-                                                                        .ToList();
+            .Where(s => (s.FechaSesion == fecha && s.Horario.IdAmbiente == idAmbiente &&
+                            s.Horario.IdHorario != idHorario && s.Horario.EstadoHorario == 1))
+            .Include(s => s.Horario)                                                                             
+                .ThenInclude(h => h.Ambiente)            
+            .ToList();
         
 
         
@@ -153,10 +155,21 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
+
+
+        /*
+         *  REMAKE
+         */
+
+
+        /*
+         *  CREAR HORARIO
+         */
         public bool CrearHorario(Horario horario)
         {
             try
-            {               
+            {
+                horario.EstadoHorario = 1;
                 _context.Horario.Add(horario);
                 _context.SaveChanges();               
                 return true;
@@ -167,10 +180,43 @@ namespace Persistencia.ImplementacionDao
             }
         }
 
+        /*
+         *  EDITAR HORARIO
+         */
+        public bool EditarHorario(Horario horario)
+        {
+            try
+            {
+                _context.Horario.Attach(horario);
+                _context.Horario.Update(horario);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
+
         public Horario BuscarHorario(int idHorario) => _context.Horario
                                                        .Where(h => h.IdHorario == idHorario)
+                                                       .Include(h => h.Ambiente)
+                                                       .Include(h => h.Curso)
                                                        .FirstOrDefault();
 
+
+        /*
+         * buscar horario por ambiente, dia, estado=1
+         */
+        public List<Horario> BuscarHorariosPorAmbienteDia(Horario nuevo) => _context.Horario
+            .Where(h => (h.EstadoHorario == 1 && h.Dia == nuevo.Dia && h.IdAmbiente == nuevo.IdAmbiente ))
+            .Include(h => h.Ambiente)
+            .Include(h => h.Curso)
+                .ThenInclude(c => c.TipoCurso)
+            .Include(h => h.Curso)
+                .ThenInclude(c => c.Docente)
+            .ToList();
 
     }
 }

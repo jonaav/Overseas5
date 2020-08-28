@@ -434,12 +434,24 @@ function EditarCurso(id) {
 
 function GuardarCurso() {
     let action;
+    let idiomaSel;
     //Seleccionar Action    
-    (idCursoEdit == 0) ? action = "RegistrarCurso" : action = "EditarCurso";
+    if (idCursoEdit == 0) {
+        action = "RegistrarCurso";
+    } else {
+        action = "EditarCurso";
+    }
+
+    if (tipoCurso.nombreCurso == 'Inglés General' || tipoCurso.nombreCurso == 'Inglés Niños') {
+        idiomaSel = 'Inglés';
+    } else {
+        idiomaSel = selectorIdiomaCurso.val();
+    }
+
     let nuevoCurso = {
         IdCurso: idCursoEdit,
         Programa: programaCurso,
-        Idioma: selectorIdiomaCurso.val(),
+        Idioma: idiomaSel,
         Nivel: txtNivelCurso.val(),
         Ciclo: txtCicloCurso.val(),
         FechaInicio: txtFechaInicioCurso.val(),

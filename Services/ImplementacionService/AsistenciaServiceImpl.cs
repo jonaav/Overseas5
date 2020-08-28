@@ -12,16 +12,22 @@ namespace Services.ImplementacionService
         private IAsistenciaDao _asistenciaDao;
         private ISesionDao _sesionDao;
         private IInscripcionDao _inscripcionDao;
+        private IDocenteDao _docenteDao;
+        private IHorarioDao _horarioDao;
 
         public AsistenciaServiceImpl(
             IAsistenciaDao asistenciaDao,
             ISesionDao sesionDao,
-            IInscripcionDao inscripcionDao
+            IInscripcionDao inscripcionDao,
+            IDocenteDao docenteDao,
+            IHorarioDao horarioDao
         )
         {
             _asistenciaDao = asistenciaDao;
             _sesionDao = sesionDao;
             _inscripcionDao = inscripcionDao;
+            _docenteDao = docenteDao;
+            _horarioDao = horarioDao;
         }
 
 
@@ -29,43 +35,59 @@ namespace Services.ImplementacionService
         {
             DateTime fechaActual = DateTime.Today;
             List<Asistencia> asistencias = _asistenciaDao.ListarAsistenciasPorSesionCurso(idCurso, fechaActual);
-            //Verifica si ya estan creadas las asistencias
-            if (asistencias.Count == 0)
-            {
-                if(RegistrarAsistencias(idCurso, fechaActual))
-                    asistencias = _asistenciaDao.ListarAsistenciasPorSesionCurso(idCurso, fechaActual);
-            }
             return asistencias;
 
         }
 
-        public bool RegistrarAsistencias(int idCurso, DateTime fecha)
+
+
+        public String MarcarAsistenciaDocente(int idCurso)
         {
-            Sesion sesion = _sesionDao.BuscarSesionPorFechaYCurso(idCurso, fecha);
-            if(sesion != null)
+            string mensaje = "No se pudo actualizar los datos";
+
+            if (_sesionDao.BuscarSesionPorFechaYCurso(idCurso, DateTime.Today) != null)
             {
-                //Crea las asistencias por sesion
-                List<Inscripcion> inscripciones = _inscripcionDao.ListarInscripciones(idCurso);
-                foreach (Inscripcion i in inscripciones)
-                {
-                    Asistencia asistencia = new Asistencia
-                    {
-                        AsistenciaEstudiante = 0,
-                        IdEstudiante = i.IdEstudiante,
-                        IdSesion = sesion.IdSesion
-                    };
-                    _asistenciaDao.RegistrarAsistencia(asistencia);
-                }
-                //Marca la asistencia del docente
-                sesion.AsistenciaDocente = 1;
-                _sesionDao.EditarSesion(sesion);
-                return true;
-            }
-            else
-            {
-                return false;
+                mensaje = "Sesión activa";
+                return mensaje;
             }
 
+            List<Horario> horarios = _horarioDao.BuscarHorariosCurso(idCurso);
+            foreach (Horario h in horarios)
+            {
+                if (h.EsDiaCorrespondiente())
+                {
+                    Sesion sesion = new Sesion
+                    {
+                        AsistenciaDocente = 1,
+                        FechaSesion = DateTime.Today,
+                        IdHorario = h.IdHorario,
+                        NumeroSesion = 0
+                    };
+                    _sesionDao.CrearSesion(sesion);
+                    mensaje = "Datos actualizados";
+
+                    RegistrarAsistencias(idCurso, sesion.FechaSesion);
+                }
+            }
+            return mensaje;
+        }
+
+
+        private void RegistrarAsistencias(int idCurso, DateTime fecha)
+        {
+            Sesion sesion = _sesionDao.BuscarSesionPorFechaYCurso(idCurso, fecha);
+            //Crea las asistencias por sesion
+            List<Inscripcion> inscripciones = _inscripcionDao.ListarInscripciones(idCurso);
+            foreach (Inscripcion i in inscripciones)
+            {
+                Asistencia asistencia = new Asistencia
+                {
+                    AsistenciaEstudiante = 0,
+                    IdEstudiante = i.IdEstudiante,
+                    IdSesion = sesion.IdSesion
+                };
+                _asistenciaDao.RegistrarAsistencia(asistencia);
+            }
         }
 
         public String EditarAsistencias(List<int> asistieron)
@@ -89,5 +111,17 @@ namespace Services.ImplementacionService
             List<Asistencia> asistencias = _asistenciaDao.ListarAsistenciasPorSesion(idSesion);
             return asistencias;
         }
+
+
+        public bool VerificarSesionActiva (int idCurso)
+        {
+            Sesion sesion = _sesionDao.BuscarSesionPorFechaYCurso(idCurso, DateTime.Today);
+            return (sesion != null) ? true : false;
+        }
+
+
+
+
+
     }
 }

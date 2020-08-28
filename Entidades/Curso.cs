@@ -39,6 +39,15 @@ namespace Entidades
             return (FechaFin > FechaInicio) ? true : false;
         }
 
+
+        /*
+         *  Validar fecha inicio > fecha fin de otro curso
+         */ 
+
+        public bool ValidarFechaInicio(DateTime fechafinAntigua)
+        {
+            return (FechaInicio > fechafinAntigua) ? true : false;
+        }
         
 
 

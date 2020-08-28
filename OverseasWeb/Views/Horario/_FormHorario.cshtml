@@ -1,7 +1,7 @@
  <div class="container-fluid">
      <div class="row">
          <div class="col-md-12 text-center">
-            <h2 class="tituloCurso" id="tituloCursoHorario" ></h1>
+            <h1 class="tituloCurso" id="tituloCursoHorario" ></h1>
         </div>
      </div>
      <div class="row">        
@@ -79,8 +79,11 @@
                                     <span class="fa fa-search" style="color:black"></button>            		            		           
                                 </div> 
                             </div>
+
                             <div class="form-group text-center" >
-                                <button id="btnAgregarHorario" onclick = "VerificarHorario()"  rel="tooltip" title="Agregar" type="button" class="btn btn-outline-success"><span class="fa fa-plus" style="color:black"></button>
+                                <!--
+                                    <button id="btnAgregarHorario" onclick = "VerificarHorario()"  rel="tooltip" title="Agregar" type="button" class="btn btn-outline-success"><span class="fa fa-plus" style="color:black"></button>
+                                -->
                                 <button onclick = "LimpiarFormHorario()"  rel="tooltip" title="Limpiar Campos" type="button" class="btn btn-outline-secondary"><span class="fa fa-refresh" style="color:black"></button>                    
                             </div>                                                                                                                
 
@@ -90,12 +93,12 @@
                 </div>  
 
                 <div class="form-group text-center" >
-                    <button onclick = "GuardarHorarios()"  id="btnGuardarHorario"  type="button" class="btn btn-outline-primary">GUARDAR</button>                    
+                    <button onclick = "GuardarHorario()"  id="btnGuardarHorario"  type="button" class="btn btn-outline-primary">GUARDAR</button>                    
                     <button onclick="SalirFormHorario()" type="button" class="btn btn-outline-danger">CANCELAR</button>                    
                 </div>
             </div>    
         </div>
-        <partial name="~/Views/Horario/ListarHorariosRegular.cshtml"></partial>    
+        <partial name="~/Views/Horario/ListarHorariosRegular.cshtml">   
      </div>
  </div>
           

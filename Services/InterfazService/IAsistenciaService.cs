@@ -10,5 +10,7 @@ namespace Services.InterfazService
         List<Asistencia> ListarAsistenciasPorSesionCurso(int idCurso);
         List<Asistencia> ListarAsistenciasPorSesion(int idSesion);
         String EditarAsistencias(List<int> asistieron);
+        String MarcarAsistenciaDocente(int idCurso);
+        bool VerificarSesionActiva(int idCurso);
     }
 }

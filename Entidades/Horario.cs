@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Entidades
 {
@@ -39,6 +40,32 @@ namespace Entidades
             TimeSpan now = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             return (HoraInicio > now) ? true : false;
         }
+
+
+
+        /* nuevohorai <= inicio y nuevohoraf <= inicio
+         * nuevohorai > fin y nuevohoraf > fin
+         */
+
+        public bool VerificarCruce(Horario h)
+        {
+            if ((HoraInicio <= h.HoraInicio && HoraFin <= h.HoraInicio) || 
+                (HoraInicio >= h.HoraFin    && HoraFin >= h.HoraFin))
+                return true;
+            else
+                return false;
+        }
+
+        /*
+         * Comparar el dia actual con el horario
+         */
+        public bool EsDiaCorrespondiente()
+        {
+            CultureInfo ci = new CultureInfo("Es-Es");
+            var hoy = ci.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek);
+            return (Dia.ToUpper() == hoy.ToUpper()) ? true : false;
+        }
+
 
         #endregion Metodos
     }

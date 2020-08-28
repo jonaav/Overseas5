@@ -13,13 +13,15 @@ namespace Services.ImplementacionService
 
         private readonly IHorarioDao _horarioDao;
         private readonly ISesionDao _sesionDao;
+        private readonly ICursoDao _cursoDao;
 
-        public HorarioServiceImpl(IHorarioDao horarioDao, ISesionDao sesionDao)
+        public HorarioServiceImpl(IHorarioDao horarioDao, ISesionDao sesionDao, ICursoDao cursoDao)
         {
             _horarioDao = horarioDao;
             _sesionDao = sesionDao;
+            _cursoDao = cursoDao;
         }
-
+        /*
         public List<Horario> BuscarHorariosCurso(int idCurso)
         {
             return _horarioDao.BuscarHorariosCurso(idCurso);
@@ -116,7 +118,117 @@ namespace Services.ImplementacionService
         {
             return _horarioDao.ObtenerIdUltimoHorario();
         }
+        */
 
-       
+
+        //Remake
+
+
+
+        public List<Horario> BuscarHorariosCurso(int idCurso)
+        {
+            return _horarioDao.BuscarHorariosCurso(idCurso);
+        }
+        
+        public Horario BuscarHorario(int idHorario)
+        {
+            return _horarioDao.BuscarHorario(idHorario);
+        }
+
+
+        public String CrearHorario(Horario horario)
+        {
+            String mensaje = "Datos no válidos";
+            if (horario.EsHoraFinCorrecta())
+            {
+                List<Horario> listaHorarios = _horarioDao.BuscarHorariosPorAmbienteDia(horario);
+                foreach (Horario h in listaHorarios)
+                {
+                    if (!horario.VerificarCruce(h))
+                    {
+                        Curso curso = _cursoDao.BuscarCursoPorID(horario.IdCurso);
+                        if(!curso.ValidarFechaInicio(h.Curso.FechaFin))
+                        {
+                            mensaje = "Existe un cruce de horario";
+                            return mensaje;
+                        }
+                    }
+                }
+
+                if (_horarioDao.CrearHorario(horario))
+                    mensaje = "Registrado";
+            }
+            else
+            {
+                mensaje = "La hora de inicio y fin no son adecuadas";
+            }
+
+            return mensaje;
+        }
+
+        public String EditarHorario(Horario horario)
+        {
+            String mensaje = "Datos no válidos";
+            if (horario.EsHoraFinCorrecta())
+            {
+                /*
+                 * Busca todos los horarios del aula en el dia y compara con el nuevo horario para verificar un cruce
+                 */
+                List<Horario> listaHorarios = _horarioDao.BuscarHorariosPorAmbienteDia(horario);
+                foreach (Horario h in listaHorarios)
+                {
+                    if (!horario.VerificarCruce(h))
+                    {
+                        /*
+                         * busca el curso con el que se relaciona y 
+                         * compara que la nueva fecha inicio sea posterior a la fecha fin del curso anterior con el mismo horario
+                         */ 
+                        Curso curso = _cursoDao.BuscarCursoPorID(horario.IdCurso);
+                        if (!curso.ValidarFechaInicio(h.Curso.FechaFin) && (horario.IdHorario != h.IdHorario))
+                        {
+                            mensaje = "Existe un cruce de horario";
+                            return mensaje;
+                        }
+                    }
+                }
+
+                if (_horarioDao.EditarHorario(horario))
+                    mensaje = "Datos actualizados";
+            }
+
+            return mensaje;
+        }
+
+
+        
+
+        public String AnularHorario(int idHorario)
+        {
+            String mensaje = "Error";
+            Horario horario = _horarioDao.BuscarHorario(idHorario);
+            horario.EstadoHorario = 0;
+            if (_horarioDao.EditarHorario(horario))
+                mensaje = "Horario Anulado";
+            return mensaje;
+        }
+
+
+        public String EsHorarioPermitido(Horario horarioEvaluar)
+        {
+            String mensaje = "Horario no disponible";
+            if (horarioEvaluar.EsHoraFinCorrecta())
+            {
+                if (_horarioDao.EsHorarioPermitido(horarioEvaluar))
+                    mensaje = "Correcto";
+            }
+            else
+            {
+                mensaje = "La Hora Fin debe ser mayor que la Hora Inicio";
+            }
+
+            return mensaje;
+        }
+
+
     }
 }

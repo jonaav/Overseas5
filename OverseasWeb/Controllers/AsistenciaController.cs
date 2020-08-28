@@ -92,6 +92,22 @@ namespace OverseasWeb.Controllers
             String mensaje = _asistenciaService.EditarAsistencias(asistieron);
             return Json(mensaje);
         }
+        
+
+        [HttpPost]
+        [Authorize(Roles = "Docente")]
+        public IActionResult MarcarAsistenciaDocente(int idCurso)
+        {
+            String mensaje = _asistenciaService.MarcarAsistenciaDocente(idCurso);
+            return Json(mensaje);
+        }
+
+        [Authorize(Roles = "Docente")]
+        public IActionResult VerificarSesionActiva(int idCurso)
+        {
+            bool activo = _asistenciaService.VerificarSesionActiva(idCurso);
+            return Json(activo);
+        }
 
 
     }

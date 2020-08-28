@@ -73,15 +73,16 @@ let divDiaHorario = $('#divDiaHorario');
    fechaFinCursoHorario = fechaFin;    
    MostrarFormHorario();    
    AddTituloCursoAlFormHorario(tituloCurso);
-   (estadoCursoHorario == 1) ? DeshabilitarEdicionHorarios(false) : DeshabilitarEdicionHorarios(true);  
+   //(estadoCursoHorario == 1) ? DeshabilitarEdicionHorarios(false) : DeshabilitarEdicionHorarios(true);  
    if(programa == "Privado") {
        divDatosHorarioPrivado.show(), divDiaHorario.hide();
    }else{
        divDiaHorario.show(), divDatosHorarioPrivado.hide();
+       /*
        if(CompararFecha(fechaInicio) == 'Menor' && estadoCursoHorario == 1){
            msgError("EL curso se inició no puede modificar los horarios");
            DeshabilitarEdicionHorarios(true);
-       }
+       }*/
    }                               
    AgregarCabeceraTablaHorario();    
    BuscarHorariosCurso();
@@ -319,6 +320,37 @@ function CrearHorariosSesionesCurso(){
    }          
 }
 
+/*
+ *  GUARDAR 
+ * */
+
+function GuardarHorarios() {
+    console.log("IDCURSO: " + idCursoHorario + "- IDAMBIENTE: " + idAmbienteSelecHorario);
+    $.ajax({
+        type: 'POST',
+        url: "/Horario/CrearHorario",
+        data: {
+            dia: selectorDia.val(),
+            horaInicio: txtHoraInicio.val(),
+            horaFin: txtHoraFin.val(),
+            idCurso: idCursoHorario,
+            idAmbiente: idAmbienteSelecHorario,
+        },
+        datatype: 'json',
+        success: function (res) {
+            switch (res) {
+                case 'Registrado': {
+                    msgExitoCurso(res);
+                    break;
+                }
+                default: {
+                    msgError(res);
+                }
+            }
+        }
+    });
+}
+/*
 function GuardarHorarios(){    
    let accion = 'EliminarHorariosCurso';
    if(btnGuardarHorario.html() == 'Editar'){
@@ -340,6 +372,8 @@ function GuardarHorarios(){
        CrearHorariosSesionesCurso();
    }
 }
+*/
+
 
 function ActualizarNumeroSesionHorario(numero){
    $('#txtNumeroSesion').val(numero);

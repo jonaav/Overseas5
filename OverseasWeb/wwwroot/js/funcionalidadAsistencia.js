@@ -7,7 +7,10 @@
  * ELEMENTOS
  */
 
-
+let activarSesionCard = $("#ActivarSesionCard");
+activarSesionCard.hide();
+let asistEstudiantesCard = $("#asistEstudiantesCard");
+asistEstudiantesCard.hide();
 let dataAsistenciasDocente = $("#dataAsistenciasDocente");
 let dataAsistenciasAdmin = $("#dataAsistenciasAdmin");
 let dataSesiones = $("#dataSesiones");
@@ -108,6 +111,55 @@ function GuardarAsistencias() {
         
 }
 
+
+/*
+ * VERIFICAR SESION ACTIVA
+ */
+function VerificarSesionActiva(idCurso) {
+    console.log("verf curso  :: " + idCurso);
+    $.ajax({
+        type: "get",
+        url: "/Asistencia/VerificarSesionActiva",
+        datatype: 'json',
+        data: { idCurso: idCurso },
+        success: function (response) {
+            SesionActivada(response, idCurso);
+        }
+    });
+}
+
+/*
+ *  MOSTRAR U OCULTAR CARDS EN ASISTENCIAS
+ */
+function SesionActivada(val, idCurso) {
+    if (val == true) {
+        activarSesionCard.hide();
+        ListarAsistenciasPorSesion(idCurso);
+        asistEstudiantesCard.show();
+    } else {
+        activarSesionCard.show();
+        asistEstudiantesCard.hide();
+    }
+}
+
+/*
+ * MARCAR ASISTENCIA DOCENTE
+ */
+
+function MarcarAsistenciaDocente() {
+    $.ajax({
+        type: "post",
+        url: "/Asistencia/MarcarAsistenciaDocente",
+        datatype: 'json',
+        data: { idCurso: idCursoSelec },
+        success: function (response) {
+            if (response == "Datos actualizados") {
+                SesionActivada(true, idCursoSelec);
+            }
+        }
+    });
+    ListarAsistenciasPorSesion(idCursoSelec);
+}
 
 
 
@@ -222,6 +274,9 @@ function VerAsistenciasSesion(idSesion) {
         }
     });
 }
+
+
+
 
 
 

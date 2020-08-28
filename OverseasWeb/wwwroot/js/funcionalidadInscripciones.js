@@ -146,6 +146,8 @@ function ListarInscripciones() {
  * AGREGAR CURSO
  */
 function agregarCursoInscripcion(idCurso) {
+
+    console.log("CURSO AGREGADO");
     let nombreDocente;
     $.ajax({
         type: "get",
@@ -157,7 +159,7 @@ function agregarCursoInscripcion(idCurso) {
             dataCursoSeleccionado.html("");
             if (response != "") {
                 idCursoSelec = response.idCurso;
-                console.log(idCursoSelec);
+                console.log("CURSO seleccionado:: " +idCursoSelec);
                 if (response.docente != null) { nombreDocente = '<td>' + response.docente.persona.nombresPersona + ' ' + response.docente.persona.apellidosPersona + '</td>' }
                 else { nombreDocente = '<td class="sinAsignar">-Sin asignar-</td>'; }
                 dataCursoSeleccionado.append(
